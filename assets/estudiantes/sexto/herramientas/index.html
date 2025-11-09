@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Centro de Herramientas Académicas</title>
+<link rel="icon" href="img/icono.png">
+
+
+  <!-- Estilos externos -->
+  <link rel="stylesheet" href="css/bootstrap.min.css" />
+  <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="css/tooplate-style.css" />
+
+  <!-- Estilos personalizados -->
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+
+    .hero-section {
+      background: url('img/imagen123.jpg') no-repeat center center/cover;
+      color: white;
+      text-align: center;
+      padding: 60px 20px;
+      min-height: 40vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-shadow: 2px 2px 4px rgba(70, 68, 68, 0.7);
+      position: relative;
+    }
+
+    .hero-section h1 {
+      background-color: rgb(63, 136, 63);
+      padding: 15px 25px;
+      border-radius: 10px;
+      font-size: 2em;
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 1.5em;
+      color: #000000;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 700;
+    }
+
+    .places-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    .place-card {
+      color: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(165, 199, 169, 0.781);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      min-height: 200px;
+      display: flex;
+      align-items: flex-end;
+      text-decoration: none;
+      animation: fadeIn 1s ease;
+    }
+
+    .place-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 15px rgba(116, 211, 116, 0.692);
+    }
+
+    .place-info {
+      padding: 15px;
+      background: rgb(77, 146, 68);
+      border-top: 1px solid rgba(157, 158, 204, 0.3);
+    }
+
+    .place-info h3 {
+      margin: 0;
+      font-size: 1.3em;
+      font-weight: bold;
+    }
+
+    .place-info p {
+      margin-top: 5px;
+      font-size: 0.95em;
+    }
+
+    /* Colores de fondo */
+    .card-orientaciones { background: linear-gradient(rgba(162,179,161,0.342), rgba(126,243,171,0.6)), url('img/orientaciones.jpg') center/cover; }
+    .card-videos { background: linear-gradient(rgba(162,179,161,0.342), rgba(250,170,71,0.6)), url('img/videos.jpg') center/cover; }
+    .card-preguntas { background: linear-gradient(rgba(162,179,161,0.342), rgba(253,92,92,0.6)), url('img/preguntas.jpg') center/cover; }
+    .card-paginas { background: linear-gradient(rgba(162,179,161,0.342), rgba(134,100,255,0.6)), url('img/paginas.jpg') center/cover; }
+    .card-actividades { background: linear-gradient(rgba(162,179,161,0.342), rgba(100,210,255,0.6)), url('img/actividades.jpg') center/cover; }
+    .card-refuerzo { background: linear-gradient(rgba(162,179,161,0.342), rgba(248,209,80,0.6)), url('img/refuerzo.jpg') center/cover; }
+    .card-comunicacion { background: linear-gradient(rgba(162,179,161,0.342), rgba(87,203,226,0.6)), url('img/comunicacion.jpg') center/cover; }
+    .card-recursos { background: linear-gradient(rgba(162,179,161,0.342), rgba(127,127,182,0.6)), url('img/recursos.jpg') center/cover; }
+    .card-registro { background: linear-gradient(rgba(162,179,161,0.342), rgba(151,105,241,0.6)), url('img/registro.jpg') center/cover; }
+    .card-motivacion { background: linear-gradient(rgba(162,179,161,0.342), rgba(248,103,173,0.6)), url('img/motivacion.jpg') center/cover; }
+
+    .card-pqrs {
+      background: linear-gradient(rgba(162,179,161,0.342), rgba(130,255,147,0.6)), url('img/pqrs.png') center/cover;
+      max-width: 320px;
+      margin: 50px auto;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      display: flex;
+      align-items: flex-end;
+      text-align: center;
+      color: white;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card-pqrs:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.25);
+    }
+
+    .card-pqrs .place-info {
+      background: rgba(165, 199, 169, 0.781);
+      padding: 15px;
+    }
+
+.hora-legal {
+  position: relative;
+  text-align: center;
+  background: url('img/horalegal.png') center/cover no-repeat;
+  padding: 10px 0; /* ← antes era 30px, reduce la altura */
+  border-radius: 10px; /* opcional, le da bordes suaves */
+  margin: 20px auto; /* espacio alrededor */
+  max-width: 500px; /* ← controla el ancho total (ajústalo si quieres más pequeño o grande) */
+}
+
+.hora-legal img {
+  display: none; /* oculta la imagen original si ya estás usando un fondo azul */
+}
+
+.hora-texto {
+  font-family: Arial, sans-serif;
+  font-size: 30px;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+}
+
+
+    footer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 18px;
+      font-size: 0.9em;
+      color: #f5f5f5;
+      background-color: rgba(0, 0, 0, 0.5);
+      font-family: 'Lucida Calligraphy', cursive;
+      font-weight: bold;
+      font-style: italic;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      backdrop-filter: blur(5px);
+    }
+
+    .modal-content {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      text-align: center;
+      max-width: 400px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+
+    .modal-content h2 {
+      font-size: 1.3em;
+      margin-bottom: 15px;
+      color: #333;
+    }
+
+    .modal-content button {
+      background: #4CAF50;
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .modal-content button:hover {
+      background: #45a049;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="hero-section">
+    <h1>Hub de Aprendizaje</h1>
+  </div>
+
+  <!-- 🧭 Aprendizaje y Orientación -->
+  <h2 class="section-title">🧭 Aprendizaje y Orientación</h2>
+  <section class="places-grid">
+    <a href="3" class="place-card card-orientaciones" data-active="false">
+      <div class="place-info"><h3>Orientaciones</h3><p>Guías e instrucciones para tus estudios.</p></div>
+    </a>
+    <a href="#" class="place-card card-actividades" data-active="false">
+      <div class="place-info"><h3>Rúbricas y Criterios</h3><p>Criterios de evaluación para los trabajos.</p></div>
+    </a>
+    <a href="#" class="place-card card-refuerzo" data-active="false">
+      <div class="place-info"><h3>Plan de Clase / Semana</h3><p>Agenda con actividades y temas del periodo.</p></div>
+    </a>
+    <a href="pagina/index.html" class="place-card card-paginas">
+      <div class="place-info"><h3>Paginas de interes</h3><p>Invita a la curiosidad y navegación de paginas dadas por el docente.</p></div>
+    </a>
+  </section>
+
+  <!-- 🎥 Apoyo Visual y Multimedia -->
+  <h2 class="section-title">🎥 Apoyo Visual y Multimedia</h2>
+  <section class="places-grid">
+    <a href="videos/index.html" class="place-card card-videos">
+      <div class="place-info"><h3>Videos de Apoyo</h3><p>Material audiovisual explicativo.</p></div>
+    </a>
+    <a href="#" class="place-card card-comunicacion" data-active="false">
+      <div class="place-info"><h3>Audios Educativos</h3><p>Podcasts o grabaciones de repaso.</p></div>
+    </a>
+    <a href="#" class="place-card card-recursos" data-active="false">
+      <div class="place-info"><h3>Galería de Imágenes</h3><p>Infografías y esquemas visuales.</p></div>
+    </a>
+    <a href="#" class="place-card card-registro" data-active="false">
+      <div class="place-info"><h3>Presentaciones del Docente</h3><p>PowerPoints o PDFs explicativos.</p></div>
+    </a>
+  </section>
+
+  <!-- 💡 Actividades Interactivas -->
+  <h2 class="section-title">💡 Actividades Interactivas</h2>
+  <section class="places-grid">
+    <a href="#" class="place-card card-actividades" data-active="false">
+      <div class="place-info"><h3>Prueba de Conocimiento</h3><p>Evaluaciones con tiempo y retroalimentación.</p></div>
+    </a>
+    <a href="#" class="place-card card-refuerzo" data-active="false">
+      <div class="place-info"><h3>Juegos Educativos</h3><p>Crucigramas, trivias y sopas de letras.</p></div>
+    </a>
+    <a href="laboratorio_virtual.html" class="place-card card-paginas">
+      <div class="place-info"><h3>Laboratorio Virtual</h3><p>Experiencias digitales virtuales y presenciales.</p></div>
+    </a>
+    <a href="preguntas/index.html" class="place-card card-motivacion">
+      <div class="place-info"><h3>Preguntas Saber </h3><p>Repasa procesos y pon a prueba tus conocimientos.</p></div>
+    </a>
+  </section>
+
+  <!-- 💬 Comunicación y Apoyo -->
+  <h2 class="section-title">💬 Comunicación y Apoyo</h2>
+  <section class="places-grid">
+    <a href="#" class="place-card card-comunicacion" data-active="false">
+      <div class="place-info"><h3>Chat Educativo / Asistente IA</h3><p>Resuelve dudas en tiempo real.</p></div>
+    </a>
+    <a href="#" class="place-card card-recursos" data-active="false">
+      <div class="place-info"><h3>Foro de Discusión</h3><p>Comparte ideas y opiniones.</p></div>
+    </a>
+    <a href="#" class="place-card card-registro" data-active="false">
+      <div class="place-info"><h3>Psicología Escolar🧩</h3><p>Espacio de acompañamiento emocional.</p></div>
+    </a>
+    <a href="#" class="place-card card-motivacion" data-active="false">
+      <div class="place-info"><h3>Talleres de Crecimiento Personal</h3><p>Actividades sobre autoestima y liderazgo.</p></div>
+    </a>
+  </section>
+
+  
+  <!-- 📩 PQRS -->
+  <div class="place-card card-pqrs" data-active="false">
+    <div class="place-info">
+      <h3>📩 PQRS</h3>
+      <p>Envía peticiones, quejas o sugerencias.</p>
+    </div>
+  </div>
+
+  <!-- 🪟 Modal -->
+  <div class="modal-overlay" id="modalAviso">
+    <div class="modal-content">
+      <h2>📢 Pagina en mantenimiento:</h2>
+      <p>Estamos reestructurando los contenidos para mejorar tu experiencia de aprendizaje.  
+      Gracias por tu comprensión.</p>
+      <button id="cerrarModal">Cerrar</button>
+    </div>
+  </div>
+
+ <!-- 🕒 Hora Legal -->
+<div class="hora-legal">
+  <div class="hora-texto" id="horaColombia">Cargando hora...</div>
+</div>
+
+
+  <footer>
+    © 2025 Institución Educativa Colucas - Derechos reservados
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/jquery-1.11.3.min.js"></script>
+  <script>
+    // 🕒 Actualizar hora de Colombia
+    function actualizarHora() {
+      const opciones = { timeZone: 'America/Bogota', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+      const hora = new Date().toLocaleTimeString('es-CO', opciones);
+      document.getElementById("horaColombia").textContent = hora;
+    }
+    setInterval(actualizarHora, 1000);
+    actualizarHora();
+
+    // 🪟 Modal
+    const modal = document.getElementById('modalAviso');
+    const cerrarModal = document.getElementById('cerrarModal');
+
+    document.querySelectorAll('.place-card[data-active="false"]').forEach(card => {
+      card.addEventListener('click', function(event) {
+        event.preventDefault();
+        modal.style.display = 'flex';
+      });
+    });
+
+    cerrarModal.addEventListener('click', () => modal.style.display = 'none');
+    modal.addEventListener('click', e => { if (e.target === modal) modal.style.display = 'none'; });
+  </script>
+</body>
+</html>

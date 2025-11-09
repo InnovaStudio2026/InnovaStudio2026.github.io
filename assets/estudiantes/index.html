@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" href="img/icono.png">
+  <title>Clave Acceso</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background: url(img/fondo2.jpg) no-repeat center center fixed;
+      background-size: cover;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    #titulo1 {
+      background-color: rgba(3, 56, 214, 0.3);
+      padding: 20px;
+      width: 90%;
+      max-width: 600px;
+      color: rgb(0, 0, 0);
+      text-align: center;
+      font-size: 28px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+
+    #titulo {
+      background-color: rgba(255, 38, 0, 0.562);
+      padding: 30px;
+      width: 90%;
+      max-width: 600px;
+      text-align: center;
+      color: rgb(0, 0, 0);
+      font-size: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+
+    .form-container {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 300px;
+    }
+
+    .input-wrapper svg.lock {
+      position: absolute;
+      top: 50%;
+      left: 10px;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      fill: #013adf;
+      opacity: 0.7;
+    }
+
+    .input-wrapper svg.toggle {
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+      width: 22px;
+      height: 22px;
+      fill: rgba(0, 0, 0, 0.4);
+      cursor: pointer;
+      transition: fill 0.3s;
+    }
+
+    .input {
+      width: 100%;
+      padding: 12px 40px 12px 35px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+      outline: none;
+    }
+
+    .input:focus {
+      border-color: #ff7c11;
+      box-shadow: 0 0 6px rgba(219, 132, 18, 0.4);
+    }
+
+    .button {
+      padding: 12px 25px;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(45deg, #4CAF50, #2e7d32);
+      color: rgb(0, 0, 0);
+      font-size: 16px;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.3s;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .button:hover {
+      background: linear-gradient(45deg, #45a049, #1b5e20);
+      transform: scale(1.05);
+    }
+
+    .loader {
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      border-top: 4px solid #002699;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+      margin-top: 15px;
+      display: none;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 600px) {
+      #titulo1, #titulo {
+        font-size: 20px;
+        padding: 15px;
+      }
+
+      .input {
+        font-size: 14px;
+      }
+
+      .button {
+        font-size: 14px;
+      }
+    }
+
+    footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background-color: rgb(13, 228, 96);
+      text-align: center;
+      padding: 12px 0;
+      color: #000;
+      font-weight: bold;
+      z-index: 2;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+  </style>
+</head>
+<body>
+
+
+  <div id="titulo1">
+    <b> <br />Secundaria</b>
+  </div>
+
+  <div id="titulo">
+    Bienvenido, Estudiante. Introduzca su <b>clave</b> para acceder al espacio educativo.
+    <form onsubmit="return acceso()" class="form-container">
+      <div class="input-wrapper">
+        <svg class="lock" viewBox="0 0 24 24">
+          <path d="M12 17a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm6-6V9a6 6 0 10-12 0v2H4v10h16V11h-2zm-8-2a4 4 0 118 0v2H10V9z"/>
+        </svg>
+        <input type="password" id="clave" class="input" placeholder="Ingrese la clave" required />
+        <svg class="toggle" id="togglePassword" viewBox="0 0 24 24" tabindex="0">
+          <path d="M12 4.5C7.5 4.5 3.7 7.5 2 12c1.7 4.5 5.5 7.5 10 7.5s8.3-3 10-7.5c-1.7-4.5-5.5-7.5-10-7.5zm0 13a5.5 5.5 0 110-11 5.5 5.5 0 010 11zm0-9a3.5 3.5 0 100 7 3.5 3.5 0 000-7z"/>
+        </svg>
+      </div>
+      <button type="submit" class="button">Ingresar</button>
+      <div id="loader" class="loader" aria-hidden="true"></div>
+    </form>
+  </div>
+
+  <footer>
+    © 2025 Institución Educativa colucas - Derechos reservados
+  </footer>
+
+  <script>
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('clave');
+    const submitButton = document.querySelector('.button');
+    const loader = document.getElementById('loader');
+
+    // --- Password Toggle Logic ---
+    togglePassword.addEventListener('click', () => {
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
+      togglePassword.style.fill = type === 'password' ? 'rgba(0, 0, 0, 0.4)' : '#013adf';
+    });
+
+    togglePassword.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        togglePassword.click();
+      }
+    });
+
+    // --- Access (Login) Logic ---
+    function acceso() {
+      const claveCorrecta = "Educolucas25";
+      const claveIngresada = passwordInput.value.trim();
+
+      if (claveIngresada === '') {
+        passwordInput.focus();
+        return false;
+      }
+
+      submitButton.disabled = true;
+      loader.style.display = 'block';
+      loader.setAttribute('aria-hidden', 'false');
+
+      setTimeout(() => {
+        loader.style.display = 'none';
+        loader.setAttribute('aria-hidden', 'true');
+        submitButton.disabled = false;
+
+        if (claveIngresada === claveCorrecta) {
+          window.location.href = "menu.html";
+        } else {
+          alert("Contraseña incorrecta. Inténtelo nuevamente.");
+          passwordInput.value = '';
+          passwordInput.focus();
+        }
+      }, 1500);
+
+      return false;
+    }
+
+    // --- New Keyboard Shortcut Logic (Ctrl + F3) ---
+    document.addEventListener('keydown', (event) => {
+      // Check for Ctrl key (or Cmd key on Mac) and F3 key
+      const isCtrlOrCmd = event.ctrlKey || event.metaKey; // event.metaKey is for Cmd on Mac
+      const isF3 = event.key === 'F3' || event.keyCode === 114; // F3 key code is 114
+
+      if (isCtrlOrCmd && isF3) {
+        event.preventDefault(); // Prevent default browser action for Ctrl + F3
+        window.location.href = "certificados.html"; // Navigate to index.html
+      }
+    });
+
+// --- New Keyboard Shortcut Logic (Ctrl + F5) ---
+    document.addEventListener('keydown', (event) => {
+      // Check for Ctrl key (or Cmd key on Mac) and F5 key
+      const isCtrlOrCmd = event.ctrlKey || event.metaKey; // event.metaKey is for Cmd on Mac
+      const isF5 = event.key === 'F5' || event.keyCode === 116; // F3 key code is 114
+
+      if (isCtrlOrCmd && isF5) {
+        event.preventDefault(); // Prevent default browser action for Ctrl + F3
+        window.location.href = "resultados2.html"; // Navigate to index.html
+      }
+    });
+
+
+
+
+  </script>
+
+<script 
+    src="https://cdn.builderbot.cloud/sdk.umd.js" 
+    data-builderbot-chat
+    data-company="BuilderBot"
+    data-id="38dbd8cc-c938-4c48-935b-0cbe5f3f3332"
+  ></script>
+
+</body>
+</html>

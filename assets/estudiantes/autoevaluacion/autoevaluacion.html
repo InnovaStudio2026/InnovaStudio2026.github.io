@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Auto - Evaluación</title>
+    <!--
+
+Template 2094 Mason
+
+http://www.tooplate.com/view/2094-mason
+
+-->
+    <!-- load stylesheets -->
+    <!--<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300,400"> -->
+    <!-- Google web font "Open Sans", https://fonts.google.com/ -->
+    <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css" />
+    <!-- Font Awesome, http://fontawesome.io/ -->
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <!-- Bootstrap styles, https://getbootstrap.com/ -->
+    <link rel="stylesheet" href="css/tooplate-style.css" />
+    <link rel="stylesheet" href="stylesheets/stylemain.css" />
+    <link rel="stylesheet" href="stylesheets/touchTouch.css" />
+    <link rel="stylesheet" href="stylesheets/font-awesome.min.css" />
+    <!-- Templatemo style -->
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <script language="javascript">
+      var respuesta = new Array();
+      var explicacionRespuesta = new Array();
+      var tuRespuesta = new Array();
+      var puntuacion = 0;
+      var sumatoria = 0;
+      var d = new Date();
+      var fecha =
+        d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear();
+      var hora = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+      //aqui se ubican las respuestas de las preguntas (puedes agregar mas o quitar)
+
+      function Motor(pregunta, respuesta) {
+        tuRespuesta[pregunta] = respuesta;
+      }
+
+      function Puntuacion() {
+        var auto = 0;
+        var moti = 0;
+        var efic = 0;
+        var efici = 0;
+        var pres = 0;
+        var desa = 0;
+        var sent = 0;
+        var total = parseInt(total);
+        var totald = parseFloat;
+        var cualitativa;
+        auto = document.getElementById("auto").value;
+        moti = document.getElementById("moti").value;
+        efic = document.getElementById("efic").value;
+        efici = document.getElementById("efici").value;
+        pres = document.getElementById("pres").value;
+        desa = document.getElementById("desa").value;
+        sent = document.getElementById("sent").value;
+
+        if (auto >= 10 && auto <= 50) {
+          if (moti >= 10 && moti <= 50) {
+            if (efic >= 10 && efic <= 50) {
+              if (efici >= 10 && efici <= 50) {
+                if (pres >= 10 && pres <= 50) {
+                  if (desa >= 10 && desa <= 50) {
+                    if (sent >= 10 && sent <= 50) {
+                      var area = document.getElementById("area").innerHTML;
+                      var eva = document.getElementById("eva").innerHTML;
+                      var grado = document.getElementById("grado").value;
+                      var nombre_us = document.getElementById("nom").value;
+                      if (nombre_us === "") {
+                        alert("El nombre del estudiante está vacío");
+                      } else {
+                        var textoRespuesta =
+                          "Autoevaluación de: " + nombre_us + "\n";
+                        textoRespuesta =
+                          textoRespuesta + "Grado: " + grado + "\n";
+                        textoRespuesta =
+                          textoRespuesta +
+                          "Fecha / Hora: " +
+                          fecha +
+                          " / " +
+                          hora +
+                          "\n";
+                        textoRespuesta =
+                          textoRespuesta + eva + " - " + area + "\n";
+                        textoRespuesta = textoRespuesta + "Resultado: \n";
+                        textoRespuesta =
+                          textoRespuesta +
+                          "Autonomía: " +
+                          (auto / 10).toFixed(1) +
+                          "\n";
+                        textoRespuesta =
+                          textoRespuesta +
+                          "Motivación: " +
+                          (moti / 10).toFixed(1) +
+                          "\n";
+                        textoRespuesta =
+                          textoRespuesta +
+                          "Eficacia: " +
+                          (efic / 10).toFixed(1) +
+                          "\n";
+                        textoRespuesta =
+                          textoRespuesta +
+                          "Eficiencia: " +
+                          (efici / 10).toFixed(1) +
+                          "\n";
+                        textoRespuesta =
+                          textoRespuesta +
+                          "Presentación de Trabajos: " +
+                          (pres / 10).toFixed(1) +
+                          "\n";
+                        textoRespuesta =
+                          textoRespuesta +
+                          "Desarrollo de Competencias: " +
+                          (desa / 10).toFixed(1) +
+                          "\n";
+                        textoRespuesta =
+                          textoRespuesta +
+                          "Sentido de Pertenencia: " +
+                          (sent / 10).toFixed(1) +
+                          "\n";
+
+                        total =
+                          (parseInt(auto) +
+                            parseInt(moti) +
+                            parseInt(efic) +
+                            parseInt(efici) +
+                            parseInt(pres) +
+                            parseInt(desa) +
+                            parseInt(sent)) /
+                          7;
+                        totald = total / 10;
+                        if (
+                          totald.toFixed(1) >= 1.0 &&
+                          totald.toFixed(1) <= 2.9
+                        ) {
+                          cualitativa = "Bajo";
+                        } else if (
+                          totald.toFixed(1) >= 3.0 &&
+                          totald.toFixed(1) <= 3.9
+                        ) {
+                          cualitativa = "Básico";
+                        } else if (
+                          totald.toFixed(1) >= 4.0 &&
+                          totald.toFixed(1) <= 4.5
+                        ) {
+                          cualitativa = "Alto";
+                        } else if (totald.toFixed(1) >= 4.6) {
+                          cualitativa = "Superior";
+                        }
+                        sumatoria++;
+                        textoRespuesta =
+                          textoRespuesta +
+                          "***********************************" +
+                          "\n";
+                        textoRespuesta =
+                          textoRespuesta +
+                          "VALORACIÓN FINAL : " +
+                          totald.toFixed(1) +
+                          " (" +
+                          cualitativa +
+                          ")" +
+                          "\n";
+                        textoRespuesta =
+                          textoRespuesta +
+                          "***********************************";
+                        alert(textoRespuesta);
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        } else {
+          alert("Debe ingresar toda la Valoración...");
+        }
+      }
+    </script>
+  </head>
+
+  <body>
+    <div id="wrapper">
+      <div class="container-fluid">
+        <div class="tm-body">
+          <div id="titulo_prin">
+            <div style="text-align: left">
+              <div id="area">📒</div>
+            </div>
+            <div style="text-align: center">
+              <b id="negrita"><div id="eva">AUTO - EVALUACIÓN</div></b>
+            </div>
+            <div style="text-align: right">Prof. Marta Emilia Ovalle Burgos</div>
+          </div>
+          <br />
+          <form action="" method="" name="f_tercero_lenguaje_1">
+            <h3 align="justify">
+              <font color="black"
+                ><b id="negrita"> Estudiante:</b
+                ><input
+                  type="text"
+                  name="nombre_usu"
+                  id="nom"
+                  size="20px" /><br
+              /></font>
+            </h3>
+            <h4 align="justify">
+              <font color="black"
+                ><b id="negrita">Grado:</b>
+                <select name="grado" id="grado">
+                  <option value="601">6-01</option>
+                  <option value="602">6-02</option>
+                  <option value="801">8-01</option>
+                  <option value="802">8-02</option>
+                  <option value="1101">11-01</option>
+                </select>
+              </font>
+            </h4>
+
+            <!-- Inicio de la sección -->
+            <div class="row mb-5">
+              <div class="media tm-flexbox-ie-fix tm-width-ie-fix">
+                <div
+                  class="
+                    media-body
+                    tm-flexbox-ie-fix tm-width-ie-fix tm-bg-light-gray
+                  "
+                >
+                  <div class="p-5">
+                    <!-- Escriba el Contenido  -->
+
+                    <div class="respuesta">
+                      <p align="justify">
+                        <font size="+3" color="#0000FF">
+                          <!-- Aquí va la pregunta  -->
+                          <font color="black" size="+2"
+                            ><b id="negrita">Querido estudiante</b>, a
+                            continuación se presentan los criterios con los
+                            respectivos indicadores para que autoevalúes tu
+                            trabajo y desempeño en el área. Evalúa cada uno de
+                            los criterios teniendo en cuenta la siguiente escala
+                            de valoración:</font
+                          ><br />
+                          <center>
+                            <img
+                              src="img/escala.jpg"
+                              width="60%"
+                              height="56px"
+                            />
+                          </center>
+
+                          <!-- fin de la pregunta -->
+                        </font>
+                      </p>
+                    </div>
+
+                    <!-- Fin del contenido -->
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Fin de la sección -->
+
+            <!-- Inicio de la sección -->
+            <div class="row mb-5">
+              <div class="media tm-flexbox-ie-fix tm-width-ie-fix">
+                <div
+                  class="
+                    media-body
+                    tm-flexbox-ie-fix tm-width-ie-fix tm-bg-light-gray
+                  "
+                >
+                  <div class="p-5">
+                    <!-- Escriba el Contenido  -->
+
+                    <div class="pregunta">
+                      <font color="black" size="+2"
+                        >Tenga presente que para la valoración del criterio y
+                        sus indicadores,
+                        <b id="negrita">NO debe utilizar puntos, ni comas</b> en
+                        la valoración, por ejemplo:
+                        <center>
+                          <img
+                            src="img/ejemplo_val.jpg"
+                            width="20%"
+                            height="91"
+                          />
+                        </center>
+                      </font>
+                    </div>
+                    <div class="respuesta">
+                      <p align="justify">
+                        <font size="+3" color="#0000FF">
+                          <!-- Aquí va la pregunta  -->
+
+                          <!-- fin de la pregunta -->
+                        </font>
+                      </p>
+                      <p align="center">
+                        <font size="+2" color="black">
+                          <table align="center" border="1" width="90%">
+                            <tr align="center">
+                              <td width="20%">
+                                <h3><b id="negrita">CRITERIO</b></h3>
+                              </td>
+                              <td width="60%">
+                                <h3><b id="negrita">INDICADOR</b></h3>
+                              </td>
+                              <td width="20%">
+                                <h3><b id="negrita">VALORACIÓN</b></h3>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td align="center">AUTONOMÍA</td>
+                              <td align="justify">
+                                * Desarrollé el 100% de las actividades
+                                propuestas en las guías y durante las clases
+                                virtuales.<br />
+                                * Mantuve diálogo con el (la) docente dentro del
+                                horario de clase y en los casos que fue
+                                necesario, para asegurarme la comprensión
+                                autónoma.<br />
+                                * Estuve comprometido con mi formación integral
+                                permanente, brindando mis aportes en los
+                                espacios requeridos.<br />
+                                * Aprendí y me apropié de las temáticas
+                                propuestas en las guías, de manera autónoma; con
+                                una mentalidad reflexiva, constructiva y
+                                propositiva.
+                              </td>
+                              <td align="center">
+                                <input
+                                  type="text"
+                                  name="autonomia"
+                                  id="auto"
+                                  size="2px"
+                                />
+                              </td>
+                            </tr>
+                            <tr>
+                              <td align="center">MOTIVACIÓN</td>
+                              <td align="justify">
+                                * Realicé con agrado, dedicación y constancia
+                                las actividades propuestas en las guías; en los
+                                tiempos y horarios estipulados.<br />
+                                * Reporté asistencia iniciando cada clase.<br />
+                                * Participé activamente durante el desarrollo de
+                                la clase, según el horario de la aplicación.<br />
+                                * Me interesé por completar mis actividades en
+                                donde se evidencian los aprendizajes
+                                propuestos.<br />
+                                * Consulté (según mis posibilidades y recursos)
+                                e incluí información relevante y precisa en el
+                                desarrollo de las actividades.
+                              </td>
+                              <td align="center">
+                                <input
+                                  type="text"
+                                  name="motivacion"
+                                  id="moti"
+                                  size="2px"
+                                />
+                              </td>
+                            </tr>
+                            <tr>
+                              <td align="center">EFICACIA</td>
+                              <td align="justify">
+                                * Cumplí con el desarrollo completo de las
+                                actividades a partir de las indicaciones
+                                descritas en cada guía.<br />
+                                * Me apropié de la fundamentación trabajada en
+                                las guías de aprendizaje.<br />
+                                * Hice envío completo de las guías en la fecha
+                                estipulada.
+                              </td>
+                              <td align="center">
+                                <input
+                                  type="text"
+                                  name="eficacia"
+                                  id="efic"
+                                  size="2px"
+                                />
+                              </td>
+                            </tr>
+                            <tr>
+                              <td align="center">EFICIENCIA</td>
+                              <td align="justify">
+                                * Comprendí y consigné la fundamentación
+                                necesaria expuesta en las guías y/o páginas web
+                                de interés, como soporte para el desarrollo de
+                                las actividades propuestas y envío de
+                                evidencias.<br />
+                                * Realicé las actividades sugeridas, tanto en la
+                                guía como durante el desarrollo de las clases
+                                virtuales, en los horarios estipulados y
+                                dedicando el tiempo necesario.<br />
+                                * Hice envío oportuno de mi evidencia de trabajo
+                                en cada clase.
+                              </td>
+                              <td align="center">
+                                <input
+                                  type="text"
+                                  name="eficiencia"
+                                  id="efici"
+                                  size="2px"
+                                />
+                              </td>
+                            </tr>
+                            <tr>
+                              <td align="center">PRESENTACIÓN DE TRABAJOS</td>
+                              <td align="justify">
+                                * Elaboré cada una de las guías en forma
+                                completa, organizada y bien fundamentadas,
+                                apoyándome en mi pensamiento creativo.<br />
+                                * Revisé cuidadosamente el trabajo realizado,
+                                verificando el buen uso de los recursos y
+                                materiales con que cuento.<br />
+                                * Organicé de forma adecuada las evidencias
+                                enviadas (imágenes claras, ordenadas, marcadas,
+                                formato sugerido).
+                              </td>
+                              <td align="center">
+                                <input
+                                  type="text"
+                                  name="pres"
+                                  id="pres"
+                                  size="2px"
+                                />
+                              </td>
+                            </tr>
+                            <tr>
+                              <td align="center">DESARROLLO DE COMPETENCIAS</td>
+                              <td align="justify">
+                                * Comprendí y alcancé los propósitos planteados
+                                en las guías de aprendizaje, reconociendo mis
+                                fortalezas y debilidades.<br />
+                                * Mis trabajos y evidencias demuestran
+                                claramente mi interpretación y comprensión de la
+                                fundamentación trabajada y de las actividades
+                                planteadas para cada clase.<br />
+                                * Puedo explicar con claridad y precisión el
+                                desarrollo de las actividades, las temáticas
+                                trabajadas, los aprendizajes y conclusiones
+                                obtenidas con el desarrollo de cada una de las
+                                guías, aplicando lo propuesto en diferentes
+                                situaciones.
+                              </td>
+                              <td align="center">
+                                <input
+                                  type="text"
+                                  name="desarrollo"
+                                  id="desa"
+                                  size="2px"
+                                />
+                              </td>
+                            </tr>
+                            <tr>
+                              <td align="center">SENTIDO DE PERTENENCIA</td>
+                              <td align="justify">
+                                * Valoro los espacios dados en las clases
+                                virtuales y los de seguimiento y
+                                retroalimentación del docente como parte
+                                fundamental de mi formación integral, que me
+                                permiten desarrollar mi pensamiento crítico,
+                                creativo y humanizador. <br />
+                                * Mantuve un ambiente y comunicación, adecuada y
+                                respetuosa, tanto con el docente como con mis
+                                compañeros; en los diferentes espacios virtuales
+                                de formación.<br />
+                                * Cuando no pude reportarme en clase o cumplir
+                                con el envío de una evidencia, me comuniqué con
+                                el docente para explicarle las razones y llegar
+                                a nuevos acuerdos de entrega y seguimiento.<br />
+                                * Participé en forma dinámica de las diferentes
+                                actividades propuestas por el docente y/o por la
+                                institución.
+                              </td>
+                              <td align="center">
+                                <input
+                                  type="text"
+                                  name="sentido"
+                                  id="sent"
+                                  size="2px"
+                                />
+                              </td>
+                            </tr>
+                          </table>
+                        </font>
+                      </p>
+                    </div>
+
+                    <!-- Fin del contenido -->
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Fin de la sección -->
+
+            <center>
+              <input
+                type="button"
+                value="RESULTADO"
+                onClick="Puntuacion()"
+                style="
+                  width: 150px;
+                  height: 35px;
+                  font-size: 19px;
+                  background-color: #c0c0c0;
+                "
+              />
+            </center>
+            <br />
+          </form>
+        </div>
+        <!-- container-fluid -->
+      </div>
+    </div>
+
+    <!-- load JS files -->
+    <script src="js/jquery-1.11.3.min.js"></script>
+    <!-- jQuery (https://jquery.com/download/) -->
+    <script>
+      $(document).ready(function () {
+        // Update the current year in copyright
+        $(".tm-current-year").text(new Date().getFullYear());
+      });
+    </script>
+  </body>
+</html>

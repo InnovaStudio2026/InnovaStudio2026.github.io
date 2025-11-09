@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lista de resultados</title>
+    <link rel="icon" href="img/icono.png">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: linear-gradient(to right, yellow, green);
+        }
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border: 1px solid white;
+            color: black;
+        }
+        th {
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+        .btn {
+            background: linear-gradient(to right, yellow, green);
+            border: none;
+            color: black;
+            padding: 10px 15px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <h1 align="center">Lista de resultados</h1>
+    <h2 align="center"></h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Juan</td> <div></div>
+                <td><a href="resultado.html" class="btn">Resultado</a></td>
+            </tr>
+            <tr>
+                <td>Ana</td>
+                <td><a href="resultado.html" class="btn">Resultado</a></td>
+            </tr>
+            <tr>
+                <td>Pablo</td>
+                <td><a href="resultado.html" class="btn">Resultado</a></td>
+            </tr>
+            <tr>
+                <td>Maria</td>
+                <td><a href="resultado.html" class="btn">Resultado</a></td>
+            </tr>
+            <tr>
+                <td>Lucía</td>
+                <td><a href="resultado.html" class="btn">Resultado</a></td>
+            </tr>
+            <tr>
+                <td>José</td>
+                <td><a href="resultado.html" class="btn">Resultado</a></td>
+            </tr>
+            <tr>
+                <td>Carla</td>
+                <td><a href="resultado.html" class="btn">Resultado</a></td>
+            </tr>
+            <tr>
+                <td>Fernando</td>
+                <td><a href="resultado.html" class="btn">Resultado</a></td>
+            </tr>
+            <tr>
+                <td>Sofía</td>
+                <td><a href="resultado.html" class="btn">Resultado</a></td>
+            </tr>
+            <tr>
+                <td>Diego</td>
+                <td><a href="resultado.html" class="btn">Resultado</a></td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    <script>
+        document.addEventListener('keydown', function(event) {
+            // Verifica si se presionó Alt + F3
+            if (event.altKey && event.key === 'F3') {
+                event.preventDefault(); // Prevenir el comportamiento por defecto
+                window.location.href = 'https://q.plataformaintegra.net/lucascaballero/index.php'; // Cambia el enlace por el deseado
+            }
+        });
+      </script>
+      
+      <body>
+      <h1>Presiona Alt + F3 para abrir un enlace</h1>
+      </body>
+
+
+</body>
+</html>

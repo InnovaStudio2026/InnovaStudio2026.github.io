@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Tabla de Resultados - Docente</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom right, #0a2c58, #ffffff);
+            padding: 20px;
+            color: #333;
+        }
+        .contenedor-resultados {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 900px;
+            margin: 40px auto;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            color: #0a2c58;
+            border-bottom: 2px solid #4a90e2;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #4a90e2;
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f1f8ff;
+        }
+        .btn-accion {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s, opacity 0.2s;
+            min-width: 120px;
+            text-align: center;
+        }
+        .btn-activo {
+            background-color: #28a745;
+            color: white;
+        }
+        .btn-activo:hover {
+            background-color: #218838;
+        }
+        .btn-inactivo {
+            background-color: #dc3545;
+            color: white;
+            opacity: 0.8;
+            cursor: not-allowed;
+        }
+        .btn-volver {
+            background-color: #6c757d;
+            color: white;
+            margin-bottom: 20px;
+        }
+        .btn-volver:hover {
+            background-color: #5a6268;
+        }
+
+        /* Contenedor de botones superior */
+        .header-acciones {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .btn-agregar {
+            background-color: #4a90e2;
+            color: white;
+        }
+        .btn-agregar:hover {
+            background-color: #357bd6;
+        }
+
+        /* -------------------------------------- */
+        /* ESTILOS DEL MODAL DE DETALLE Y EDITOR */
+        /* -------------------------------------- */
+        .modal-overlay {
+            display: none; 
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #detalleResultado, #editorEstudiante {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 450px;
+            width: 90%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transform: scale(0.9);
+            opacity: 0;
+            transition: all 0.3s ease-out;
+            display: none; /* Oculto por defecto */
+        }
+        
+        .modal-overlay.active #detalleResultado,
+        .modal-overlay.active #editorEstudiante {
+            display: block; /* Muestra el modal activo */
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        #detalleResultado h3, #editorEstudiante h3 {
+            color: #0a2c58;
+            border-bottom: 2px solid #4a90e2;
+            padding-bottom: 10px;
+            margin-top: 0;
+            font-size: 24px;
+        }
+        #detalleResultado p {
+            line-height: 1.6;
+            margin: 8px 0;
+            font-size: 16px;
+        }
+        #detalleResultado p strong {
+            color: #0a2c58;
+            min-width: 120px;
+            display: inline-block;
+        }
+        .nota-final {
+            background-color: #e0f2ff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-weight: bold;
+            text-align: center;
+            font-size: 1.2em;
+        }
+        .nota-final span {
+            color: #dc3545;
+            font-size: 1.3em;
+        }
+        .btn-cerrar-modal {
+            background-color: #dc3545;
+            color: white;
+            margin-top: 20px;
+            width: 100%;
+        }
+        .btn-cerrar-modal:hover {
+            background-color: #c0392b;
+        }
+
+        /* Estilos del Editor */
+        #editorEstudiante label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        #editorEstudiante input, #editorEstudiante select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        #btnGuardarEstudiante {
+            background-color: #28a745;
+            color: white;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body onload="cargarResultadosFijos()">
+
+    <div class="contenedor-resultados">
+        
+        <div class="header-acciones">
+          
+            <button onclick="abrirEditorEstudiante()" class="btn-accion btn-agregar">➕ Agregar Estudiante</button>
+        </div>
+
+        <h1>📊 Resultados Pre-Inscritos</h1>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Nombre y Apellido</th>
+                    <th>Grado</th>
+                    <th>Nota (Base 5.0)</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody id="tablaCuerpo">
+                </tbody>
+        </table>
+    </div>
+    
+    <div class="modal-overlay" id="modalOverlay">
+        
+        <div id="detalleResultado">
+            <h3 id="detalleTitulo">Detalle del Resultado:</h3>
+            <div id="detalleDatos">
+                </div>
+            <button class="btn-accion btn-cerrar-modal" onclick="cerrarDetalle()">Cerrar</button>
+        </div>
+
+        <div id="editorEstudiante">
+            <h3>📝 Registrar Nuevo Estudiante</h3>
+            <div id="editorMensaje" style="color: red; margin-bottom: 10px;"></div>
+            <label for="nuevoCodigo">Código (ej. 106, 107...):</label>
+            <input type="number" id="nuevoCodigo" min="101" required>
+
+            <label for="nuevoNombre">Nombre y Apellido:</label>
+            <input type="text" id="nuevoNombre" required>
+
+            <label for="nuevoGrado">Grado:</label>
+            <select id="nuevoGrado" required>
+                <option value="">Seleccione</option>
+                <option value="6-1">6-1</option>
+                <option value="6-2">6-2</option>
+                <option value="7-1">7-1</option>
+                <option value="7-2">7-2</option>
+                <option value="8-1">8-1</option>
+                <option value="8-2">8-2</option>
+                <option value="9-1">9-1</option>
+                <option value="9-2">9-2</option>
+                <option value="10-1">10-1</option>
+                <option value="11°">11°</option>
+            </select>
+            
+            <button class="btn-accion" id="btnGuardarEstudiante" onclick="guardarNuevoEstudiante()">Guardar Estudiante</button>
+            <button class="btn-accion btn-cerrar-modal" onclick="cerrarDetalle()">Cancelar</button>
+        </div>
+        
+    </div>
+    <script>
+        
+        // 1. LISTA BASE DE ESTUDIANTES (Inicialmente solo los fijos)
+        let estudiantesFijos = [
+            { codigo: '101', nombre: 'Ana María Gómez', grado: '6-1' },
+            { codigo: '102', nombre: 'Carlos David Torres', grado: '6-2' },
+            { codigo: '103', nombre: 'Laura Sofía Pérez', grado: '6-1' },
+            { codigo: '104', nombre: 'Miguel Ángel Rojas', grado: '6-2' },
+            { codigo: '105', nombre: 'Valeria Patricia Castro', grado: '6-2' }
+        ];
+        
+        // Clave en localStorage para guardar la lista de estudiantes adicionales
+        const STORAGE_KEY_LISTA = 'lista_estudiantes_adicionales';
+
+        // ----------------------------------------------------
+        // FUNCIONES DE MANEJO DE LA LISTA DE ESTUDIANTES
+        // ----------------------------------------------------
+
+        /**
+         * Carga los estudiantes adicionales guardados en localStorage.
+         * @returns {Array} Lista completa de estudiantes (fijos + adicionales).
+         */
+        function obtenerListaEstudiantesCompleta() {
+            let estudiantesAdicionales = [];
+            try {
+                const data = localStorage.getItem(STORAGE_KEY_LISTA);
+                if (data) {
+                    estudiantesAdicionales = JSON.parse(data);
+                }
+            } catch (e) {
+                console.error("Error al cargar la lista adicional:", e);
+            }
+            // Combina fijos y adicionales
+            return [...estudiantesFijos, ...estudiantesAdicionales];
+        }
+
+        /**
+         * Carga la lista de estudiantes y revisa localStorage para activar los botones.
+         */
+        function cargarResultadosFijos() {
+            const tablaCuerpo = document.getElementById('tablaCuerpo');
+            tablaCuerpo.innerHTML = ''; // Limpiar la tabla
+
+            const listaCompleta = obtenerListaEstudiantesCompleta();
+            
+            // Ordenar por código para una mejor presentación
+            listaCompleta.sort((a, b) => parseInt(a.codigo) - parseInt(b.codigo));
+
+            listaCompleta.forEach(estudiante => {
+                const storageKey = `resultado_quizz_${estudiante.codigo}`;
+                const resultadoGuardado = localStorage.getItem(storageKey);
+                
+                let nota = 'Pendiente';
+                let botonHTML = '';
+
+                if (resultadoGuardado) {
+                    // Si hay resultado guardado, el botón se activa
+                    try {
+                        const data = JSON.parse(resultadoGuardado);
+                        nota = data.nota || 'N/A';
+                    } catch (e) {
+                        nota = 'Error de datos';
+                    }
+                    
+                    botonHTML = `
+                        <button class="btn-accion btn-activo" onclick="verDetalle('${estudiante.codigo}')">
+                            Ver Resultado
+                        </button>
+                    `;
+                } else {
+                    // Si no hay resultado, el botón se desactiva
+                    botonHTML = `
+                        <button class="btn-accion btn-inactivo" disabled>
+                            Pendiente
+                        </button>
+                    `;
+                }
+
+                // Insertar la fila
+                const fila = tablaCuerpo.insertRow();
+                fila.insertCell().textContent = estudiante.codigo;
+                fila.insertCell().textContent = estudiante.nombre; 
+                fila.insertCell().textContent = estudiante.grado;
+                
+                // Celda de Nota (destacada si está completada)
+                const celdaNota = fila.insertCell();
+                celdaNota.innerHTML = `<span style="font-weight: bold; color: ${nota !== 'Pendiente' ? '#28a745' : '#dc3545'};">${nota}</span>`;
+
+                // Celda de Acción (botón)
+                fila.insertCell().innerHTML = botonHTML;
+            });
+        }
+        
+        // ----------------------------------------------------
+        // FUNCIONES DEL MODAL DE DETALLE (se mantienen)
+        // ----------------------------------------------------
+
+        /**
+         * Muestra el detalle del resultado de un estudiante en un modal.
+         */
+        function verDetalle(codigo) {
+            // Esconde el editor
+            document.getElementById('editorEstudiante').style.display = 'none';
+            document.getElementById('detalleResultado').style.display = 'block';
+
+            const storageKey = `resultado_quizz_${codigo}`;
+            const dataString = localStorage.getItem(storageKey);
+            const modalOverlay = document.getElementById('modalOverlay');
+            const detalleDatos = document.getElementById('detalleDatos');
+
+            // ... (Resto de la lógica de verDetalle se mantiene igual para mostrar los datos) ...
+            if (!dataString) {
+                detalleDatos.innerHTML = `<p style="color:red; text-align:center;">Error: No hay datos de examen completado para el código ${codigo}.</p>`;
+            } else {
+                const data = JSON.parse(dataString);
+                
+                const nombreEstudiante = data.nombre || 'N/A';
+                const gradoEstudiante = data.grado || 'N/A';
+                const fechaFin = data.fecha || 'N/A';
+                const horaInicio = data.horaInicio || 'N/A';
+                const horaFin = data.horaFin || 'N/A';
+
+                const contenido = `
+                    <p>👤 <strong>Estudiante:</strong> ${nombreEstudiante}</p>
+                    <p>🎓 <strong>Grado:</strong> ${gradoEstudiante}</p>
+                    <p>🆔 <strong>Código:</strong> ${codigo}</p>
+                    <p>✅ <strong>Estado:</strong> Completado</p>
+                    <p>⭐ <strong>Puntuación:</strong> ${data.puntuacion || 'N/A'}</p>
+                    <div class="nota-final">
+                        NOTA FINAL: <span>${data.nota || 'N/A'}</span> / 5.0
+                    </div>
+                    <p>📅 <strong>Fecha:</strong> ${fechaFin}</p>
+                    <p>⏱️ <strong>Hora de Inicio:</strong> ${horaInicio}</p>
+                    <p>⏱️ <strong>Hora de Fin:</strong> ${horaFin}</p>
+                `;
+
+                document.getElementById('detalleTitulo').textContent = `Detalle de ${nombreEstudiante} (${codigo})`;
+                detalleDatos.innerHTML = contenido;
+            }
+
+            modalOverlay.style.display = 'flex';
+            modalOverlay.classList.add('active');
+        }
+        
+        function cerrarDetalle() {
+            const modalOverlay = document.getElementById('modalOverlay');
+            modalOverlay.classList.remove('active');
+            // Oculta todos los cuadros internos
+            document.getElementById('detalleResultado').style.display = 'none';
+            document.getElementById('editorEstudiante').style.display = 'none';
+            
+            setTimeout(() => {
+                modalOverlay.style.display = 'none';
+            }, 300);
+        }
+
+        // ----------------------------------------------------
+        // FUNCIONES DEL EDITOR DE ESTUDIANTES
+        // ----------------------------------------------------
+        
+        /**
+         * Abre el modal del editor para agregar un nuevo estudiante.
+         */
+        function abrirEditorEstudiante() {
+            // Esconde el detalle
+            document.getElementById('detalleResultado').style.display = 'none'; 
+            document.getElementById('editorEstudiante').style.display = 'block';
+
+            // Limpia campos y mensajes
+            document.getElementById('nuevoCodigo').value = '';
+            document.getElementById('nuevoNombre').value = '';
+            document.getElementById('nuevoGrado').value = '';
+            document.getElementById('editorMensaje').textContent = '';
+
+            const modalOverlay = document.getElementById('modalOverlay');
+            modalOverlay.style.display = 'flex';
+            modalOverlay.classList.add('active');
+        }
+
+        /**
+         * Valida y guarda el nuevo estudiante en localStorage.
+         */
+        function guardarNuevoEstudiante() {
+            const nuevoCodigo = document.getElementById('nuevoCodigo').value.trim();
+            const nuevoNombre = document.getElementById('nuevoNombre').value.trim();
+            const nuevoGrado = document.getElementById('nuevoGrado').value;
+            const mensajeDiv = document.getElementById('editorMensaje');
+            mensajeDiv.textContent = ''; // Limpiar mensaje anterior
+
+            // Validación de campos
+            if (!nuevoCodigo || !nuevoNombre || !nuevoGrado) {
+                mensajeDiv.textContent = 'Por favor, complete todos los campos.';
+                return;
+            }
+
+            // Validación de código
+            const listaCompleta = obtenerListaEstudiantesCompleta();
+            const codigoString = String(nuevoCodigo);
+
+            if (listaCompleta.some(est => est.codigo === codigoString)) {
+                mensajeDiv.textContent = `Error: El código ${codigoString} ya existe.`;
+                return;
+            }
+            
+            // Si todo es válido, procede a guardar
+            const nuevoEstudiante = {
+                codigo: codigoString,
+                nombre: nuevoNombre,
+                grado: nuevoGrado
+            };
+
+            let estudiantesAdicionales = obtenerListaEstudiantesCompleta().filter(est => !estudiantesFijos.some(fijo => fijo.codigo === est.codigo));
+            estudiantesAdicionales.push(nuevoEstudiante);
+
+            try {
+                localStorage.setItem(STORAGE_KEY_LISTA, JSON.stringify(estudiantesAdicionales));
+                
+                // Actualizar la lista fija en memoria para la sesión actual
+                // (Esto es clave para que se muestre inmediatamente sin recargar)
+                estudiantesFijos = obtenerListaEstudiantesCompleta().filter(est => estudiantesFijos.some(fijo => fijo.codigo === est.codigo));
+                
+                alert(`Estudiante ${nuevoNombre} (Cód. ${nuevoCodigo}) guardado con éxito.`);
+                cerrarDetalle();
+                cargarResultadosFijos(); // Recargar la tabla con el nuevo estudiante
+            } catch (e) {
+                mensajeDiv.textContent = 'Error al guardar los datos en el navegador.';
+                console.error("Error de localStorage:", e);
+            }
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InnovaStudio | Plataforma Educativa 2.0</title>
+    <style>
+        :root {
+            /* Colores Base del Tema Verde Moderno */
+            --color-background: #0a3d19; /* Verde Oscuro Principal */
+            --color-surface: #1B5E4A; /* Verde para Contenedores */
+            --color-text: #E8F5E9; /* Blanco/Verde Muy Claro */
+            --color-primary: #8BC34A; /* Verde Claro/Lima para acentos */
+            --color-secondary: #00E676; /* Verde Brillante (Botones) */
+            --color-shadow: rgba(0, 0, 0, 0.5);
+            --color-border: rgba(139, 195, 74, 0.3);
+            --color-disabled: #000000; /* Negro para botones bloqueados */
+            --color-disabled-text: #424242; /* Gris oscuro para texto bloqueado */
+            --transition-speed: 0.3s;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--color-background);
+            color: var(--color-text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--color-surface);
+            padding: 20px 5%;
+            box-shadow: 0 4px 10px var(--color-shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.8em;
+            color: var(--color-primary);
+        }
+
+        #dashboard {
+            padding: 40px 5%;
+        }
+
+        h2 {
+            font-size: 2em;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--color-primary);
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        /* Contenedor de las Áreas (Grid) */
+        #areas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        /* Estilo de la Tarjeta Modular */
+        .area-card {
+            background-color: var(--color-surface);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px var(--color-shadow);
+            transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+            cursor: pointer;
+            border: 1px solid var(--color-border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .area-card:hover:not(.blocked) {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(139, 195, 74, 0.3); /* Sombra de acento verde */
+        }
+
+        .area-card h3 {
+            margin-top: 0;
+            font-size: 1.4em;
+            color: var(--color-text);
+        }
+
+        .area-card p {
+            font-size: 0.9em;
+            color: rgba(232, 245, 233, 0.7);
+        }
+
+        .icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+            color: var(--color-primary);
+            display: block;
+        }
+
+        /* Estilo para Tarjetas Bloqueadas */
+        .area-card.blocked {
+            background-color: var(--color-disabled);
+            cursor: not-allowed;
+            opacity: 0.7;
+            border: 1px solid var(--color-disabled-text);
+        }
+
+        .area-card.blocked .icon,
+        .area-card.blocked h3,
+        .area-card.blocked p {
+            color: var(--color-disabled-text);
+        }
+        
+        .area-card.blocked:hover {
+            transform: none;
+            box-shadow: 0 4px 10px var(--color-shadow);
+        }
+        
+        /* Contraste Verde y Color Secundario (Blanco) */
+        .progress-bar-container {
+            height: 8px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            margin-top: 15px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0;
+            /* Degradado de Verde Claro a Verde Brillante */
+            background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+            transition: width 1s ease-out;
+        }
+
+        /* Estilo para SweetAlert (Mejorando la apariencia del anuncio) */
+        .swal2-popup {
+            background-color: var(--color-surface) !important;
+            color: var(--color-text) !important;
+            border-radius: 15px !important;
+        }
+        .swal2-title, .swal2-html-container {
+            color: var(--color-text) !important;
+        }
+        .swal2-styled.swal-button-primary {
+            /* Botón con Verde y Blanco */
+            background-color: var(--color-primary) !important;
+            color: var(--color-background) !important; /* Texto oscuro sobre verde claro */
+            font-weight: bold;
+            border: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.2s;
+        }
+        .swal2-styled.swal-button-primary:hover {
+            background-color: #689F38 !important; /* Tono más oscuro de verde claro */
+        }
+
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                text-align: center;
+            }
+            header h1 {
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+<header>
+    <h1>InnovaStudio 🚀                        6°  </h1>
+    <div id="user-info">
+        <p style="margin: 0; color: var(--color-primary);">Estudiante</p>
+    </div>
+</header>
+
+<div id="dashboard">
+    <div id="welcome-message">
+        <h2>Mis Areas de conocimiento</h2>
+        <p>Viaje de aprendizaje es dinámico, accesible y transversal. ¡Selecciona un área para comenzar!</p>
+    </div>
+
+    <div id="areas-grid">
+        </div>
+</div>
+
+<script>
+    // --- Lógica de la Plataforma (JavaScript) ---
+
+    // 1. Array con las 13 Áreas de Conocimiento
+    const areasDeConocimiento = [
+        { name: 'Matemáticas', icon: 'fa-calculator', isBlocked: false, page: 'matematicas.html', description: 'Lógica, álgebra y resolución de problemas.' },
+        { name: 'Lenguaje y Literatura', icon: 'fa-book-open', isBlocked: true, page: 'lengua.html', description: 'Comunicación, gramática, lectura crítica y géneros literarios.' },
+        { name: 'Historia y Sociales', icon: 'fa-globe-americas', isBlocked: false, page: 'historia.html', description: 'Estudio de sociedades, culturas y la historia de nuestro pais.' },
+        { name: 'Biología', icon: 'fa-dna', isBlocked: true, page: 'biologia.html', description: 'Ciencia de la vida, organismos vivos y ecosistemas.' },
+        { name: 'Ingles', icon: 'fa-language', isBlocked: true, page: 'idiomas.html', description: 'Desarrollo de habilidades comunicativas y cultura global.' },
+        { name: 'Artes Visuales', icon: 'fa-palette', isBlocked: true, page: 'artes.html', description: 'Creatividad, expresión, dibujo, pintura y diseño.' },
+        { name: 'Agropecuarias', icon: 'fa-music', isBlocked: true, page: 'musica.html', description: 'Producción, manejo agropecuario.' },
+        { name: 'Educación Física', icon: 'fa-running', isBlocked: true, page: 'educacion-fisica.html', description: 'Salud, bienestar, deportes y motricidad.' },
+        { name: 'Tecnología e Informática', icon: 'fa-laptop-code', isBlocked: true, page: 'tecnologia.html', description: 'Programación, redes, diseño digital y robótica.' },
+        { name: 'Filosofía', icon: 'fa-brain', isBlocked: true, page: 'filosofia.html', description: 'Pensamiento crítico, ética y grandes interrogantes.' },
+
+        { name: 'Educación Cívica', icon: 'fa-gavel', isBlocked: true, page: 'civica.html', description: 'Ciudadanía, derechos, deberes y estructura política.' }
+    ];
+
+    // 2. Función para Generar las Tarjetas (Renderizado Dinámico)
+    function renderizarAreas() {
+        const grid = document.getElementById('areas-grid');
+        areasDeConocimiento.forEach(area => {
+            // Cargar el progreso desde localStorage
+            const progresoKey = `progreso_${area.name.replace(/\s/g, '_')}`;
+            const progreso = parseInt(localStorage.getItem(progresoKey)) || 0;
+            
+            const card = document.createElement('div');
+            card.className = 'area-card';
+            card.classList.toggle('blocked', area.isBlocked); // Añade la clase 'blocked' si está deshabilitada
+            card.setAttribute('data-area', area.name);
+            card.setAttribute('data-page', area.page);
+            
+            card.innerHTML = `
+                <i class="icon fas ${area.icon}"></i>
+                <h3>${area.name} ${area.isBlocked ? '(Próximamente)' : ''}</h3>
+                <p>${area.description}</p>
+                
+                <div class="progress-info">
+                    <p style="margin: 5px 0 0;">Progreso: ${area.isBlocked ? 'N/A' : progreso + '%'}</p>
+                </div>
+                
+                <div class="progress-bar-container">
+                    <div class="progress-bar" style="width: ${area.isBlocked ? '0' : progreso + '%'};"></div>
+                </div>
+            `;
+            
+            // 3. Añadir Interactividad (Bloqueo o Anuncio + Redirección)
+            card.addEventListener('click', () => {
+                if (area.isBlocked) {
+                    // Muestra el anuncio para áreas bloqueadas (Fondo negro)
+                    Swal.fire({
+                        title: '📢Área no Habilitada',
+                        html: `La sección de **${area.name}** no se encuentra habilitada para este grado. ¡Estamos trabajando para lanzarla pronto!`,
+                        icon: 'warning',
+                        confirmButtonText: 'Cerrar Anuncio',
+                        customClass: {
+                            confirmButton: 'swal-button-primary'
+                        }
+                    });
+                } else {
+                    // Muestra el anuncio de confirmación y luego redirige
+                    Swal.fire({
+                        title: `Ingresando a ${area.name}... ✅`,
+                        text: `Serás redirigido al área seleccionada. Presiona 'Continuar' para acceder al modulo.`,
+                        icon: 'success',
+                        confirmButtonText: 'Continuar', // Botón para aceptar la redirección
+                        customClass: {
+                            confirmButton: 'swal-button-primary'
+                        }
+                    }).then((result) => {
+                        // Redirige solo si el usuario hizo clic en el botón 'Continuar'
+                        if (result.isConfirmed) {
+                            window.location.href = card.getAttribute('data-page');
+                        }
+                    });
+                }
+            });
+
+            grid.appendChild(card);
+        });
+    }
+
+    // Ejecución al cargar la página
+    document.addEventListener('DOMContentLoaded', renderizarAreas);
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script 
+    src="https://cdn.builderbot.cloud/sdk.umd.js" 
+    data-builderbot-chat
+    data-company="BuilderBot"
+    data-id="38dbd8cc-c938-4c48-935b-0cbe5f3f3332"
+  ></script>
+
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Acceso</title>
+  <link rel="icon" href="icono.png">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+      position: relative;
+    }
+
+    video#video-fondo {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      min-width: 100%;
+      min-height: 100%;
+      transform: translate(-50%, -50%);
+      object-fit: cover;
+      z-index: -1;
+    }
+
+    .cuadro {
+      position: absolute;
+      bottom: 1cm; /* Justo 1 cm arriba del footer */
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(255, 255, 255, 0.95);
+      width: 260px;
+      padding: 30px 20px;
+      border-radius: 25px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      z-index: 1;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      margin: 12px 0;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-estudiante {
+      background: linear-gradient(45deg, #43e97b, #38f9d7);
+      color: #000;
+    }
+
+    .btn-docente {
+      background: linear-gradient(45deg, #fddb92, #d1fdff);
+      color: #000;
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+      opacity: 0.9;
+    }
+
+    footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background-color: aquamarine;
+      text-align: center;
+      padding: 12px 0;
+      color: #000;
+      font-weight: bold;
+      z-index: 2;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Video de fondo -->
+  <video id="video-fondo" autoplay muted>
+    <source src="video.mp4" type="video/mp4">
+    Tu navegador no soporta el video de fondo.
+  </video>
+
+  <!-- Cuadro de botones -->
+  <div class="cuadro">
+    
+    <button class="btn btn-docente" onclick="location.href='assets/docentes_2/index.html'">Docente</button>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    © 2025 Institución Educativa colucas - Derechos reservados
+  </footer>
+
+  <!-- Script para control de reproducción -->
+  <script>
+    const video = document.getElementById('video-fondo');
+    let pausaActiva = false;
+
+    video.addEventListener('ended', () => {
+      pausaActiva = true;
+      setTimeout(() => {
+        video.currentTime = 0;
+        video.play();
+        pausaActiva = false;
+      }, 180000); // 3 minutos
+    });
+
+    setInterval(() => {
+      if (!pausaActiva) {
+        video.currentTime = 0;
+        video.play();
+      }
+    }, 180000);
+  </script>
+
+</body>
+</html>

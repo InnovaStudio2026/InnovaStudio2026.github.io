@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Tabla de Resultados - Docente</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to bottom right, #0a2c58, #e6f0ff);
+      padding: 20px;
+      color: #333;
+      margin: 0;
+    }
+
+    /* 🔹 ENCABEZADO CENTRADO (LOGO + FRASE) */
+    .encabezado {
+      text-align: center;
+      background: #ffffffcc;
+      backdrop-filter: blur(4px);
+      padding: 25px 15px;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      max-width: 900px;
+      margin: 0 auto 25px auto;
+    }
+
+    .encabezado img {
+      height: 100px;
+      width: auto;
+      margin-bottom: 10px;
+      border-radius: 10px;
+    }
+
+    .frase {
+      color: #0a2c58;
+      font-style: italic;
+      font-size: 22px;
+      line-height: 1.4;
+      font-weight: bold;
+    }
+
+    /* 🔹 CONTENEDOR PRINCIPAL */
+    .contenedor-resultados {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 15px;
+      max-width: 950px;
+      margin: 0 auto 40px auto;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    h1 {
+      color: #0a2c58;
+      border-bottom: 2px solid #4a90e2;
+      padding-bottom: 12px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    /* 🔹 BARRA DE ACCIONES */
+    .barra-acciones {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 25px;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 15px;
+      transition: all 0.25s ease;
+      text-align: center;
+    }
+
+    .btn-agregar {
+      background: linear-gradient(135deg, #28a745, #218838);
+      color: white;
+    }
+    .btn-agregar:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(40, 167, 69, 0.4);
+    }
+
+    .btn-eliminar {
+      background: linear-gradient(135deg, #dc3545, #c82333);
+      color: white;
+    }
+    .btn-eliminar:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(220, 53, 69, 0.4);
+    }
+
+    .btn-pdf {
+      background: linear-gradient(135deg, #0a2c58, #1b5e9e);
+      color: white;
+    }
+    .btn-pdf:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(10, 44, 88, 0.4);
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* 🔹 TABLA */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      font-size: 15px;
+    }
+
+    th, td {
+      padding: 14px 16px;
+      text-align: left;
+      border-bottom: 1px solid #e0e6f0;
+    }
+
+    th {
+      background-color: #0a2c58;
+      color: white;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f8fbff;
+    }
+
+    tr:hover {
+      background-color: #edf5ff;
+    }
+
+    tr.selected {
+      background-color: #d0e3ff !important;
+      border-left: 4px solid #4a90e2;
+    }
+
+    .nota-pendiente {
+      color: #dc3545;
+      font-weight: bold;
+    }
+    .nota-lista {
+      color: #28a745;
+      font-weight: bold;
+    }
+
+    /* 🔹 MODALES */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(2px);
+    }
+
+    .modal {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 16px;
+      max-width: 480px;
+      width: 90%;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+      transform: scale(0.95);
+      opacity: 0;
+      transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-overlay.active .modal {
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    .modal h3 {
+      color: #0a2c58;
+      margin-top: 0;
+      font-size: 24px;
+      border-bottom: 2px solid #4a90e2;
+      padding-bottom: 12px;
+    }
+
+    .form-group {
+      margin: 18px 0;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: #2c3e50;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ced4da;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border 0.3s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #4a90e2;
+      box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+    }
+
+    .modal-footer {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .modal-footer button {
+      flex: 1;
+    }
+
+    .btn-modal-cancel {
+      background: #6c757d;
+    }
+    .btn-modal-cancel:hover {
+      background: #5a6268;
+    }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      color: #7f8c8d;
+      font-size: 14px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body onload="cargarResultadosFijos()">
+
+  <!-- 🔹 ENCABEZADO CENTRADO -->
+  <div class="encabezado">
+    <img src="img/icono.png" alt="Logo del Colegio">
+    <div class="frase">
+      Con Excelencia,<br>
+      Construimos Futuro
+    </div>
+  </div>
+
+  <div class="contenedor-resultados">
+    <h1>📊 Resultados de Estudiantes</h1>
+
+    <div class="barra-acciones">
+      <button class="btn btn-agregar" onclick="abrirModalAgregar()">
+        ✅ Agregar Estudiante
+      </button>
+      <button class="btn btn-eliminar" id="btnEliminar" onclick="eliminarEstudiante()" disabled>
+        🗑️ Eliminar Seleccionado
+      </button>
+      <button class="btn btn-pdf" onclick="descargarPDF()">
+        📥 Descargar PDF
+      </button>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Nombre y Apellido</th>
+          <th>Grado</th>
+          <th>Nota (Base 5.0)</th>
+          <th>Acción</th>
+        </tr>
+      </thead>
+      <tbody id="tablaCuerpo"></tbody>
+    </table>
+
+    <footer>
+      Los cambios se guardan automáticamente. Los estudiantes agregados/eliminados persisten tras recargar.
+    </footer>
+  </div>
+
+  <!-- MODAL: AGREGAR ESTUDIANTE -->
+  <div class="modal-overlay" id="modalAgregar">
+    <div class="modal">
+      <h3>📝 Registrar Nuevo Estudiante</h3>
+      <div id="mensajeError" style="color: #e74c3c; margin-bottom: 10px; font-weight: 500;"></div>
+
+      <div class="form-group">
+        <label for="nuevoCodigo">Código *</label>
+        <input type="text" id="nuevoCodigo" placeholder="Ej. 106" required>
+      </div>
+
+      <div class="form-group">
+        <label for="nuevoNombre">Nombre y Apellido *</label>
+        <input type="text" id="nuevoNombre" placeholder="Ej. Juan Pérez" required>
+      </div>
+
+      <div class="form-group">
+        <label for="nuevoGrado">Grado *</label>
+        <select id="nuevoGrado" required>
+          <option value="">Seleccione grado</option>
+          <option value="6-1">6-1</option>
+          <option value="6-2">6-2</option>
+          <option value="7-1">7-1</option>
+          <option value="7-2">7-2</option>
+          <option value="8-1">8-1</option>
+          <option value="8-2">8-2</option>
+          <option value="9-1">9-1</option>
+          <option value="9-2">9-2</option>
+          <option value="10-1">10-1</option>
+          <option value="11°">11°</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="nuevaNota">Nota (opcional, 0–5)</label>
+        <input type="number" id="nuevaNota" min="0" max="5" step="0.1" placeholder="Si no, se usará 10 (en PDF)">
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-agregar" onclick="guardarNuevoEstudiante()">Guardar</button>
+        <button class="btn btn-modal-cancel" onclick="cerrarModal('modalAgregar')">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: DETALLE (ya existente, actualizado para no interferir) -->
+  <div class="modal-overlay" id="modalDetalle">
+    <div class="modal" id="detalleResultado">
+      <h3 id="detalleTitulo">Detalle del Resultado</h3>
+      <div id="detalleDatos"></div>
+      <button class="btn btn-modal-cancel" style="width:100%; margin-top:20px;" onclick="cerrarModal('modalDetalle')">Cerrar</button>
+    </div>
+  </div>
+
+  <script>
+    const { jsPDF } = window.jspdf;
+
+    // Estudiantes fijos (no editables)
+    const estudiantesFijos = [
+      { codigo: '101', nombre: 'Ana María Gómez', grado: '6-1' },
+      { codigo: '102', nombre: 'Carlos David Torres', grado: '6-2' },
+      { codigo: '103', nombre: 'Laura Sofía Pérez', grado: '6-1' },
+      { codigo: '104', nombre: 'Miguel Ángel Rojas', grado: '6-2' },
+      { codigo: '105', nombre: 'Valeria Patricia Castro', grado: '6-2' }
+    ];
+
+    const STORAGE_KEY_ADICIONALES = 'estudiantes_adicionales';
+    let estudiantesAdicionales = JSON.parse(localStorage.getItem(STORAGE_KEY_ADICIONALES)) || [];
+    let filaSeleccionada = null;
+
+    // ==================================
+    // FUNCIONES PRINCIPALES
+    // ==================================
+
+    function obtenerListaCompleta() {
+      return [...estudiantesFijos, ...estudiantesAdicionales].sort((a, b) => 
+        parseInt(a.codigo) - parseInt(b.codigo)
+      );
+    }
+
+    function guardarEstudiantesAdicionales() {
+      localStorage.setItem(STORAGE_KEY_ADICIONALES, JSON.stringify(estudiantesAdicionales));
+      renderTabla();
+    }
+
+    function renderTabla() {
+      const tbody = document.getElementById('tablaCuerpo');
+      tbody.innerHTML = '';
+
+      const lista = obtenerListaCompleta();
+
+      lista.forEach(est => {
+        const tr = document.createElement('tr');
+        tr.dataset.codigo = est.codigo;
+
+        // Buscar resultado guardado (del quiz)
+        const storageKey = `resultado_quizz_${est.codigo}`;
+        const resultadoGuardado = localStorage.getItem(storageKey);
+        let notaMostrar = 'Pendiente';
+        let claseNota = 'nota-pendiente';
+        let notaPDF = 10; // Si no hay resultado → 10 en PDF
+
+        if (resultadoGuardado) {
+          try {
+            const data = JSON.parse(resultadoGuardado);
+            const notaBase5 = parseFloat(data.nota) || 0;
+            notaMostrar = notaBase5.toFixed(1);
+            notaPDF = notaBase5;
+            claseNota = 'nota-lista';
+          } catch (e) {
+            console.warn(`Error al parsear resultado de ${est.codigo}`);
+          }
+        } else if (est.hasOwnProperty('nota') && est.nota !== undefined) {
+          // Si fue agregado manualmente con nota
+          const notaManual = parseFloat(est.nota);
+          notaMostrar = isNaN(notaManual) ? 'Pendiente' : notaManual.toFixed(1);
+          notaPDF = isNaN(notaManual) ? 10 : notaManual;
+          claseNota = isNaN(notaManual) ? 'nota-pendiente' : 'nota-lista';
+        }
+
+        tr.innerHTML = `
+          <td>${est.codigo}</td>
+          <td>${est.nombre}</td>
+          <td>${est.grado}</td>
+          <td><span class="${claseNota}">${notaMostrar}</span></td>
+          <td>
+            ${notaMostrar !== 'Pendiente' 
+              ? `<button class="btn btn-agregar" style="padding:6px 12px; font-size:13px;" onclick="verDetalle('${est.codigo}')">Ver</button>`
+              : `<span style="color:#999; font-style:italic;">Sin examen</span>`
+            }
+          </td>
+        `;
+
+        tr.addEventListener('click', () => {
+          if (filaSeleccionada) filaSeleccionada.classList.remove('selected');
+          filaSeleccionada = tr;
+          tr.classList.add('selected');
+          document.getElementById('btnEliminar').disabled = false;
+        });
+
+        tbody.appendChild(tr);
+      });
+    }
+
+    // ==================================
+    // MODALES
+    // ==================================
+
+    function abrirModalAgregar() {
+      document.getElementById('mensajeError').textContent = '';
+      document.getElementById('nuevoCodigo').value = '';
+      document.getElementById('nuevoNombre').value = '';
+      document.getElementById('nuevoGrado').value = '';
+      document.getElementById('nuevaNota').value = '';
+      abrirModal('modalAgregar');
+    }
+
+    function abrirModal(id) {
+      document.getElementById(id).classList.add('active');
+    }
+
+    function cerrarModal(id) {
+      document.getElementById(id).classList.remove('active');
+    }
+
+    // ==================================
+    // AGREGAR ESTUDIANTE
+    // ==================================
+
+    function guardarNuevoEstudiante() {
+      const codigo = document.getElementById('nuevoCodigo').value.trim();
+      const nombre = document.getElementById('nuevoNombre').value.trim();
+      const grado = document.getElementById('nuevoGrado').value;
+      const notaInput = document.getElementById('nuevaNota').value;
+      const mensajeError = document.getElementById('mensajeError');
+
+      mensajeError.textContent = '';
+
+      // Validaciones
+      if (!codigo || !nombre || !grado) {
+        mensajeError.textContent = '⚠️ Todos los campos marcados con * son obligatorios.';
+        return;
+      }
+
+      if (codigo.length < 3) {
+        mensajeError.textContent = '⚠️ El código debe tener al menos 3 caracteres.';
+        return;
+      }
+
+      // Verificar duplicado (en fijos + adicionales)
+      const existe = [...estudiantesFijos, ...estudiantesAdicionales].some(e => e.codigo === codigo);
+      if (existe) {
+        mensajeError.textContent = `⚠️ Ya existe un estudiante con código ${codigo}.`;
+        return;
+      }
+
+      const nuevoEst = {
+        codigo,
+        nombre,
+        grado,
+        nota: notaInput ? parseFloat(notaInput) : undefined // undefined → se usará 10 en PDF
+      };
+
+      estudiantesAdicionales.push(nuevoEst);
+      guardarEstudiantesAdicionales();
+      cerrarModal('modalAgregar');
+    }
+
+    // ==================================
+    // ELIMINAR ESTUDIANTE
+    // ==================================
+
+    function eliminarEstudiante() {
+      if (!filaSeleccionada) {
+        alert('⚠️ Por favor, seleccione un estudiante de la tabla.');
+        return;
+      }
+
+      const codigo = filaSeleccionada.dataset.codigo;
+
+      // No permitir eliminar estudiantes fijos
+      if (estudiantesFijos.some(e => e.codigo === codigo)) {
+        alert('🔒 No puede eliminar estudiantes predefinidos (101–105).');
+        return;
+      }
+
+      if (!confirm(`¿Está seguro de eliminar al estudiante con código ${codigo}?`)) return;
+
+      estudiantesAdicionales = estudiantesAdicionales.filter(e => e.codigo !== codigo);
+      guardarEstudiantesAdicionales();
+      filaSeleccionada = null;
+      document.getElementById('btnEliminar').disabled = true;
+    }
+
+    // ==================================
+    // DESCARGAR PDF
+    // ==================================
+
+    function descargarPDF() {
+      const doc = new jsPDF();
+      const pageWidth = doc.internal.pageSize.width;
+
+      // Título
+      doc.setFontSize(18);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(10, 44, 88);
+      doc.text('REPORTE DE ESTUDIANTES', pageWidth / 2, 20, { align: 'center' });
+
+      doc.setFontSize(11);
+      doc.setTextColor(80, 80, 80);
+      doc.text(`Generado el: ${new Date().toLocaleDateString('es-ES', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      })}`, pageWidth / 2, 30, { align: 'center' });
+
+      // Datos
+      const lista = obtenerListaCompleta();
+      const headers = [['Código', 'Nombre y Apellido', 'Grado', 'Nota (Base 5.0)']];
+      const data = lista.map(est => {
+        // Obtener nota real o usar 10 si no hay
+        let notaPDF = 10;
+        const resultadoGuardado = localStorage.getItem(`resultado_quizz_${est.codigo}`);
+        if (resultadoGuardado) {
+          try {
+            const data = JSON.parse(resultadoGuardado);
+            notaPDF = parseFloat(data.nota) || 10;
+          } catch (e) {}
+        } else if (est.nota !== undefined) {
+          notaPDF = parseFloat(est.nota) || 10;
+        }
+
+        return [
+          est.codigo,
+          est.nombre,
+          est.grado,
+          notaPDF === 10 ? '10 (por defecto)' : notaPDF.toFixed(1)
+        ];
+      });
+
+      doc.autoTable({
+        head: headers,
+        body: data,
+        startY: 45,
+        theme: 'grid',
+        headStyles: {
+          fillColor: [10, 44, 88],
+          fontSize: 12
+        },
+        bodyStyles: { fontSize: 11 },
+        columnStyles: {
+          0: { cellWidth: 30, halign: 'center' },
+          1: { cellWidth: 75 },
+          2: { cellWidth: 40, halign: 'center' },
+          3: { cellWidth: 45, halign: 'center' }
+        },
+        margin: { horizontal: 15 },
+        didDrawPage: function (data) {
+          doc.setFontSize(10);
+          doc.setTextColor(150);
+          doc.text('Sistema de Gestión Académica © 2025', data.settings.margin.left, doc.internal.pageSize.height - 10);
+        }
+      });
+
+      doc.save(`reporte_estudiantes_${new Date().toISOString().slice(0,10)}.pdf`);
+    }
+
+    // ==================================
+    // DETALLE (sin cambios, solo se ajustó llamado)
+    // ==================================
+
+    function verDetalle(codigo) {
+      const storageKey = `resultado_quizz_${codigo}`;
+      const dataString = localStorage.getItem(storageKey);
+      const detalleDatos = document.getElementById('detalleDatos');
+
+      if (!dataString) {
+        detalleDatos.innerHTML = `<p style="color:#e74c3c; text-align:center;">No hay resultados guardados para este estudiante.</p>`;
+        document.getElementById('detalleTitulo').textContent = `Resultados: ${codigo}`;
+      } else {
+        const data = JSON.parse(dataString);
+        detalleDatos.innerHTML = `
+          <p><strong>Estudiante:</strong> ${data.nombre || '—'}</p>
+          <p><strong>Grado:</strong> ${data.grado || '—'}</p>
+          <p><strong>Código:</strong> ${codigo}</p>
+          <p><strong>Puntuación:</strong> ${data.puntuacion || '—'}</p>
+          <p><strong>Nota:</strong> <span style="color:#28a745; font-weight:bold;">${data.nota || '—'}</span></p>
+          <p><strong>Fecha:</strong> ${data.fecha || '—'}</p>
+          <p><strong>Hora Inicio/Fin:</strong> ${data.horaInicio || '—'} / ${data.horaFin || '—'}</p>
+        `;
+        document.getElementById('detalleTitulo').textContent = `Resultados: ${data.nombre} (${codigo})`;
+      }
+
+      abrirModal('modalDetalle');
+    }
+
+    // ==================================
+    // INICIALIZAR
+    // ==================================
+
+    function cargarResultadosFijos() {
+      renderTabla();
+    }
+  </script>
+
+</body>
+</html>

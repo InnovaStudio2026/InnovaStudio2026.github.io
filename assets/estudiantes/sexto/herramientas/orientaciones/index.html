@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Páginas Web de Interés</title>
+    <style>
+      body {
+        background: url('img/fondo.jpg') no-repeat center center fixed;
+        background-size: cover;
+        font-family: 'Segoe UI', Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      #titulo {
+        background: linear-gradient(135deg, #f7e85f, #e6d11e);
+        width: 85%;
+        padding: 25px;
+        text-align: center;
+        font-size: 26px;
+        color: #222;
+        font-weight: bold;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        margin: 40px auto 20px;
+        letter-spacing: 1px;
+      }
+
+      #enlaces {
+        background-color: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(6px);
+        width: 85%;
+        padding: 25px;
+        text-align: center;
+        color: #fff;
+        border-radius: 15px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        margin: 0 auto 40px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        overflow: hidden;
+      }
+
+      th, td {
+        border: 2px solid rgba(255, 255, 255, 0.4);
+        padding: 20px;
+        text-align: center;
+        color: #fff;
+        font-weight: bold;
+      }
+
+      th {
+        background-color: rgba(230, 209, 30, 0.8);
+        color: #222;
+        font-size: 22px;
+      }
+
+      td b {
+        display: block;
+        font-size: 18px;
+        margin-bottom: 10px;
+        color: #000; /* Texto negro en las celdas */
+        font-weight: bold;
+      }
+
+      video {
+        width: 90%;
+        max-width: 500px;
+        border-radius: 10px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      video:hover {
+        transform: scale(1.03);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+      }
+
+      @media (max-width: 768px) {
+        table, tr, td {
+          display: block;
+          width: 100%;
+        }
+        td {
+          margin-bottom: 20px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="titulo">
+      <i>HERRAMIENTAS DE APOYO - ORIENTACIONES DEL DOCENTE</i>
+    </div>
+
+    <div id="enlaces">
+      <table>
+        <tr>
+          <th colspan="2"><i>Orientaciones</i></th>
+        </tr>
+
+        <tr>
+          <td>
+            <b>Orientación #1 - Actividad exploratoria - Actividad 1 (Ejercicio 1 y 2)</b>
+            <video
+              src="url/video1_comp.mp4"
+              controls
+              poster="img/portada1.jpg"
+            ></video>
+          </td>
+          <td>
+            <b>Orientación #2 - Actividad 1 (Ejercicio 3 y 4)</b>
+            <video
+              src="url/video2_comp.mp4"
+              controls
+              poster="img/portada2.jpg"
+            ></video>
+          </td>
+        </tr>
+
+        <tr>
+          <td>
+            <b>Orientación #3 - Actividad 2 (Ejercicio 1 y 2)</b>
+            <video
+              src="url/video3_comp.mp4"
+              controls
+              poster="img/portada3.jpg"
+            ></video>
+          </td>
+          <td>
+            <b>Orientación #4 - Actividad 2 (Ejercicio 3 y 4)</b>
+            <video
+              src="url/video4_comp.mp4"
+              controls
+              poster="img/portada4.jpg"
+            ></video>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

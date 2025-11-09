@@ -1,0 +1,41 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>clave acceso</title>
+    <style type="text/css">
+      #titulo {
+        background-color: #9b4f0f;
+        width: 60%;
+        padding: 20px;
+        text-align: center;
+        font-family: "verdana";
+        font-size: 24px;
+        color: aliceblue;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    </style>
+  </head>
+
+  <body bgcolor="#B3C100">
+    <script>
+      function acceso() {
+        if (document.formclave.clave.value === "sestas114") {
+          window.location = document.formclave.clave.value + ".html";
+        } else {
+          alert("La contraseña no es correcta");
+        }
+      }
+    </script>
+    <div id="titulo">
+      Ingrese la contraseña para acceder a la Auto-evaluación:
+      <form name="formclave">
+        <input type="password" name="clave" />
+
+        <input type="button" value="Acceder" onclick="acceso()" />
+      </form>
+    </div>
+  </body>
+</html>

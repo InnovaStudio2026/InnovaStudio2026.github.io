@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Autoevaluación </title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      background: linear-gradient(to right, #74ebd5, #ACB6E5);
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background-color: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      padding: 30px;
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: #333;
+    }
+
+    .info-box {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      gap: 20px;
+    }
+
+    .info-box input, .info-box select {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+  table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+th {
+  background: linear-gradient(to right, #006666, #00cc99);
+  color: #fff;
+  text-align: center;
+  padding: 16px;
+  font-weight: bold;
+  font-size: 16px;
+  border: 1px solid #004d4d;
+}
+
+td {
+  background-color: rgba(0, 51, 102, 0.05);
+  border: 1px solid #004466;
+  padding: 16px;
+  color: #003333;
+}
+
+tbody tr:nth-child(even) td {
+  background-color: rgba(0, 51, 102, 0.12);
+}
+
+td:first-child {
+  background-color: rgba(0, 102, 102, 0.2);
+  font-weight: bold;
+  text-align: center;
+}
+
+td input {
+  width: 60px;
+  text-align: center;
+  font-size: 16px;
+  padding: 8px;
+  border-radius: 8px;
+  border: 2px solid #00b386;
+  background-color: #e0f7f1;
+  box-shadow: 0 2px 6px rgba(0, 204, 153, 0.2);
+  transition: all 0.3s ease;
+}
+
+td input:focus {
+  outline: none;
+  border-color: #009973;
+  box-shadow: 0 0 6px rgba(0, 204, 153, 0.4);
+}
+
+
+
+  td:first-child {
+  text-align: center;
+  vertical-align: middle;
+  font-weight: bold;
+}
+
+
+   .button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: blank;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  margin-top: 30px;
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.3s;
+}
+.button:hover {
+  background-color: #45a049;
+}
+
+
+    .note {
+      margin-top: 10px;
+      color: #555;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    /* BOTÓN VOLVER */
+    #btn-volver {
+      position: fixed;
+      bottom: 60px;
+      left: 20px;
+      z-index: 1000;
+      padding: 12px 28px;
+      background: linear-gradient(135deg, #0033cc, #0099ff);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease-in-out;
+    }
+
+    #btn-volver:hover {
+      background: linear-gradient(135deg, #002db3, #007acc);
+      transform: scale(1.07);
+      box-shadow: 0 12px 20px rgba(0, 0, 0, 0.35);
+    }
+
+    #btn-volver:active {
+      transform: scale(0.96);
+      box-shadow: 0 6px 10px rgba(0, 0, 0, 0.25);
+    }
+
+    @media (max-width: 600px) {
+      .info-box {
+        flex-direction: column;
+      }
+
+      #btn-volver {
+        font-size: 13px;
+        padding: 10px 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BOTÓN VOLVER -->
+  <button id="btn-volver" onclick="location.href='menu.html'">⮜ Volver</button>
+
+  <div class="container">
+    <h1>Autoevaluación</h1>
+    <h2>NOTA ACTITUDINAL</h2>
+
+   <div class="info-box">
+  <input type="text" id="nom" placeholder="Nombre del estudiante">
+  <div style="display: flex; gap: 10px; width: 100%;">
+    <select id="area" style="flex: 1;">
+      <option value="">Área</option>
+      <option>Historia</option>
+      <option>Sociales</option>
+      <option>Ética</option>
+      <option>Económicas</option>
+      <option>Matematicas</option>
+      <option>Lenguaje</option>
+      <option>Informatica</option>
+      <option>Quimica</option>
+      <option>Fisica</option>
+      <option>Ingles</option>
+      <option>Artes</option>
+      <option>Agropeciarias</option>
+      <option>Edu-Fisica</option>
+      <option>Religión</option>
+      <option>Filosofia</option>
+      <option>Otra</option>
+
+
+
+    </select>
+    <select id="grado" style="flex: 1;">
+      <option value="">Grado</option>
+      <option>6-01</option><option>6-02</option>
+      <option>7-01</option><option>7-02</option>
+      <option>8-01</option><option>8-02</option>
+      <option>9-01</option><option>9-02</option>
+      <option>10-01</option><option>10-02</option>
+      <option>11</option>
+      o enviadas al(la) docente
+    </select>
+    <select id="periodo" style="flex: 1;">
+      <option value="">Período</option>
+      <option>1</option><option>2</option><option>3</option><option>4</option>
+    </select>
+  </div>
+</div>
+
+
+    <table>
+      <thead>
+        <tr>
+          <th>CRITERIO</th>
+          <th>INDICADOR</th>
+          <th>VALORACIÓN<br>(10-50)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>AUTONOMÍA</td>
+          <td align="justify">
+                                * Desarrollé el 100% de las actividades
+                                propuestas en las guías y durante las clases.<br />
+                                * Mantuve diálogo con el (la) docente dentro del
+                                horario de clase y en los casos que fue
+                                necesario, para asegurarme la comprensión
+                                autónoma.<br />
+                                * Estuve comprometido con mi formación integral
+                                permanente, brindando mis aportes en los
+                                espacios requeridos.<br />
+                                * Aprendí y me apropié de las temáticas
+                                propuestas en las guías, de manera autónoma; con
+                                una mentalidad reflexiva, constructiva y
+                                propositiva.
+                              </td>
+
+          <td><input type="number" id="auto" min="10" max="50"></td>
+        </tr>
+        <tr>
+          <td>MOTIVACIÓN</td>
+          <td align="justify">
+                                * Realicé con agrado, dedicación y constancia
+                                las actividades propuestas en las guías; en los
+                                tiempos y horarios estipulados.<br />
+                                * Reporté asistencia iniciando cada clase.<br />
+                                * Participé activamente durante el desarrollo de
+                                la clase, según el horario.<br />
+                                * Me interesé por completar mis actividades en
+                                donde se evidencian los aprendizajes
+                                propuestos.<br />
+                                * Consulté (según mis posibilidades y recursos)
+                                e incluí información relevante y precisa en el
+                                desarrollo de las actividades.
+                              </td>
+
+          <td><input type="number" id="moti" min="10" max="50"></td>
+        </tr>
+        <tr>
+          <td>EFICACIA</td>
+          <td align="justify">
+                                * Cumplí con el desarrollo completo de las
+                                actividades a partir de las indicaciones
+                                descritas en cada guía.<br />
+                                * Me apropié de la fundamentación trabajada en
+                                las guías de aprendizaje.<br />
+                                * Hice los trabajos propuestos por el (la) docente en la guia
+                                e hice entrega o envio de actividad desarrollada en la fecha
+                                estipulada.
+                              </td>
+
+          <td><input type="number" id="efic" min="10" max="50"></td>
+        </tr>
+        <tr>
+          <td>EFICIENCIA</td>
+            <td align="justify">
+                                * Comprendí y consigné la fundamentación
+                                necesaria expuesta en las guías y/o páginas web
+                                de interés, como soporte para el desarrollo de
+                                las actividades propuestas y envío de
+                                evidencias.<br />
+                                * Realicé las actividades sugeridas, tanto en la
+                                guía como durante el desarrollo de las clases
+                                 en los horarios estipulados y
+                                dedicando el tiempo necesario.<br />
+                                * Hice entrega o envío oportuno de mi evidencia de trabajo
+                                en cada clase.
+                              </td>
+
+          <td><input type="number" id="efici" min="10" max="50"></td>
+        </tr>
+        <tr>
+          <td>PRESENTACIÓN</td>
+           <td align="justify">
+                                * Elaboré cada una de las guías en forma
+                                completa, organizada y bien fundamentadas,
+                                apoyándome en mi pensamiento creativo.<br />
+                                * Revisé cuidadosamente el trabajo realizado,
+                                verificando el buen uso de los recursos y
+                                materiales con que cuento.<br />
+                                * Organicé de forma adecuada las evidencias entregadas 
+                                o enviadas al(la) docente (enviadas: imágenes claras, 
+                                ordenadas, marcadas, formato sugerido).
+                              </td>
+
+          <td><input type="number" id="pres" min="10" max="50"></td>
+        </tr>
+        <tr>
+          <td>DESARROLLO DE COMPETENCIAS</td>
+          <td align="justify">
+                                * Comprendí y alcancé los propósitos planteados
+                                en las guías de aprendizaje, reconociendo mis
+                                fortalezas y debilidades.<br />
+                                * Mis trabajos y evidencias demuestran
+                                claramente mi interpretación y comprensión de la
+                                fundamentación trabajada y de las actividades
+                                planteadas para cada clase.<br />
+                                * Puedo explicar con claridad y precisión el
+                                desarrollo de las actividades, las temáticas
+                                trabajadas, los aprendizajes y conclusiones
+                                obtenidas con el desarrollo de cada una de las
+                                guías, aplicando lo propuesto en diferentes
+                                situaciones.
+                              </td>
+
+          <td><input type="number" id="desa" min="10" max="50"></td>
+        </tr>
+        <tr>
+          <td>SENTIDO DE PERTENENCIA</td>
+          <td align="justify">
+                                * Valoro los espacios dados en las clases
+                                virtuales y/o presenciales y los de seguimiento y
+                                retroalimentación del docente como parte
+                                fundamental de mi formación integral, que me
+                                permiten desarrollar mi pensamiento crítico,
+                                creativo y humanizador. <br />
+                                * Mantuve un ambiente y comunicación, adecuada y
+                                respetuosa, tanto con el docente como con mis
+                                compañeros; en los diferentes espacios de formación.<br />
+                                * Cuando no pude reportarme en clase o cumplir
+                                con la entrega de una evidencia, me comuniqué con
+                                el docente para explicarle las razones y llegar
+                                a nuevos acuerdos de entrega y seguimiento.<br />
+                                * Participé en forma dinámica de las diferentes
+                                actividades propuestas por el docente y/o por la
+                                institución.
+                              </td>
+
+          <td><input type="number" id="sent" min="10" max="50"></td>
+        </tr>
+
+<!-- Modal Resultado -->
+<div id="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.7); justify-content:center; align-items:center; z-index:9999;">
+  <div style="background:white; padding:20px; border-radius:12px; width:90%; max-width:500px; text-align:center; font-family:'Inter', sans-serif; position:relative;">
+    <button onclick="cerrarModal()" style="position:absolute; top:10px; right:15px; background:#f44336; border:none; color:white; border-radius:50%; width:30px; height:30px; font-weight:bold; cursor:pointer;">×</button>
+    <div id="modal-contenido"></div>
+  </div>
+</div>
+
+      </tbody>
+    </table>
+
+   <div style="text-align: center;">
+  <button class="button" onclick="Puntuacion()">Calcular Resultado</button>
+</div>
+    <div class="note">Todos los valores deben estar entre 10 y 50. No uses puntos ni comas.</div>
+  </div>
+
+<script>
+function Puntuacion() {
+  const auto = parseInt(document.getElementById('auto').value);
+  const moti = parseInt(document.getElementById('moti').value);
+  const efic = parseInt(document.getElementById('efic').value);
+  const efici = parseInt(document.getElementById('efici').value);
+  const pres = parseInt(document.getElementById('pres').value);
+  const desa = parseInt(document.getElementById('desa').value);
+  const sent = parseInt(document.getElementById('sent').value);
+
+  const nombre = document.getElementById('nom').value.trim();
+  const area = document.getElementById('area').value;
+  const grado = document.getElementById('grado').value;
+  const periodo = document.getElementById('periodo').value;
+
+  // Validar que todos los campos estén completos
+  if (!nombre || area === '' || grado === '' || periodo === '') {
+    alert('Por favor completa todos los campos: nombre, área, grado y período.');
+    return;
+  }
+
+  // Validar que todos los criterios tengan un valor entre 10 y 50
+  const criterios = [
+    { nombre: 'Autonomía', valor: auto },
+    { nombre: 'Motivación', valor: moti },
+    { nombre: 'Eficacia', valor: efic },
+    { nombre: 'Eficiencia', valor: efici },
+    { nombre: 'Presentación', valor: pres },
+    { nombre: 'Desarrollo de Competencias', valor: desa },
+    { nombre: 'Sentido de Pertenencia', valor: sent }
+  ];
+
+  for (let criterio of criterios) {
+    if (isNaN(criterio.valor) || criterio.valor < 10 || criterio.valor > 50) {
+      alert(`La valoración del criterio "${criterio.nombre}" debe estar entre 10 y 50.`);
+      return;
+    }
+  }
+
+  const total = (auto + moti + efic + efici + pres + desa + sent) / 7;
+  const valor = (total / 10).toFixed(1);
+
+  let cualitativa = '';
+  if (valor <= 2.9) cualitativa = "Bajo";
+  else if (valor <= 3.9) cualitativa = "Básico";
+  else if (valor <= 4.5) cualitativa = "Alto";
+  else cualitativa = "Superior";
+
+  const d = new Date();
+  const fecha = d.toLocaleDateString();
+  const hora = d.toLocaleTimeString();
+
+  const contenido = `
+    <img src="img/icono.png" alt="Escudo Colegio" style="width: 100px; margin-bottom: 10px;">
+    <p style="font-style: italic; font-size: 16px;">"CON EXCELENCIA CONSTRUIMOS FUTURO"</p>
+    <hr style="margin: 10px 0;">
+    <p><strong>Autoevaluación de:</strong> ${nombre}<br>
+    <strong>Área:</strong> ${area}<br>
+    <strong>Grado:</strong> ${grado}<br>
+    <strong>Período:</strong> ${periodo}<br>
+    <strong>Fecha/Hora:</strong> ${fecha} ${hora}</p>
+    <hr>
+    <p><strong>NOTAS POR CRITERIO:</strong></p>
+    <ul style="text-align: left; padding-left: 20px;">
+      <li>Autonomía: ${auto}</li>
+      <li>Motivación: ${moti}</li>
+      <li>Eficacia: ${efic}</li>
+      <li>Eficiencia: ${efici}</li>
+      <li>Presentación: ${pres}</li>
+      <li>Desarrollo de Competencias: ${desa}</li>
+      <li>Sentido de Pertenencia: ${sent}</li>
+    </ul>
+    <p><strong>VALORACIÓN FINAL:</strong> ${valor} (${cualitativa})</p>
+  `;
+
+  document.getElementById('modal-contenido').innerHTML = contenido;
+  document.getElementById('modal').style.display = 'flex';
+}
+
+  function cerrarModal() {
+    document.getElementById('modal').style.display = 'none';
+  }
+</script>
+
+</body>
+</html>

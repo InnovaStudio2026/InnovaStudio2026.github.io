@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docente</title>
+    <script src="js/script1.js"></script>
+    <script src="js/script2.js"></script>
+    <link rel="icon" href="img/icono.png">
+
+    <style>
+        body {
+            background-image: url('img/imagen6.jpg'); /* Cambia esto a tu imagen de fondo */
+            background-size: cover;
+            font-family: "Monotype Corsiva", cursive;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-size: 20px; /* Tamaño de texto normal */
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.8); /* Color de fondo del cuadro */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+        h1 {
+            font-size: 30px; /* Tamaño de los títulos */
+        }
+        label {
+            font-size: 28px; /* Tamaño de los subtítulos */
+        }
+        .input {
+            margin: 10px 0;
+            padding: 10px;
+            width: 200px;
+            border: 1px solid #3ca313b0;
+            border-radius: 15px;
+        }
+        .button {
+            margin-top: 20px;
+            padding: 12px 22px;
+            border: none;
+            border-radius: 28%;
+            background-color: #4CAF50;
+            color: rgb(0, 0, 0);
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-family: "Monotype Corsiva", cursive;
+            font-size: 20px; /* Tamaño de texto normal */
+        }
+        .button:hover {
+            background: linear-gradient(to right, #0ada14, #cceece);
+        }
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s, opacity 0.3s;
+        }
+        .modal.active {
+            visibility: visible;
+            opacity: 1;
+        }
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.973);
+        }
+        .modal-content button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+        .modal-content button:hover {
+            background-color: #45a049;
+        }
+        .back-button {
+            position: absolute;
+            bottom: 50px;
+            left: 20px;
+            background-color: rgba(61, 150, 61, 0.911);
+            color: rgb(0, 0, 0);
+            padding: 10px 20px;
+            font-family: "Lucida Calligraphy", cursive;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: linear-gradient(to right, #0ada14, #cceece);
+        }
+       
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div></div>
+
+        <td>
+            <img src="img/fondo-transicion.png" width="135" height="135px" />
+        </td>
+        <h1>Docentes</h1>
+        <label for="usuario">Usuario:</label><br>
+        <input type="text" id="usuario" class="input"><br>
+        <label for="contraseña">Contraseña:</label><br>
+        <input type="password" id="contraseña" class="input"><br>
+        <button class="button" onclick="validar()">Ingresar</button>
+    </div>
+
+    <div id="errorModal" class="modal">
+        <div class="modal-content">
+            <p id="errorMessage"></p>
+            <button onclick="cerrarModal()">Cerrar</button>
+        </div>
+    </div>
+
+    <div id="registroModal" class="modal">
+        <div class="modal-content">
+            <p id="registroMessage"></p>
+            <button onclick="cerrarRegistroModal()">Cerrar</button>
+        </div>
+    </div>
+
+    <a href="index.html" class="back-button">Atrás</a>
+
+    <script>
+        let intentos = 0;
+        const intentosInfo = [];
+
+        function validar() {
+            const usuario = document.getElementById('usuario').value;
+            const contraseña = document.getElementById('contraseña').value;
+            const usuarios = [
+                { usuario: "usuario1", contraseña: "contraseña1", pagina: "menudocentes.html" },
+                { usuario: "usuario2", contraseña: "contraseña2", pagina: "menudocentes.html" },
+                { usuario: "usuario3", contraseña: "contraseña3", pagina: "menudocentes.html" },
+                { usuario: "usuario4", contraseña: "contraseña4", pagina: "menudocentes.html" }
+            ];
+
+            const usuarioValido = usuarios.find(u => u.usuario === usuario && u.contraseña === contraseña);
+
+            if (usuarioValido) {
+                window.location.href = usuarioValido.pagina;
+            } else {
+                intentos++;
+                const timestamp = new Date();
+                intentosInfo.push({ usuario, contraseña, timestamp, intentosRealizados: intentos });
+                mostrarModal(`Usuario o contraseña incorrectos. Intentos: ${intentos}`);
+
+                if (intentos >= 3) {
+                    const cincoMinutosAntes = new Date(Date.now() - 5 * 60 * 1000);
+                    const intentosRecientes = intentosInfo.filter(info => info.timestamp >= cincoMinutosAntes);
+
+                    if (intentosRecientes.length >= 3) {
+                        mostrarRegistroModal();
+                        enviarCorreo(intentosRecientes);
+                    }
+                }
+            }
+        }
+
+        function mostrarModal(message) {
+            const modal = document.getElementById('errorModal');
+            const errorMessage = document.getElementById('errorMessage');
+            errorMessage.textContent = message;
+            modal.classList.add('active');
+        }
+
+        function cerrarModal() {
+            const modal = document.getElementById('errorModal');
+            modal.classList.remove('active');
+        }
+
+        function mostrarRegistroModal() {
+            const modal = document.getElementById('registroModal');
+            const registroMessage = document.getElementById('registroMessage');
+            registroMessage.textContent = "Número de intentos registrados. Se enviará un correo informativo.";
+            modal.classList.add('active');
+        }
+
+        function cerrarRegistroModal() {
+            const modal = document.getElementById('registroModal');
+            modal.classList.remove('active');
+        }
+
+        function enviarCorreo(intentosRecientes) {
+            const correo = "garzonjesus313@gmail.com";
+            const mensaje = intentosRecientes.map(info => `Usuario: ${info.usuario}, Contraseña: ${info.contraseña}, Intentos: ${info.intentosRealizados}, Fecha y Hora: ${info.timestamp.toLocaleString()}`).join('\n');
+
+            enviarCorreo("Enviando correo...");
+            enviarCorreo(`Para: ${correo}`);
+            enviarCorreo(`Mensaje: \n${mensaje}`);
+        }
+    </script>
+</body>
+</html>

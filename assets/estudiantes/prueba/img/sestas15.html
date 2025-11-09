@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Evaluación</title>
+    <!--
+
+Template 2094 Mason
+
+http://www.tooplate.com/view/2094-mason
+
+-->
+    <!-- load stylesheets -->
+    <!--<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300,400"> -->
+    <!-- Google web font "Open Sans", https://fonts.google.com/ -->
+    <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css" />
+    <!-- Font Awesome, http://fontawesome.io/ -->
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <!-- Bootstrap styles, https://getbootstrap.com/ -->
+    <link rel="stylesheet" href="css/tooplate-style.css" />
+    <link rel="stylesheet" href="stylesheets/stylemain.css" />
+    <link rel="stylesheet" href="stylesheets/touchTouch.css" />
+    <link rel="stylesheet" href="stylesheets/font-awesome.min.css" />
+    <!-- Templatemo style -->
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <script language="javascript">
+      var fdia_instala = localStorage.getItem("f_dia");
+      var fmes_instala = localStorage.getItem("f_mes");
+      var fanio_instala = localStorage.getItem("f_anio");
+      var fhora_instala = localStorage.getItem("f_hora");
+      var fmin_instala = localStorage.getItem("f_min");
+      var fseg_instala = localStorage.getItem("f_seg");
+
+      var fecha_ins = fdia_instala + "/" + fmes_instala + "/" + fanio_instala;
+      var hora_ins = fhora_instala + ":" + fmin_instala + ":" + fseg_instala;
+
+      var pregunta = new Array();
+      var respuesta = new Array();
+      var explicacionRespuesta = new Array();
+      var tuRespuesta = new Array();
+      var puntuacion = 0;
+      var sumatoria = 0;
+      var d = new Date();
+      var fecha =
+        d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear();
+      var hora = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+      //aqui se ubican las respuestas de las preguntas (puedes agregar mas o quitar)
+      respuesta[1] = "d";
+      respuesta[2] = "a";
+      respuesta[3] = "c";
+      respuesta[4] = "b";
+      respuesta[5] = "c";
+      respuesta[6] = "b";
+      respuesta[7] = "c";
+      respuesta[8] = "c";
+      respuesta[9] = "a";
+      respuesta[10] = "d";
+
+      function Motor(pregunta, respuesta) {
+        tuRespuesta[pregunta] = respuesta;
+      }
+
+      function Puntuacion() {
+        var puntuacion = 0;
+        var cuenta = 0;
+        var valor_grado = document.getElementById("grado").value;
+        // modificar variable
+        var intent = localStorage.getItem("num_inten1" + valor_grado + "tec");
+
+        if (!intent) {
+          var area = document.getElementById("area").innerHTML;
+          var eva = document.getElementById("eva").innerHTML;
+          var grado = document.getElementById("grado").value;
+          var nombre_us = document.getElementById("nom").value;
+
+          if (nombre_us === "") {
+            alert("El nombre del estudiante está vacío");
+          } else {
+            pregunta[1] = document.form1.preg1.value;
+            pregunta[2] = document.form1.preg2.value;
+            pregunta[3] = document.form1.preg3.value;
+            pregunta[4] = document.form1.preg4.value;
+            pregunta[5] = document.form1.preg5.value;
+            pregunta[6] = document.form1.preg6.value;
+            pregunta[7] = document.form1.preg7.value;
+            pregunta[8] = document.form1.preg8.value;
+            pregunta[9] = document.form1.preg9.value;
+            pregunta[10] = document.form1.preg10.value;
+
+            for (j = 1; j <= 10; j++) {
+              if (pregunta[j] === "") {
+                alert("Falta por responder la pregunta: " + j);
+                cuenta++;
+              }
+            }
+
+            if (cuenta == 0) {
+              var result = window.confirm(
+                "Está seguro de enviar la evaluación?"
+              );
+              if (result === true) {
+                var textoRespuesta =
+                  "F. Instalación APK: " + fecha_ins + "***" + hora_ins + "\n";
+                textoRespuesta =
+                  textoRespuesta +
+                  "Estudiante: " +
+                  nombre_us +
+                  "-" +
+                  grado +
+                  "\n";
+                textoRespuesta = textoRespuesta + eva + " - " + area + "\n";
+                textoRespuesta =
+                  textoRespuesta +
+                  "Fecha / Hora: " +
+                  fecha +
+                  " / " +
+                  hora +
+                  "\n";
+                for (i = 1; i <= 10; i++) {
+                  //textoRespuesta=textoRespuesta+"Pregunta "+i+": ";
+                  if (respuesta[i] != tuRespuesta[i]) {
+                    //textoRespuesta=textoRespuesta+"La respuesta es incorrecta\n";
+                  } else {
+                    // textoRespuesta=textoRespuesta+"Has respondido correctamente!\n";
+                    puntuacion++;
+                  }
+                }
+                sumatoria++;
+
+                // Modificar variables
+                localStorage.setItem("nombre_grad_tec16", grado);
+                localStorage.setItem("nom_area_tec16", area);
+                localStorage.setItem("nombre_estud_tec16", nombre_us);
+                localStorage.setItem("puntua_tec16", puntuacion);
+                localStorage.setItem(
+                  "num_inten1" + valor_grado + "tec",
+                  sumatoria
+                );
+                localStorage.setItem("fecha_tec16", fecha);
+                localStorage.setItem("hora_tec16", hora);
+                var intentos = localStorage.getItem(
+                  "num_inten1" + valor_grado + "tec"
+                );
+
+                textoRespuesta =
+                  textoRespuesta + "Intentos : " + parseInt(intentos) + "\n";
+                textoRespuesta =
+                  textoRespuesta + "Resul" + puntuacion + "tado Final : \n";
+                textoRespuesta =
+                  textoRespuesta + "***********************************" + "\n";
+                textoRespuesta =
+                  textoRespuesta +
+                  "Respuestas Correctas : " +
+                  "(" +
+                  puntuacion +
+                  ")" +
+                  " de 10 \n";
+                textoRespuesta =
+                  textoRespuesta + "***********************************";
+                alert(textoRespuesta);
+              }
+            }
+          }
+        } else {
+          var textoalert =
+            "F. Instalación APK: " + fecha_ins + "***" + hora_ins + "\n";
+          textoalert =
+            textoalert +
+            "Ya se encuentra registrada su Evaluación\nPuede observar el resultado en el botón **Ver resultado**";
+          alert(textoalert);
+        }
+      }
+    </script>
+  </head>
+
+  <body>
+    <div id="wrapper">
+      <div class="container-fluid">
+        <div class="tm-body">
+          <div id="titulo_prin">
+            <div style="text-align: left">
+              <div id="area">Área infortec</div>
+            </div>
+            <div style="text-align: center">
+              <b id="negrita"><div id="eva">EVALUACIÓN</div></b>
+            </div>
+            <div style="text-align: right">Prof.Edwin Vargas Galvis</div>
+          </div>
+          <br />
+          <form action="" method="" name="form1">
+            <h3 align="justify">
+              <font color="black"
+                ><b id="negrita"> Estudiante:</b
+                ><input
+                  type="text"
+                  name="nombre_usu"
+                  id="nom"
+                  size="20px" /><br
+              /></font>
+            </h3>
+            <h4 align="justify">
+              <font color="black"
+                ><b id="negrita">Grado:</b>
+                <select name="grado" id="grado">
+                  <option value="601">6-01</option>
+                  <option value="602">6-02</option>
+                </select>
+              </font>
+            </h4>
+            <h2 align="center">
+              <font color="black"
+                >A continuación encontrará un cuestionario con diez (10)
+                preguntas de selección múltiple con una única respuesta, con los
+                temas vistos en la guía 1, 2 y 3 del tercer período.</font
+              >
+            </h2>
+            <!-- Inicio de la sección -->
+            <div class="row mb-5">
+              <div class="media tm-flexbox-ie-fix tm-width-ie-fix">
+                <div
+                  class="
+                    media-body
+                    tm-flexbox-ie-fix tm-width-ie-fix tm-bg-light-gray
+                  "
+                >
+                  <div class="p-5">
+                    <!-- Escriba el Contenido  -->
+
+                    <div class="pregunta">
+                      <h2>Pregunta #1</h2>
+                    </div>
+                    <div class="respuesta">
+                      <p align="justify">
+                        <font size="+3" color="#0000FF">
+                          <!-- Aquí va la pregunta  -->
+                          Son unidades de medida:
+                          <!-- fin de la pregunta -->
+                        </font>
+                      </p>
+                      <p align="justify">
+                        <font size="+2" color="black">
+                          a.
+                          <input
+                            type="radio"
+                            name="preg1"
+                            value="a"
+                            onClick="Motor(1, this.value)"
+                          />De longitud<br />
+                          b.
+                          <input
+                            type="radio"
+                            name="preg1"
+                            value="b"
+                            onClick="Motor(1, this.value)"
+                          />De peso<br />
+                          c.
+                          <input
+                            type="radio"
+                            name="preg1"
+                            value="c"
+                            onClick="Motor(1, this.value)"
+                          />De tiempo<br />
+                          d.
+                          <input
+                            type="radio"
+                            name="preg1"
+                            value="d"
+                            onClick="Motor(1, this.value)"
+                          />Todas las anteriores
+                        </font>
+                      </p>
+                    </div>
+
+                    <!-- Fin del contenido -->
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Fin de la sección -->
+            <!-- Inicio de la sección -->
+            <div class="row mb-5">
+              <div class="media tm-flexbox-ie-fix tm-width-ie-fix">
+                <div
+                  class="
+                    media-body
+                    tm-flexbox-ie-fix tm-width-ie-fix tm-bg-light-gray
+                  "
+                >
+                  <div class="p-5">
+                    <!-- Escriba el Contenido  -->
+                    <div class="pregunta">
+                      <h2>Pregunta #2</h2>
+                    </div>
+                    <div class="respuesta">
+                      <p align="justify">
+                        <font size="+3" color="#0000FF">
+                          <!-- Aquí va la pregunta  -->
+                          Todo aquello que es intangible en la computadora, lo
+                          que no se puede tocar, como, por ejemplo, los
+                          programas y los sistemas operativos:
+
+                          <!-- fin de la pregunta -->
+                        </font>
+                      </p>
+                      <p align="justify">
+                        <font size="+2" color="black">
+                          a.
+                          <input
+                            type="radio"
+                            name="preg2"
+                            value="a"
+                            onClick="Motor(2, this.value)"
+                          />Software<br />
+                          b.
+                          <input
+                            type="radio"
+                            name="preg2"
+                            value="b"
+                            onClick="Motor(2, this.value)"
+                          />Hardware<br />
+                          c.
+                          <input
+                            type="radio"
+                            name="preg2"
+                            value="c"
+                            onClick="Motor(2, this.value)"
+                          />Equipos de cómputo<br />
+                          d.
+                          <input
+                            type="radio"
+                            name="preg2"
+                            value="d"
+                            onClick="Motor(2, this.value)"
+                          />Ninguna de las anteriores
+                        </font>
+                      </p>
+                    </div>
+
+                    <!-- Fin del contenido -->
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Fin de la sección -->
+            <!-- Inicio de la sección -->
+            <div class="row mb-5">
+              <div class="media tm-flexbox-ie-fix tm-width-ie-fix">
+                <div
+                  class="
+                    media-body
+                    tm-flexbox-ie-fix tm-width-ie-fix tm-bg-light-gray
+                  "
+                >
+                  <div class="p-5">
+                    <!-- Escriba el Contenido  -->
+                    <div class="pregunta">
+                      <h2>Pregunta #3</h2>
+                    </div>
+                    <div class="respuesta">
+                      <p align="justify">
+                        <font size="+3" color="#0000FF">
+                          <!-- Aquí va la pregunta  -->
+                          Es la unidad mínima de almacenamiento, si se escribe y
+                          guarda un carácter en un programa de texto plano, este
+                          ocupara 1 Byte. Un byte es la unión de 8 bits:
+
+                          <!-- fin de la pregunta -->
+                        </font>
+                      </p>
+                      <p align="justify">
+                        <font size="+2" color="black">
+                          a.
+                          <input
+                            type="radio"
+                            name="preg3"
+                            value="a"
+                            onClick="Motor(3, this.value)"
+                          />KiloByte<br />
+                          b.
+                          <input
+                            type="radio"
+                            name="preg3"
+                            value="b"
+                            onClick="Motor(3, this.value)"
+                          />
+                          MegaByte<br />
+                          c.
+                          <input
+                            type="radio"
+                            name="preg3"
+                            value="c"
+                            onClick="Motor(3, this.value)"
+                          />
+                          Byte<br />
+                          d.
+                          <input
+                            type="radio"
+                            name="preg3"
+                            value="d"
+                            onClick="Motor(3, this.value)"
+                          />
+                          Ninguna de las anteriores
+                        </font>
+                      </p>
+                    </div>
+                    <!-- Fin del contenido -->
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Fin de la sección -->
+
+            <!-- Inicio de la sección -->
+            <div class="row mb-5">
+              <div class="media tm-flexbox-ie-fix tm-width-ie-fix">
+                <div
+                  class="
+                    media-body
+                    tm-flexbox-ie-fix tm-width-ie-fix tm-bg-light-gray
+                  "
+                >
+                  <div class="p-5">
+                    <!-- Escriba el Contenido  -->
+                    <div class="pregunta">
+                      <h2>Pregunta #4</h2>
+                    </div>
+                    <div class="respuesta">
+                      <p align="justify">
+                        <font size="+3" color="#0000FF">
+                          <!-- Aquí va la pregunta  -->
+                          Es la unidad mínima de almacenamiento y la unidad de
+                          almacenamiento más grande, respectivamente:
+
+                          <!-- fin de la pregunta -->
+                        </font>
+                      </p>
+                      <p align="justify">
+                        <font size="+2" color="black">
+                          a.
+                          <input
+                            type="radio"
+                            name="preg4"
+                            value="a"
+                            onClick="Motor(4, this.value)"
+                          />Byte – Exabyte<br />
+                          b.
+                          <input
+                            type="radio"
+                            name="preg4"
+                            value="b"
+                            onClick="Motor(4, this.value)"
+                          />Byte – Yottabyte<br />
+                          c.
+                          <input
+                            type="radio"
+                            name="preg4"
+                            value="c"
+                            onClick="Motor(4, this.value)"
+                          />Bit – GigaByte<br />
+                          d.
+                          <input
+                            type="radio"
+                            name="preg4"
+                            value="d"
+                            onClick="Motor(4, this.value)"
+                          />KiloByte - Byte
+                        </font>
+                      </p>
+                    </div>
+
+                    <!-- Fin del contenido -->
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Fin de la sección -->
+
+            <!-- Inicio de la sección -->
+            <div class="row mb-5">
+              <div class="media tm-flexbox-ie-fix tm-width-ie-fix">
+                <div
+                  class="
+                    media-body
+                    tm-flexbox-ie-fix tm-width-ie-fix tm-bg-light-gray
+                  "
+                >
+                  <div class="p-5">
+                    <!-- Escriba el Contenido  -->
+                    <div class="pregunta">
+                      <h2>Pregunta #5</h2>
+                    </div>
+                    <div class="respuesta">
+                      <p align="justify">
+                        <font size="+3" color="#0000FF">
+                          <!-- Aquí va la pregunta  -->
+                          El desarrollo de los sistemas de almacenaje en línea y
+                          de las altas velocidades de transmisión de datos en
+                          Internet, han permitido usarlo como un dispositivo de
+                          lectura y escritura:
+                          <!-- fin de la pregunta -->
+                        </font>
+                      </p>
+                      <p align="justify">
+                        <font size="+2" color="black">
+                          a.
+                          <input
+                            type="radio"
+                            name="preg5"
+                            value="a"
+                            onClick="Motor(5, this.value)"
+                          />Memoria ROM<br />
+                          b.
+                          <input
+                            type="radio"
+                            name="preg5"
+                            value="b"
+                            onClick="Motor(5, this.value)"
+                          />Memoria RAM<br />
+                          c.
+                          <input
+                            type="radio"
+                            name="preg5"
+                            value="c"
+                            onClick="Motor(5, this.value)"
+                          />Almacenamiento en la nube
+                          <br />
+                          d.
+                          <input
+                            type="radio"
+                            name="preg5"
+                            value="d"
+                            onClick="Motor(5, this.value)"
+                          />
+                          Ninguna de las anteriores
+                        </font>
+                      </p>
+                    </div>
+
+                    <!-- Fin del contenido -->
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Fin de la sección -->
+
+            <!-- Inicio de la sección -->
+            <div class="row mb-5">
+              <div class="media tm-flexbox-ie-fix tm-width-ie-fix">
+                <div
+                  class="
+                    media-body
+                    tm-flexbox-ie-fix tm-width-ie-fix tm-bg-light-gray
+                  "
+                >
+                  <div class="p-5">
+                    <!-- Escriba el Contenido  -->
+                    <div class="pregunta">
+                      <h2>Pregunta #6</h2>
+                    </div>
+                    <div class="respuesta">
+                      <p align="justify">
+                        <font size="+3" color="#0000FF">
+                          <!-- Aquí va la pregunta  -->
+                          Es la parte física de un ordenador o sistema
+                          informático. Está formado por los componentes
+                          eléctricos, electrónicos, electromecánicos y
+                          mecánicos, tales como circuitos de cables y luz,
+                          placas, memorias, discos:
+                          <!-- fin de la pregunta -->
+                        </font>
+                      </p>
+                      <p align="justify">
+                        <font size="+2" color="black">
+                          a.
+                          <input
+                            type="radio"
+                            name="preg6"
+                            value="a"
+                            onClick="Motor(6, this.value)"
+                          />Software<br />
+                          b.
+                          <input
+                            type="radio"
+                            name="preg6"
+                            value="b"
+                            onClick="Motor(6, this.value)"
+                          />Hardware<br />
+                          c.
+                          <input
+                            type="radio"
+                            name="preg6"
+                            value="c"
+                            onClick="Motor(6, this.value)"
+                          />Portátiles<br />
+                          d.
+                          <input
+                            type="radio"
+                            name="preg6"
+                            value="d"
+                            onClick="Motor(6, this.value)"
+                          />Todas las anteriores
+                        </font>
+                      </p>
+                    </div>
+
+                    <!-- Fin del contenido -->
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Fin de la sección -->
+
+            <!-- Inicio de la sección -->
+            <div class="row mb-5">
+              <div class="media tm-flexbox-ie-fix tm-width-ie-fix">
+                <div
+                  class="
+                    media-body
+                    tm-flexbox-ie-fix tm-width-ie-fix tm-bg-light-gray
+                  "
+                >
+                  <div class="p-5">
+                    <!-- Escriba el Contenido  -->
+                    <div class="pregunta">
+                      <h2>Pregunta #7</h2>
+                    </div>
+                    <div class="respuesta">
+                      <p align="justify">
+                        <font size="+3" color="#0000FF">
+                          <!-- Aquí va la pregunta  -->
+                          ¿21 KiloByte (KB) a cuántos Byte equivalen?
+                          <!-- fin de la pregunta -->
+                        </font>
+                      </p>
+                      <p align="justify">
+                        <font size="+2" color="black">
+                          a.
+                          <input
+                            type="radio"
+                            name="preg7"
+                            value="a"
+                            onClick="Motor(7, this.value)"
+                          />21504 KB
+                          <br />
+                          b.
+                          <input
+                            type="radio"
+                            name="preg7"
+                            value="b"
+                            onClick="Motor(7, this.value)"
+                          />21 B<br />
+                          c.
+                          <input
+                            type="radio"
+                            name="preg7"
+                            value="c"
+                            onClick="Motor(7, this.value)"
+                          />21504 B<br />
+                          d.
+                          <input
+                            type="radio"
+                            name="preg7"
+                            value="d"
+                            onClick="Motor(7, this.value)"
+                          />21 Kb
+                        </font>
+                      </p>
+                    </div>
+
+                    <!-- Fin del contenido -->
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Fin de la sección -->
+
+            <!-- Inicio de la sección -->
+            <div class="row mb-5">
+              <div class="media tm-flexbox-ie-fix tm-width-ie-fix">
+                <div
+                  class="
+                    media-body
+                    tm-flexbox-ie-fix tm-width-ie-fix tm-bg-light-gray
+                  "
+                >
+                  <div class="p-5">
+                    <!-- Escriba el Contenido  -->
+                    <div class="pregunta">
+                      <h2>Pregunta #8</h2>
+                    </div>
+                    <div class="respuesta">
+                      <p align="justify">
+                        <font size="+3" color="#0000FF">
+                          <!-- Aquí va la pregunta  -->
+                          (Memoria de Acceso Aleatorio), es el campo de
+                          almacenamiento empleado como medio de trabajo en los
+                          sistemas computacionales, pues contiene todas las
+                          instrucciones del procesador y la mayor parte de las
+                          instrucciones del software. Al apagar o reiniciar el
+                          sistema, se borra la totalidad de su contenido:
+                          <!-- fin de la pregunta -->
+                        </font>
+                      </p>
+                      <p align="justify">
+                        <font size="+2" color="black">
+                          a.
+                          <input
+                            type="radio"
+                            name="preg8"
+                            value="a"
+                            onClick="Motor(8, this.value)"
+                          />Memoria ROM<br />
+                          b.
+                          <input
+                            type="radio"
+                            name="preg8"
+                            value="b"
+                            onClick="Motor(8, this.value)"
+                          />Disco duro<br />
+                          c.
+                          <input
+                            type="radio"
+                            name="preg8"
+                            value="c"
+                            onClick="Motor(8, this.value)"
+                          />Memoria RAM<br />
+                          d.
+                          <input
+                            type="radio"
+                            name="preg8"
+                            value="d"
+                            onClick="Motor(8, this.value)"
+                          />Memoria USB
+                        </font>
+                      </p>
+                    </div>
+
+                    <!-- Fin del contenido -->
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Fin de la sección -->
+
+            <!-- Inicio de la sección -->
+            <div class="row mb-5">
+              <div class="media tm-flexbox-ie-fix tm-width-ie-fix">
+                <div
+                  class="
+                    media-body
+                    tm-flexbox-ie-fix tm-width-ie-fix tm-bg-light-gray
+                  "
+                >
+                  <div class="p-5">
+                    <!-- Escriba el Contenido  -->
+                    <div class="pregunta">
+                      <h2>Pregunta #9</h2>
+                    </div>
+                    <div class="respuesta">
+                      <p align="justify">
+                        <font size="+3" color="#0000FF">
+                          <!-- Aquí va la pregunta  -->
+                          ¿7168 KB a cuantos MB equivalen?
+
+                          <!-- fin de la pregunta -->
+                        </font>
+                      </p>
+                      <p align="justify">
+                        <font size="+2" color="black">
+                          a.
+                          <input
+                            type="radio"
+                            name="preg9"
+                            value="a"
+                            onClick="Motor(9, this.value)"
+                          />7 MB<br />
+                          b.
+                          <input
+                            type="radio"
+                            name="preg9"
+                            value="b"
+                            onClick="Motor(9, this.value)"
+                          />7 KB<br />
+                          c.
+                          <input
+                            type="radio"
+                            name="preg9"
+                            value="c"
+                            onClick="Motor(9, this.value)"
+                          />7 GB<br />
+                          d.
+                          <input
+                            type="radio"
+                            name="preg9"
+                            value="d"
+                            onClick="Motor(9, this.value)"
+                          />7168 MB
+                        </font>
+                      </p>
+                    </div>
+
+                    <!-- Fin del contenido -->
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Fin de la sección -->
+
+            <!-- Inicio de la sección -->
+            <div class="row mb-5">
+              <div class="media tm-flexbox-ie-fix tm-width-ie-fix">
+                <div
+                  class="
+                    media-body
+                    tm-flexbox-ie-fix tm-width-ie-fix tm-bg-light-gray
+                  "
+                >
+                  <div class="p-5">
+                    <!-- Escriba el Contenido  -->
+                    <div class="pregunta">
+                      <h2>Pregunta #10</h2>
+                    </div>
+                    <div class="respuesta">
+                      <p align="justify">
+                        <font size="+3" color="#0000FF">
+                          <!-- Aquí va la pregunta  -->
+                          Es un tipo de software:
+                          <!-- fin de la pregunta -->
+                        </font>
+                      </p>
+                      <p align="justify">
+                        <font size="+2" color="black">
+                          a.
+                          <input
+                            type="radio"
+                            name="preg10"
+                            value="a"
+                            onClick="Motor(10, this.value)"
+                          />De sistema<br />
+                          b.
+                          <input
+                            type="radio"
+                            name="preg10"
+                            value="b"
+                            onClick="Motor(10, this.value)"
+                          />De aplicación
+                          <br />
+                          c.
+                          <input
+                            type="radio"
+                            name="preg10"
+                            value="c"
+                            onClick="Motor(10, this.value)"
+                          />De programación<br />
+                          d.
+                          <input
+                            type="radio"
+                            name="preg10"
+                            value="d"
+                            onClick="Motor(10, this.value)"
+                          />Todas las anteriores
+                        </font>
+                      </p>
+                    </div>
+
+                    <!-- Fin del contenido -->
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Fin de la sección -->
+
+            <center>
+              <input
+                type="button"
+                value="PUNTUACIÓN"
+                onClick="Puntuacion()"
+                style="
+                  width: 150px;
+                  height: 35px;
+                  font-size: 19px;
+                  background-color: #c0c0c0;
+                "
+              />
+            </center>
+            <br />
+          </form>
+        </div>
+        <!-- container-fluid -->
+      </div>
+    </div>
+
+    <!-- load JS files -->
+    <script src="js/jquery-1.11.3.min.js"></script>
+    <!-- jQuery (https://jquery.com/download/) -->
+    <script>
+      $(document).ready(function () {
+        // Update the current year in copyright
+        $(".tm-current-year").text(new Date().getFullYear());
+      });
+    </script>
+ <script src="js2/script.js"></script>
+  </body>
+</html>

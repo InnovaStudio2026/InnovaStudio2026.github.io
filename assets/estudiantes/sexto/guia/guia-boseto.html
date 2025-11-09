@@ -1,0 +1,437 @@
+<!DOCTYPE html> 
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Guía - Compartir</title>
+  <link rel="icon" href="img/icono.png" />
+
+  <style>
+    body {
+      background-color: gray;
+      margin: 0;
+      padding-bottom: 100px;
+      font-family: Arial, sans-serif;
+      color: #123;
+    }
+
+    @media screen and (min-width: 1300px) and (max-width: 1920px) {
+      img {
+        width: 1280px;
+      }
+    }
+
+    .share-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #25D366;
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 14px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      z-index: 9999;
+    }
+
+    .share-btn:hover {
+      background-color: #1EBE54;
+    }
+
+    #chat-toggle {
+      position: fixed;
+      right: 30px;
+      bottom: 110px;
+      z-index: 10000;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      user-select: none;
+    }
+
+    #chat-toggle img {
+      width: 48px;
+      border-radius: 80%;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.25);
+      transition: transform 0.3s ease;
+    }
+
+    #chat-toggle:hover img {
+      transform: scale(1.1);
+    }
+
+    #chat-toggle div {
+      background-color: rgb(197, 247, 153);
+      padding: 5px 10px;
+      border-radius: 10px;
+      box-shadow: 0 0 5px gray;
+      margin-top: 5px;
+      font-weight: bold;
+      color: #1b3c59;
+      font-size: 0.9rem;
+      white-space: nowrap;
+    }
+
+    #chat-box {
+      position: fixed;
+      right: 20px;
+      bottom: 100px;
+      width: 400px;
+      height: 520px;
+      background-color: #fff;
+      display: none;
+      flex-direction: column;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      z-index: 10000;
+    }
+
+    #chat-box>div:first-child {
+      background: linear-gradient(45deg, #117c70, #0e610e);
+      color: white;
+      padding: 10px;
+      text-align: center;
+      font-weight: bold;
+      position: relative;
+    }
+
+    #btn-limpiar-chat {
+      position: absolute;
+      top: 10px;
+      right: 50px;
+      background: #c82333;
+      border: none;
+      color: white;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+      transition: background-color 0.2s ease;
+    }
+
+    #btn-limpiar-chat:hover {
+      background: #a71d2a;
+    }
+
+    #btn-cerrar-chat {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #444;
+      border: none;
+      color: white;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+      transition: background 0.3s ease;
+    }
+
+    #btn-cerrar-chat:hover {
+      background: #222;
+    }
+
+    #chat-mensajes {
+      flex: 1;
+      padding: 15px 20px 15px 15px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 40px;
+    }
+
+    #chat-box>div:last-child {
+      padding: 10px;
+      background-color: #f9f9f9;
+      display: flex;
+      gap: 8px;
+      border-top: 1px solid #ddd;
+    }
+
+    #chat-input {
+      flex: 1;
+      padding: 8px 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    #chat-enviar {
+      padding: 8px 15px;
+      background-color: #106e13;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
+    }
+
+    #chat-enviar:hover {
+      background-color: #0a4d09;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(0, 0, 0, 0.15);
+      border-top: 3px solid #0e610e;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-left: 10px;
+      vertical-align: middle;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    #chat-mensajes div.usuario {
+      align-self: flex-end;
+      background: #dcf8c6;
+      padding: 12px 16px;
+      border-radius: 20px 20px 0 20px;
+      max-width: 75%;
+      font-size: 0.95rem;
+      line-height: 1.4;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      word-wrap: break-word;
+    }
+
+    #chat-mensajes div.ia {
+      align-self: flex-start;
+      background: #fefefe;
+      padding: 14px 18px;
+      border-radius: 20px 20px 20px 0;
+      max-width: 75%;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.07);
+      word-wrap: break-word;
+      color: #222;
+    }
+
+    #chat-mensajes div.ia h1 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin: 0 0 8px 0;
+      color: #0e610e;
+    }
+
+    #chat-mensajes div.ia h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin: 8px 0 6px 0;
+      color: #117c70;
+    }
+
+    #chat-mensajes div.ia h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin: 6px 0 4px 0;
+      color: #145da0;
+    }
+
+    #chat-mensajes div.ia p {
+      margin: 6px 0;
+    }
+
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+#chat-box.cerrando {
+  animation: slideOutRight 0.4s forwards;
+}
+
+  </style>
+</head>
+
+<body>
+  <center><img src="img4/img01.jpg" width="1280" height="1656" /></center><br />
+  <center><img src="img4/img02.jpg" width="1280" height="1656" /></center><br />
+  <center><img src="img4/img03.jpg" width="1280" height="1656" /></center><br />
+  <center><img src="img4/img04.jpg" width="1280" height="1656" /></center><br />
+  <center><img src="img4/img05.jpg" width="1280" height="1656" /></center><br />
+  <center><img src="img4/img06.jpg" width="1280" height="1656" /></center><br />
+  <center><img src="img4/img07.jpg" width="1280" height="1656" /></center><br />
+  <center><img src="img4/img08.jpg" width="1280" height="1656" /></center><br />
+  <center><img src="img4/img09.jpg" width="1280" height="1656" /></center><br />
+  <center><img src="img4/img10.jpg" width="1280" height="1656" /></center><br />
+  <center><img src="img4/img11.jpg" width="1280" height="1656" /></center><br />
+  <center><img src="img4/img12.jpg" width="1280" height="1656" /></center><br />
+  <center><img src="img4/img13.jpg" width="1280" height="1656" /></center><br />
+  <center><img src="img4/img14.jpg" width="1280" height="1656" /></center><br />
+  <center><img src="img4/img15.jpg" width="1280" height="1656" /></center><br />
+
+
+
+  <button class="share-btn" onclick="descargarYCompartir()">📥 Compartir</button>
+
+  <div id="chat-toggle" title="Abrir chat">
+    <img src="img/chatia.png" alt="Chat AI" />
+    <div>¡Hola! Soy NOVA</div>
+  </div>
+
+  <div id="chat-box" aria-live="polite" aria-label="Chat de asistencia">
+    <div>
+      Asistente Virtual NOVA
+      <button id="btn-cerrar-chat" title="Cerrar chat" aria-label="Cerrar chat">✖</button>
+      <button id="btn-limpiar-chat" title="Limpiar conversación" aria-label="Limpiar conversación">🧹</button>
+    </div>
+    <div id="chat-mensajes"></div>
+    <div>
+      <input id="chat-input" type="text" placeholder="Escribe tu pregunta..." />
+      <button id="chat-enviar">Enviar</button>
+    </div>
+  </div>
+
+  <script>
+    function descargarYCompartir() {
+      const enlace = document.createElement('a');
+      enlace.href = 'Cuadernillo_de_preguntas_competencias_ciudadanas_Saber_Pro_2018.pdf';
+      enlace.download = 'Cuadernillo_de_preguntas_competencias_ciudadanas_Saber_Pro_2018.pdf';
+      document.body.appendChild(enlace);
+      enlace.click();
+      document.body.removeChild(enlace);
+
+      const mensaje = encodeURIComponent("Hola, aquí te comparto la guía en PDF. Ya está descargada, puedes adjuntarla desde tu teléfono.");
+      const whatsappURL = `https://wa.me/?text=${mensaje}`;
+      setTimeout(() => {
+        window.open(whatsappURL, '_blank');
+      }, 1000);
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      const chatToggle = document.getElementById("chat-toggle");
+      const chatBox = document.getElementById("chat-box");
+      const chatMensajes = document.getElementById("chat-mensajes");
+      const chatInput = document.getElementById("chat-input");
+      const chatEnviar = document.getElementById("chat-enviar");
+      const btnLimpiarChat = document.getElementById("btn-limpiar-chat");
+      const btnCerrarChat = document.getElementById("btn-cerrar-chat");
+
+      chatToggle.addEventListener("click", () => {
+        chatBox.style.display = chatBox.style.display === "flex" ? "none" : "flex";
+      });
+
+      btnCerrarChat.addEventListener("click", () => {
+  chatBox.classList.add("cerrando");
+  setTimeout(() => {
+    chatBox.style.display = "none";
+    chatBox.classList.remove("cerrando");
+  }, 400); // Duración de la animación
+});
+
+
+      btnLimpiarChat.addEventListener("click", () => {
+        chatMensajes.innerHTML = "";
+        chatInput.focus();
+      });
+
+    function agregarMensaje(texto, tipo) {
+  const mensaje = document.createElement("div");
+  mensaje.classList.add(tipo === "usuario" ? "usuario" : "ia");
+  mensaje.innerHTML = texto;
+  chatMensajes.appendChild(mensaje);
+  // chatMensajes.scrollTop = chatMensajes.scrollHeight; // Eliminado el scroll automático
+}
+
+
+      function formatearRespuesta(texto) {
+        const lineas = texto.split(/\n+/);
+        let html = "";
+
+        lineas.forEach(linea => {
+          const textoLimpio = linea.trim();
+          if (!textoLimpio) return;
+
+          if (textoLimpio.startsWith("### ")) {
+            html += `<h3>${textoLimpio.substring(4)}</h3>`;
+          } else if (textoLimpio.startsWith("## ")) {
+            html += `<h2>${textoLimpio.substring(3)}</h2>`;
+          } else if (textoLimpio.startsWith("# ")) {
+            html += `<h1>${textoLimpio.substring(2)}</h1>`;
+          } else {
+            html += `<p>${textoLimpio}</p>`;
+          }
+        });
+
+        return html;
+      }
+
+      async function responderAI(pregunta) {
+        if (!navigator.onLine) {
+          agregarMensaje("⚠️ No hay conexión a Internet.", "ia");
+          return;
+        }
+
+        const spinner = document.createElement("div");
+        spinner.classList.add("ia");
+        spinner.innerHTML = 'NOVA está pensando... <span class="spinner"></span>';
+        chatMensajes.appendChild(spinner);
+        chatMensajes.scrollTop = chatMensajes.scrollHeight;
+
+        const API_KEY = "AIzaSyC0T5jsdVWSEiZ69kNL4ipyRkaxk5iHiGM";
+        const ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`;
+
+        try {
+          const response = await fetch(ENDPOINT, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: pregunta }] }]
+            })
+          });
+
+          chatMensajes.removeChild(spinner);
+          const data = await response.json();
+          const respuestaRaw = data?.candidates?.[0]?.content?.parts?.[0]?.text || "⚠️ No se pudo obtener una respuesta.";
+          const respuestaFormateada = formatearRespuesta(respuestaRaw);
+          agregarMensaje(respuestaFormateada, "ia");
+
+        } catch (error) {
+          chatMensajes.removeChild(spinner);
+          agregarMensaje("⚠️ Error al conectar con la IA.", "ia");
+        }
+      }
+
+      chatEnviar.addEventListener("click", () => {
+        const pregunta = chatInput.value.trim();
+        if (pregunta !== "") {
+          agregarMensaje(pregunta, "usuario");
+          responderAI(pregunta);
+          chatInput.value = "";
+        }
+      });
+
+      chatInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          chatEnviar.click();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

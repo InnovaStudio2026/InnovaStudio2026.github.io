@@ -1,0 +1,130 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>clave acceso</title>
+    <style type="text/css">
+      #titulo {
+        background-color: #fb654190;
+        width: 60%;
+        padding: 20px;
+        text-align: center;
+        font-family: "verdana";
+        font-size: 24px;
+        color: black;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      #titulo1 {
+        background-color: #3f681c90;
+        width: 60%;
+        padding: 20px;
+        text-align: center;
+        font-family: "verdana";
+        font-size: 32px;
+        color: cornsilk;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      body {
+        background: url(img/fondo2.jpg);
+        background-size: 1480px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <script>
+      function acceso() {
+        // Modificar variable
+        var valida_ing1 = localStorage.getItem("num_inten1601tec");
+        var valida_ing2 = localStorage.getItem("num_inten1602tec");
+        if (!valida_ing1 || !valida_ing2) {
+          if (document.formclave.clave.value === "sestas15") {
+            window.location = document.formclave.clave.value + ".html";
+          } else {
+            alert("La contraseña no es correcta");
+          }
+        } else {
+          alert("Ya presentó su evaluación");
+        }
+      }
+
+      function ver_resultado() {
+        var d = new Date();
+        var fecha =
+          d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear();
+        var hora = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+        var fdia_instala = localStorage.getItem("f_dia");
+        var fmes_instala = localStorage.getItem("f_mes");
+        var fanio_instala = localStorage.getItem("f_anio");
+        var fhora_instala = localStorage.getItem("f_hora");
+        var fmin_instala = localStorage.getItem("f_min");
+        var fseg_instala = localStorage.getItem("f_seg");
+
+        var fecha_ins = fdia_instala + "/" + fmes_instala + "/" + fanio_instala;
+        var hora_ins = fhora_instala + ":" + fmin_instala + ":" + fseg_instala;
+        // Modificar variable
+        var existe1 = localStorage.getItem("num_inten1601tec");
+        var existe2 = localStorage.getItem("num_inten1602tec");
+        if (!existe1 && !existe2) {
+          alert("Aún no responde la evaluación");
+        } else {
+          //Modificar variable
+          var nombre_es = localStorage.getItem("nombre_estud_tec16");
+          var nombre_gra = localStorage.getItem("nombre_grad_tec16");
+          var nombre_are = localStorage.getItem("nom_area_tec16");
+          var puntos = localStorage.getItem("puntua_tec16");
+          // Hasta aquí se modifica las variables
+          var verRespuesta =
+            "F. Instalación APK: " + fecha_ins + "***" + hora_ins + "\n";
+          verRespuesta =
+            verRespuesta + "Estudiante: " + nombre_es + "-" + nombre_gra + "\n";
+          verRespuesta = verRespuesta + "Área: " + nombre_are + "\n";
+          verRespuesta =
+            verRespuesta +
+            "Fecha / Hora de la evaluación: " +
+            fecha +
+            " / " +
+            hora +
+            "\n";
+          verRespuesta =
+            verRespuesta +
+            "Respues" +
+            puntos +
+            "tas correctas: " +
+            "(" +
+            puntos +
+            ")" +
+            " de 10" +
+            "\n";
+          alert(verRespuesta);
+        }
+      }
+    </script>
+    <div id="titulo1">
+      <b id="negrita">InforTec <br />EVALUACIÓN FINAL</b>
+    </div>
+    <br />
+    <div id="titulo">
+      Estudiante tenga en cuenta que la Evaluación se habilitará en la fecha
+      correspondiente. Para ello debe solicitar la
+      <b id="negrita">contraseña</b> de acceso a su docente.
+      <form name="formclave">
+        <input type="password" name="clave" />
+
+        <input type="button" value="Acceder" onclick="acceso()" />
+        <br /><br />
+        <div id="ver_resul" name="ver_res">
+          <input
+            type="button"
+            value="Ver Resultado"
+            onclick="ver_resultado()"
+          />
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

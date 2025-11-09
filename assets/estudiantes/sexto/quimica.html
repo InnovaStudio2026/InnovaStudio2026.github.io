@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratorio Web Química (Grado 10+) - Funcional</title>
+    
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #e8f5e9;
+            color: #333;
+        }
+
+        header {
+            background-color: #008080;
+            color: white;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        main {
+            padding: 30px;
+            max-width: 900px;
+            margin: 30px auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .tool-section {
+            padding: 20px 0;
+        }
+
+        hr {
+            border: 0;
+            height: 1px;
+            background-image: linear-gradient(to right, rgba(0, 0, 0, 0), #ccc, rgba(0, 0, 0, 0));
+            margin: 30px 0;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+            color: #008080;
+        }
+
+        input[type="text"], input[type="number"], select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #ff6347;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+            margin-right: 10px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #cc4c39;
+        }
+
+        .resultado-display {
+            margin-top: 30px;
+            padding: 10px;
+            border-left: 5px solid #008080;
+            background-color: #f0ffff;
+            font-size: 1.2em;
+            color: #333;
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            margin-top: 20px;
+            color: #666;
+            border-top: 1px solid #eee;
+        }
+
+        /* Estilos para las Guías y Reporte */
+        details {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+        }
+        summary {
+            font-weight: bold;
+            cursor: pointer;
+            padding: 5px 0;
+            color: #008080;
+        }
+        .guia-content {
+            padding-left: 20px;
+            margin-top: 10px;
+            border-left: 3px solid #ff6347;
+        }
+        #reporte-modelo {
+            background-color: #eee;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            font-size: 0.9em;
+        }
+        #resultado-tabla-periodica {
+            background-color: #fff3e0;
+            border-left-color: #ff9800;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🔬 Herramientas de Laboratorio Químico Avanzado (Grado 10+)</h1>
+        <p>Calculadoras Funcionales para Prácticas Presenciales</p>
+    </header>
+
+    <main>
+        <section class="tool-section" id="tabla-periodica-tool">
+            <h2>1. Calculadora de Masa Molecular y Consulta Elementos ⚛️</h2>
+            <p>Introduce la fórmula para calcular su masa o el símbolo para consultar un elemento.</p>
+
+            <label for="formula-consulta">Fórmula / Símbolo (Ej: H2SO4, Fe, Hierro):</label>
+            <input type="text" id="formula-consulta" value="H2O" placeholder="Ej: H2SO4" style="text-transform: uppercase;">
+
+            <button onclick="calcularMasaMolecular()">Calcular Masa Molecular</button>
+            <button onclick="consultarElemento()">Consultar Elemento</button>
+            
+            <h3 class="resultado-display" id="resultado-tabla-periodica">Resultado: </h3>
+        </section>
+
+        <hr>
+
+        <section class="tool-section" id="dilucion-tool">
+            <h2>2. Calculadora de Dilución ($C_1V_1 = C_2V_2$) 💧</h2>
+            <p>Calcula el volumen final $V_2$ necesario para diluir una solución.</p>
+
+            <label for="c1">Concentración Inicial ($C_1$, M):</label>
+            <input type="number" id="c1" value="5.0" step="any" min="0.01">
+            
+            <label for="v1">Volumen Inicial ($V_1$, mL):</label>
+            <input type="number" id="v1" value="20" step="any" min="0.01">
+
+            <label for="c2">Concentración Final Deseada ($C_2$, M):</label>
+            <input type="number" id="c2" value="1.0" step="any" min="0.01">
+            
+            <button onclick="calcularDilucion()">Calcular Volumen Final ($V_2$)</button>
+            <h3 class="resultado-display" id="resultado-dilucion">Resultado: </h3>
+        </section>
+
+        <hr>
+
+        <section class="tool-section" id="ph-tool">
+            <h2>3. Calculadora de pH/pOH 🧪</h2>
+            <p>Calcula el pH y pOH a partir de la concentración de iones (ácidos/bases fuertes).</p>
+
+            <label for="concentracion-h">Concentración de $H^+$ o $OH^-$ (M):</label>
+            <input type="number" id="concentracion-h" value="0.001" step="any" min="0">
+
+            <button onclick="calcularPH('H')">Calcular pH (Si es $H^+$)</button>
+            <button onclick="calcularPH('OH')">Calcular pH (Si es $OH^-$)</button>
+            <h3 class="resultado-display" id="resultado-ph">Resultado: </h3>
+        </section>
+
+        <hr>
+
+        <section class="tool-section" id="moles-tool">
+            <h2>4. Conversor Estequiométrico (Masa ⇌ Moles ⇌ Partículas) 🔄</h2>
+            <p>Convierte entre gramos, moles y número de partículas.</p>
+
+            <label for="masa-molar">Masa Molar del Compuesto (g/mol) - Copia el resultado del punto 1:</label>
+            <input type="number" id="masa-molar" value="58.44" step="any" min="0.01">
+
+            <label for="unidad-entrada">Unidad de Entrada:</label>
+            <select id="unidad-entrada">
+                <option value="gramos">Gramos (g)</option>
+                <option value="moles">Moles (mol)</option>
+                <option value="particulas">Partículas</option>
+            </select>
+            
+            <label for="valor-conversion">Valor a Convertir:</label>
+            <input type="number" id="valor-conversion" value="10" step="any" min="0">
+
+            <button onclick="convertirEstequiometria()">Convertir Todo</button>
+            <h3 class="resultado-display" id="resultado-moles-masa">Resultado: </h3>
+        </section>
+        
+        <hr>
+        
+        <section id="guias-uso">
+            <h2>📚 Guías y Modelos de Uso</h2>
+            <p>Consulta las guías para conectar estos cálculos con tu práctica presencial.</p>
+            <details>
+                <summary>Guía 1: Uso de la Calculadora de Masa Molecular</summary>
+                <div class="guia-content"><p><strong>Propósito:</strong> Obtener la masa exacta de un compuesto para cálculos estequiométricos.</p><ol><li>**Fórmula:** Asegúrate de escribir la fórmula correctamente (ej: H2O, NO2, Ca(OH)2).</li><li>**Cálculo:** La calculadora suma automáticamente la masa atómica de cada elemento, multiplicada por su subíndice.</li><li>**Uso en Lab:** El resultado (g/mol) debe ser ingresado en la herramienta de **Conversor Estequiométrico** para saber cuánto pesar.</li></ol></div>
+            </details>
+            <details>
+                <summary>Guía 2: Uso de la Calculadora de Dilución ($C_1V_1 = C_2V_2$)</summary>
+                <div class="guia-content"><p><strong>Propósito:</strong> Planificar la preparación de una solución menos concentrada a partir de una solución madre.</p><ol><li>**Identifica $C_1$ (Solución Madre):** La concentración de la solución que ya tienes.</li><li>**Identifica $C_2$ (Solución Deseada):** La concentración que necesitas para tu experimento.</li><li>**Usa la Calculadora:** Introduce $C_1$, $V_1$ (volumen que tomarás) y $C_2$.</li><li>**Resultado ($V_2$):** Indica el volumen final total que debe tener tu solución diluida.</li><li>**En el Laboratorio:** Mide $V_1$ de la solución madre y **añade agua** hasta alcanzar el volumen total $V_2$ en un matraz aforado.</li></ol></div>
+            </details>
+            <details>
+                <summary>Guía 3: Integración pH y Conversor Estequiométrico</summary>
+                <div class="guia-content"><p>Estas herramientas permiten:</p><ul><li>**Estequiometría:** Pasar de gramos (lo que mides en la balanza) a moles (la unidad que usa la química para reaccionar) y viceversa.</li><li>**pH:** Comparar el pH teórico (calculado por la concentración de la solución que preparaste) con el pH experimental (medido con pH-metro).</li></ul></div>
+            </details>
+        </section>
+
+        <hr>
+
+        <section id="modelo-reporte">
+            <h2>📄 Modelo de Reporte de Práctica (Copiable)</h2>
+            <p>Formato ideal para documentar tu práctica.</p>
+
+            <pre id="reporte-modelo">
+### Título de la Práctica: [Insertar Título Aquí]
+
+**Nombre del Estudiante:**
+**Grado y Sección:**
+**Fecha de Realización:**
+**Objetivo de la Práctica:** [Breve descripción de lo que se busca lograr.]
+
+---
+#### I. Marco Teórico
+[Explica brevemente los principios químicos, fórmulas y conceptos clave.]
+
+#### II. Materiales y Reactivos
+| Material/Reactivo | Cantidad/Concentración | Masa Molar (MM) |
+|---|---|---|
+| [Compuesto X] | [__ g] | [__ g/mol (Calculado con la web)] |
+| [Solución Y] | [0.5 M] | [N/A] |
+
+#### III. Procedimiento Experimental
+[Describe los pasos realizados **en pasado** y de forma clara.]
+
+#### IV. Resultados y Cálculos
+1.  **Datos Obtenidos (Medidos):** [Registra todas las mediciones directas.]
+2.  **Cálculos Teóricos (Con Herramienta Web):**
+    - **Masa Molecular de X:** __ g/mol
+    - **Resultado Dilución/Masa Teórica:** __
+    - **pH Teórico:** __
+3.  **Resultado Final Experimental:** [El dato clave obtenido o preparado.]
+
+#### V. Análisis de Resultados
+[Compara tus resultados teóricos (calculados con la página) con los experimentales (medidos). Discute fuentes de error.]
+
+#### VI. Conclusión
+[Resume si el objetivo de la práctica se cumplió. Menciona lo aprendido.]
+            </pre>
+            <button onclick="copiarReporte()">Copiar Modelo de Reporte</button>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Laboratorio de Química Web | Desarrollado con HTML, CSS y JavaScript.</p>
+    </footer>
+
+    <script>
+        const AVOGADRO = 6.022e23;
+        
+        // Base de datos de elementos (SIMPLIFICADA) para cálculos moleculares
+        // Símbolo: {nombre, masa atómica, número atómico}
+        const TABLA_PERIODICA = {
+            'H': {nombre: 'Hidrógeno', masa: 1.008, numero: 1},
+            'HE': {nombre: 'Helio', masa: 4.003, numero: 2},
+            'LI': {nombre: 'Litio', masa: 6.941, numero: 3},
+            'BE': {nombre: 'Berilio', masa: 9.012, numero: 4},
+            'B': {nombre: 'Boro', masa: 10.81, numero: 5},
+            'C': {nombre: 'Carbono', masa: 12.011, numero: 6},
+            'N': {nombre: 'Nitrógeno', masa: 14.007, numero: 7},
+            'O': {nombre: 'Oxígeno', masa: 15.999, numero: 8},
+            'F': {nombre: 'Flúor', masa: 18.998, numero: 9},
+            'NE': {nombre: 'Neón', masa: 20.180, numero: 10},
+            'NA': {nombre: 'Sodio', masa: 22.990, numero: 11},
+            'MG': {nombre: 'Magnesio', masa: 24.305, numero: 12},
+            'AL': {nombre: 'Aluminio', masa: 26.982, numero: 13},
+            'SI': {nombre: 'Silicio', masa: 28.085, numero: 14},
+            'P': {nombre: 'Fósforo', masa: 30.974, numero: 15},
+            'S': {nombre: 'Azufre', masa: 32.06, numero: 16},
+            'CL': {nombre: 'Cloro', masa: 35.45, numero: 17},
+            'K': {nombre: 'Potasio', masa: 39.098, numero: 19},
+            'CA': {nombre: 'Calcio', masa: 40.078, numero: 20},
+            'FE': {nombre: 'Hierro', masa: 55.845, numero: 26},
+        };
+
+        // =========================================================
+        // Función de utilidad para manejar la validación
+        // =========================================================
+        function validarNumero(valor, nombreVariable, permitirCero = true) {
+            if (isNaN(valor) || valor < 0 || (!permitirCero && valor <= 0)) {
+                return `❌ Error: El valor de **${nombreVariable}** debe ser un número positivo y ${permitirCero ? 'mayor o igual a cero.' : 'mayor a cero.'}`;
+            }
+            return null;
+        }
+
+        // =========================================================
+        // 1. CÁLCULOS DE MASA MOLECULAR Y TABLA PERIÓDICA
+        // =========================================================
+
+        function calcularMasaMolecular() {
+            const formulaInput = document.getElementById('formula-consulta').value.trim().toUpperCase();
+            const resultadoElemento = document.getElementById('resultado-tabla-periodica');
+            let masaTotal = 0;
+            let detalles = '';
+            
+            // Regex para buscar el símbolo del elemento (1 o 2 letras) seguido opcionalmente por un número (cantidad)
+            const regex = /([A-Z][a-z]?)([0-9]*)/g;
+            let match;
+
+            if (formulaInput === "") {
+                resultadoElemento.innerHTML = '❌ Error: Por favor, ingrese una fórmula.';
+                return;
+            }
+
+            while ((match = regex.exec(formulaInput)) !== null) {
+                const simbolo = match[1];
+                // Si no hay número (subíndice) la cantidad es 1
+                const cantidad = match[2] === '' ? 1 : parseInt(match[2]);
+
+                const elemento = TABLA_PERIODICA[simbolo];
+
+                if (!elemento) {
+                    resultadoElemento.innerHTML = `❌ Error: El elemento **${simbolo}** no se encuentra en nuestra base de datos.`;
+                    return;
+                }
+
+                const masaElemento = elemento.masa * cantidad;
+                masaTotal += masaElemento;
+                detalles += `${simbolo} (${cantidad}): ${elemento.masa.toFixed(3)} x ${cantidad} = ${masaElemento.toFixed(3)} g/mol<br>`;
+            }
+
+            if (masaTotal === 0 || formulaInput !== match.input) {
+                 // Esta validación simple intenta evitar errores de sintaxis extraños
+                 resultadoElemento.innerHTML = '❌ Error: La fórmula es inválida. Asegúrese de usar solo símbolos listados (Ej: H2O).';
+                 return;
+            }
+
+            resultadoElemento.innerHTML = 
+                `**Fórmula:** ${formulaInput}<br>
+                **Masa Molecular:** **${masaTotal.toFixed(4)} g/mol**<br>
+                <small>Detalles del Cálculo:<br>${detalles}</small>`;
+            resultadoElemento.style.borderColor = '#ff9800';
+        }
+
+        function consultarElemento() {
+            const consultaInput = document.getElementById('formula-consulta').value.trim().toUpperCase();
+            const resultadoElemento = document.getElementById('resultado-tabla-periodica');
+            
+            let elementoEncontrado = null;
+
+            // 1. Búsqueda por Símbolo
+            elementoEncontrado = TABLA_PERIODICA[consultaInput];
+
+            // 2. Búsqueda por Nombre (Iteración)
+            if (!elementoEncontrado) {
+                for (const simbolo in TABLA_PERIODICA) {
+                    if (TABLA_PERIODICA[simbolo].nombre.toUpperCase() === consultaInput) {
+                        elementoEncontrado = TABLA_PERIODICA[simbolo];
+                        break;
+                    }
+                }
+            }
+            
+            if (elementoEncontrado) {
+                const simboloFinal = Object.keys(TABLA_PERIODICA).find(key => TABLA_PERIODICA[key] === elementoEncontrado);
+                resultadoElemento.innerHTML = 
+                    `**Elemento Encontrado:** ${elementoEncontrado.nombre} (${simboloFinal})<br>
+                    - **Símbolo:** ${simboloFinal}<br>
+                    - **Número Atómico:** ${elementoEncontrado.numero}<br>
+                    - **Masa Atómica:** **${elementoEncontrado.masa.toFixed(4)} u** (g/mol)`;
+            } else {
+                resultadoElemento.innerHTML = `❌ Error: No se encontró el elemento **${consultaInput}** por símbolo o nombre.`;
+            }
+            resultadoElemento.style.borderColor = '#ff9800';
+        }
+
+        // =========================================================
+        // 2. CÁLCULO DE DILUCIÓN (C1V1 = C2V2)
+        // =========================================================
+        function calcularDilucion() {
+            const c1Input = document.getElementById('c1').value;
+            const v1Input = document.getElementById('v1').value;
+            const c2Input = document.getElementById('c2').value;
+            const resultadoElemento = document.getElementById('resultado-dilucion');
+
+            const c1 = parseFloat(c1Input);
+            const v1 = parseFloat(v1Input);
+            const ce

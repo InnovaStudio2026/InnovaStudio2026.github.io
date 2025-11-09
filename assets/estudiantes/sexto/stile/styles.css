@@ -1,0 +1,313 @@
+/* Paleta de Colores ORIGINAL (Más profesional y sutil) */
+:root {
+    --color-primario: #007bff; /* Azul Clásico */
+    --color-secundario: #28a745; /* Verde para éxito */
+    --color-acentuacion: #ffc107; /* Amarillo para edición */
+    --color-fondo-claro: #f8f9fa; /* Gris muy claro */
+    --color-fondo-oscuro: #e9ecef; /* Gris claro */
+    --color-texto: #343a40; /* Gris oscuro para texto */
+    --color-claro: #ffffff;
+    --color-sombra: rgba(0, 0, 0, 0.1); 
+    --color-alerta: #dc3545; /* Rojo para pendiente/alerta */
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /* Fondo degradado suave */
+    background: linear-gradient(135deg, var(--color-fondo-claro) 0%, var(--color-fondo-oscuro) 100%);
+    padding: 20px;
+    color: var(--color-texto);
+    min-height: 100vh;
+    margin: 0;
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+}
+
+/* --- CONTENEDOR PRINCIPAL --- */
+.contenedor-resultados {
+    background-color: var(--color-claro);
+    padding: 30px;
+    border-radius: 10px; 
+    max-width: 900px;
+    width: 95%; 
+    margin: 40px auto;
+    box-shadow: 0 10px 20px var(--color-sombra); 
+    animation: fadeInScale 0.8s ease-out forwards;
+}
+
+@keyframes fadeInScale {
+    from { opacity: 0; transform: scale(0.98); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+h1 {
+    color: var(--color-primario);
+    border-bottom: 3px solid var(--color-primario); 
+    padding-bottom: 10px;
+    margin-bottom: 25px;
+    text-align: center;
+    font-weight: 600;
+}
+
+/* -------------------------- */
+/* --- ESTILOS DE LA TABLA --- */
+/* -------------------------- */
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 20px;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    padding: 14px 18px;
+    text-align: left;
+    border-bottom: 1px solid #dee2e6;
+    transition: background-color 0.3s ease;
+}
+
+th {
+    background-color: var(--color-primario);
+    color: var(--color-claro);
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: linear-gradient(90deg, #007bff, #0056b3); /* Degradado en la cabecera */
+}
+
+/* Esquinas de la cabecera */
+table thead tr:first-child th:first-child { border-top-left-radius: 8px; }
+table thead tr:first-child th:last-child { border-top-right-radius: 8px; }
+
+/* Bandas de color (Zebra stripes) */
+tr:nth-child(even) {
+    background-color: var(--color-fondo-claro);
+}
+tr:nth-child(odd) {
+    background-color: var(--color-claro);
+}
+
+/* Animación de Fila al Pasar el Ratón (Hover) */
+tr:hover {
+    background-color: #e2f0ff; /* Azul muy pálido al pasar */
+    transform: translateY(-2px); 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    z-index: 5;
+}
+
+/* Animación de Carga de Fila */
+@keyframes rowLoad {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+#tablaCuerpo tr {
+    opacity: 0;
+}
+
+/* Estilo de la Nota en la tabla */
+.nota-table-cell {
+    font-weight: bold;
+}
+.nota-table-cell.pendiente {
+    color: var(--color-alerta);
+}
+.nota-table-cell.completada {
+    color: var(--color-secundario);
+}
+
+/* ----------------------- */
+/* --- ESTILOS DE BOTONES --- */
+/* ----------------------- */
+.header-acciones {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.btn-accion {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-align: center;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+.btn-accion:hover {
+    transform: translateY(-2px); 
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Colores Específicos */
+.btn-agregar {
+    background-color: var(--color-primario);
+    color: var(--color-claro);
+}
+.btn-agregar:hover {
+    background-color: #0056b3;
+}
+
+.btn-editar-info {
+    background-color: var(--color-acentuacion); 
+    color: var(--color-texto); 
+}
+.btn-editar-info:hover {
+    background-color: #d89e00;
+}
+
+.btn-activo {
+    background-color: var(--color-secundario);
+    color: var(--color-claro);
+}
+.btn-activo:hover {
+    background-color: #1e7e34;
+}
+
+.btn-inactivo {
+    background-color: #e0e0e0;
+    color: #757575;
+    opacity: 0.8;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+.btn-inactivo:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+.btn-cerrar-modal {
+    background-color: var(--color-alerta);
+    color: var(--color-claro);
+    margin-top: 15px;
+}
+.btn-cerrar-modal:hover {
+    background-color: #b02a37;
+}
+
+#btnGuardarEstudiante {
+    background-color: var(--color-secundario);
+    color: var(--color-claro);
+    margin-top: 20px;
+    width: 100%;
+}
+#btnGuardarEstudiante:hover {
+    background-color: #1e7e34;
+}
+
+
+/* ----------------------- */
+/* --- ESTILOS DEL MODAL --- */
+/* ----------------------- */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); 
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+#detalleResultado, #editorEstudiante {
+    background-color: var(--color-claro);
+    padding: 30px; 
+    border-radius: 10px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3); 
+    transform: scale(0.9); 
+    opacity: 0;
+    transition: all 0.4s ease-out; /* Transición suave */
+    display: none;
+}
+
+.modal-overlay.active #detalleResultado,
+.modal-overlay.active #editorEstudiante {
+    transform: scale(1);
+    opacity: 1;
+}
+
+#detalleResultado h3, #editorEstudiante h3 {
+    color: var(--color-primario);
+    border-bottom: 2px solid var(--color-primario);
+    padding-bottom: 10px;
+    margin-top: 0;
+    font-size: 24px;
+    text-align: center;
+}
+#detalleResultado p strong {
+    color: var(--color-primario);
+}
+.nota-final {
+    background-color: #f1f8ff; 
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 20px;
+    font-weight: bold;
+    text-align: center;
+    font-size: 1.3em;
+    border-left: 5px solid var(--color-secundario); 
+}
+.nota-final span {
+    color: var(--color-alerta);
+    font-size: 1.4em; 
+    display: block;
+    margin-top: 5px;
+}
+
+/* Estilos de formulario */
+#editorEstudiante label {
+    display: block;
+    color: var(--color-texto);
+    font-weight: 500;
+    margin-top: 10px;
+}
+#editorEstudiante input, #editorEstudiante select {
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 5px;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    margin-bottom: 10px;
+}
+#editorEstudiante input:focus, #editorEstudiante select:focus {
+    border-color: var(--color-primario);
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    outline: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .contenedor-resultados {
+        margin: 20px auto;
+        padding: 15px;
+    }
+    h1 {
+        font-size: 22px;
+    }
+    .header-acciones {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .btn-accion {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+    th, td {
+        padding: 10px 12px;
+    }
+    #detalleResultado, #editorEstudiante {
+        padding: 20px;
+    }
+}

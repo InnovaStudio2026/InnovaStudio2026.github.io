@@ -1,0 +1,392 @@
+<!DOCTYPE html> 
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Selecciona tu grado</title>
+    <link rel="icon" href="img/icono.png">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background: url('img/fondo2.jpg') no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .cuadro {
+            background: linear-gradient(to bottom right, #ffffff, #ccffcc);
+            padding: 30px 25px;
+            border-radius: 30px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            max-width: 360px;
+            width: 120%;
+            opacity: 0;
+            transform: translateY(40px);
+            animation: aparecer 1s ease-out forwards;
+        }
+
+        @keyframes aparecer {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .cuadro h2 {
+            color: #000;
+            font-weight: bold;
+            margin-bottom: 25px;
+            font-size: 22px;
+        }
+
+        /* --- Estilos del Flip Card (Contenedor de Botón y Reverso) --- */
+        .boton-container {
+            perspective: 1000px; /* Para el efecto 3D */
+            display: block;
+            width: 90%; 
+            height: 58px; /* Altura fija para evitar saltos al girar */
+            margin: 15px auto;
+        }
+
+        .flip-card {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .flip-card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden; /* Oculta la cara trasera al girar */
+            backface-visibility: hidden;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* --- Estilo de la Cara Frontal (Botón) --- */
+        .card-front {
+            font-size: 22px;
+            color: #000;
+            transition: transform 0.2s, box-shadow 0.3s;
+        }
+        .card-front:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        /* --- Estilo de la Cara Trasera (Formulario) --- */
+        .card-back {
+            background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
+            transform: rotateY(180deg); /* La cara trasera está inicialmente volteada */
+            padding: 0 5px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #333;
+        }
+        .card-back form {
+            display: flex;
+            width: 100%;
+            gap: 5px;
+            padding: 0 10px;
+        }
+        .card-back input {
+            flex-grow: 1;
+            padding: 5px 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .card-back button {
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .card-back button:hover {
+            background-color: #0056b3;
+        }
+
+
+        /* --- Colores de Grado --- */
+        .sextos .card-front {
+            background: linear-gradient(45deg, #e0f7fa, #80deea);
+        }
+        .septimo .card-front {
+            background: linear-gradient(45deg, #ffcdd2, #ef9a9a);
+        }
+        /* Los demás grados son botones simples */
+        .octavos, .novenos, .decimos, .once {
+             padding: 15px 18px; /* Estilo de botón simple */
+             border-radius: 10px;
+             font-size: 22px;
+             font-weight: bold;
+             color: #000;
+             cursor: pointer;
+             transition: transform 0.2s, box-shadow 0.3s;
+             display: block;
+             width: 90%;
+             margin: 15px auto;
+             border: none;
+        }
+        .octavos:hover, .novenos:hover, .decimos:hover, .once:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        .octavos { background: linear-gradient(45deg, #ffe082, #ffd54f); }
+        .novenos { background: linear-gradient(45deg, #b3e5fc, #81d4fa); }
+        .decimos { background: linear-gradient(45deg, #e1bee7, #ce93d8); }
+        .once { background: linear-gradient(45deg, #c5e1a5, #aed581); }
+
+
+        /* Anuncio de actualización y otros estilos (sin cambios) */
+        #anuncioActualizacion {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+        #anuncioActualizacion .contenido {
+            background: linear-gradient(to bottom right, #ffffff, #bde0fe);
+            color: #1d3557;
+            padding: 40px 30px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 0 25px rgba(0,0,0,0.4);
+            max-width: 90%;
+        }
+        #anuncioActualizacion h2 {
+            font-size: 26px;
+            margin-bottom: 25px;
+        }
+        #anuncioActualizacion button {
+            padding: 12px 28px;
+            background: linear-gradient(135deg, #005f73, #0a9396);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.3s;
+        }
+        #anuncioActualizacion button:hover {
+            background: linear-gradient(135deg, #0a9396, #94d2bd);
+            transform: scale(1.05);
+        }
+
+        /* Footer y Botón Volver */
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: rgb(13, 228, 96);
+            text-align: center;
+            padding: 10px;
+            color: #000;
+            font-weight: bold;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+            z-index: 999;
+        }
+        #btn-volver {
+            position: fixed;
+            bottom: 60px;
+            left: 20px;
+            z-index: 1000;
+            padding: 12px 28px;
+            background: linear-gradient(135deg, #0033cc, #0099ff);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease-in-out;
+        }
+        #btn-volver:hover {
+            background: linear-gradient(135deg, #002db3, #007acc);
+            transform: scale(1.07);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.35);
+        }
+        #btn-volver:active {
+            transform: scale(0.96);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Media Queries */
+        @media (max-width: 500px) {
+            .cuadro h2 {
+                font-size: 18px;
+            }
+            .boton-container {
+                height: 52px;
+            }
+            .card-front {
+                font-size: 18px;
+            }
+            .card-back input, .card-back button {
+                font-size: 12px;
+                padding: 4px 8px;
+            }
+            #btn-volver {
+                font-size: 13px;
+                padding: 10px 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <button id="btn-volver" onclick="location.href='index.html'">⮜ Volver</button>
+
+    <div class="cuadro">
+        <h2>Seleccione su grado</h2>
+        
+        <div class="boton-container sextos">
+            <div class="flip-card" id="flip-sextos">
+                <button class="card-face card-front" onclick="flipCard('flip-sextos')">
+                    📘 Sextos
+                </button>
+                <div class="card-face card-back">
+                    <form onsubmit="return validarAcceso(event, 'clave-sextos')">
+                        <input type="password" id="clave-sextos" placeholder="Ingrese clave" required>
+                        <button type="submit">Ingresar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        
+        <button class="octavos" onclick="mostrarAnuncioActualizacion()">📙 Séptimo</button>
+        <button class="octavos" onclick="mostrarAnuncioActualizacion()">📗 Octavos</button>
+        <button class="novenos" onclick="mostrarAnuncioActualizacion()">📕 Novenos</button>
+        <button class="decimos" onclick="mostrarAnuncioActualizacion()">📒 Décimos</button>
+        <button class="once" onclick="mostrarAnuncioActualizacion()">🎓 Once</button>
+    </div>
+
+    <footer>
+        © 2025 Institución Educativa Colucas - Todos los derechos reservados
+    </footer>
+
+    <div id="anuncioActualizacion">
+        <div class="contenido">
+            <h2> 📢 </h2>
+            <h3> Esta página se encuentra Inabilitada</h>
+            <p>Pronto estarán disponibles los módulos de estos grados.</p>
+            <button onclick="cerrarAnuncioActualizacion()">Cerrar</button>
+        </div>
+    </div>
+
+    <script>
+        // --- Configuración de Contraseñas y Destinos ---
+        const passwords = {
+            // GRADO SEXTO
+            "sextos_estudiante": "menu_sextos_estudiante.html", 
+            "sextos26": "sexto/areas1.html",
+            
+            // GRADO SÉPTIMO
+            "septimo_estudiante": "menu_septimo_estudiante.html", 
+            "septimo_profe": "menu_septimo_profe.html"
+        };
+        
+        let activeFlipCard = null; // Para rastrear qué tarjeta está girada
+
+        // --- Funciones de Interfaz ---
+        function flipCard(cardId) {
+            const card = document.getElementById(cardId);
+            
+            // Si hay otra tarjeta activa, la volteamos de nuevo al frente
+            if (activeFlipCard && activeFlipCard !== card) {
+                activeFlipCard.classList.remove('flipped');
+                // Limpiamos su campo de contraseña
+                const prevInput = activeFlipCard.querySelector('input[type="password"]');
+                if (prevInput) prevInput.value = '';
+            }
+            
+            // Voltea la tarjeta actual
+            card.classList.toggle('flipped');
+            
+            if (card.classList.contains('flipped')) {
+                activeFlipCard = card;
+                // Enfoca el campo de contraseña en la cara trasera
+                setTimeout(() => {
+                    const input = card.querySelector('input[type="password"]');
+                    if (input) input.focus();
+                }, 300); // Espera a que el giro termine a medias
+            } else {
+                activeFlipCard = null;
+            }
+        }
+
+        // --- Lógica de Validación de Acceso ---
+        function validarAcceso(event, inputId) {
+            event.preventDefault(); // Previene el envío estándar del formulario
+            
+            const input = document.getElementById(inputId);
+            const claveIngresada = input.value.trim();
+
+            // 1. Manejo de campo vacío
+            if (claveIngresada === '') {
+                alert("Por favor, ingrese una clave.");
+                input.focus();
+                return false;
+            }
+
+            // 2. Búsqueda de la clave en el objeto 'passwords'
+            const destino = passwords[claveIngresada]; 
+
+            if (destino) {
+                // Clave correcta, redirigir
+                window.location.href = destino; 
+            } else {
+                // 3. Clave incorrecta: Muestra alerta y limpia/enfoca el input
+                alert("Clave de acceso incorrecta. Inténtelo de nuevo.");
+                input.value = '';
+                input.focus();
+            }
+            return false;
+        }
+
+        // --- Funciones para el Anuncio de Actualización (Sin cambios) ---
+        function mostrarAnuncioActualizacion() {
+            document.getElementById("anuncioActualizacion").style.display = "flex";
+        }
+        function cerrarAnuncioActualizacion() {
+            document.getElementById("anuncioActualizacion").style.display = "none";
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagina Docentes</title>
+    <link rel="icon" href="img/icono.png">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Lucida Calligraphy", cursive;
+            font-size: 16px;
+            background-color: #f0f0f0;
+        }
+
+        /* Estilo de la transición inicial */
+        .transition-screen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: url('img/fondo-transicion.jpg') no-repeat center center/cover;
+            animation: fadeOut 3s forwards;
+        }
+
+        .transition-screen img {
+            width: 25%;
+            height: 50%;
+            animation: scaleUp 2s ease-in-out;
+        }
+
+        @keyframes scaleUp {
+            0% {
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+
+        /* Estilo del menú principal */
+        .main-menu {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            background: url('img/fondo-menu.jpg') no-repeat center center/cover;
+            height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .main-menu.active {
+            display: flex;
+        }
+
+      /* Centrar la imagen del encabezado */
+    .main-menu header img {
+        width: 120px;
+        height: auto;
+        display: block; /* Convierte la imagen en bloque para centrarla */
+        margin: 0 auto; /* Centra la imagen horizontalmente */
+    }
+
+
+        .main-menu h1 {
+        color: #000000;
+        margin-top: 10px;
+        font-size: 28px;
+        text-shadow: 2px 2px 4px #000;
+        text-align: center; /* Centrar el texto del encabezado */
+    }
+
+    .main-menu header .background-image {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            height: 100%;
+            background: url('img/imagentitulo.png') no-repeat center center/cover;
+            opacity: 0.3;
+            z-index: -1;
+            text-align: center; /* Centrar el texto del encabezado */
+        }
+
+
+           .menu-options {
+        margin-top: -1,5cm; /* Baja los botones 8 cm */
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+        justify-content: center;
+    }
+        .menu-option {
+            text-align: center;
+            text-decoration: none;
+            color: #333;
+            font-size: 12px;
+            font-weight: bold; /* Negrilla */
+            font-family: "Lucida Calligraphy", cursive;
+            background-color: rgba(166, 245, 129, 0.8);
+            padding: 10px;
+            border-radius: 22px;
+            transition: transform 0.3s, background-color 0.3s;
+            width: 120px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .menu-option img {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            transition: transform 0.3s;
+        }
+
+        .menu-option:hover {
+            background: linear-gradient(to right, #0ada14, #cceece);
+            color: #020202;
+            transform: translateY(-5px);
+        }
+
+        .menu-option img:hover {
+            transform: scale(1.1);
+        }
+ .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .modal-content {
+            background-color: rgba(92, 255, 92, 0.24);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            position: relative;
+        }
+
+        .gradient-button {
+            display: block;
+            margin: 20px auto 0; /* Centra el botón debajo del video */
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background: linear-gradient(to right, #0ada14, #cceece);
+            color: rgb(0, 0, 0);
+            cursor: pointer;
+            font-family: "Monotype Corsiva", cursive;
+            font-style: italic;
+            transition: background 0.3s;
+        }
+
+        .gradient-button:hover {
+           background: linear-gradient(to right, #0ada14, #cceece);
+        }
+
+         .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            position: absolute;
+            bottom: 20px;
+        }
+
+        .navigation-button {
+            padding: 10px 20px;
+            font-family: "Lucida Calligraphy", cursive;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .back-button {
+            position: absolute;
+            bottom: 50px;
+            left: 20px;
+            background-color: rgba(61, 150, 61, 0.911);
+            color: rgb(0, 0, 0);
+            padding: 10px 20px;
+            font-family: "Lucida Calligraphy", cursive;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: linear-gradient(to right, #0ada14, #cceece);
+        }
+       
+        footer {
+            margin-top: auto;
+            color: #fff;
+            text-shadow: 1px 1px 2px #000;
+            font-size: 14px;
+            
+        }
+    </style>
+</head>
+<body>
+    <!-- Pantalla de transición inicial -->
+    <div class="transition-screen">
+        <img src="https://q.plataformaintegra.net/lucascaballero/img/colegio/escudo_auth.jpg" alt="Logo Colegio">
+    </div>
+
+    <!-- Menú principal -->
+    <div class="main-menu">
+        <header>
+ <div class="background-image"></div>
+            <img src="https://q.plataformaintegra.net/lucascaballero/img/colegio/escudo_auth.jpg" alt="Encabezado">
+            <h1>Bienvenido, Docente</h1>
+        </header>
+        <div class="menu-options">
+      <a href="mi-perfil.html" class="menu-option">
+            <img src="https://img.icons8.com/ios-filled/50/gender-neutral-user.png" alt="Mi Perfil">
+             Mi    Perfil
+        </a>
+        <a href="ofertas-educativas.html"class="menu-option">
+            <img src="https://img.icons8.com/ios-filled/50/graduation-cap.png" alt="Ofertas Educativas">
+            Ofertas Educativas
+        </a>
+        <a href="resultados/index.html"class="menu-option">
+            <img src="https://img.icons8.com/ios-filled/50/checklist.png" alt="Resultados">
+            Resultados
+        </a>
+    
+        <a href="videoconferencias.html"class="menu-option">
+            <img src="https://img.icons8.com/ios-filled/50/webcam.png" alt="Videoconferencias">
+            Videoconferencias
+        </a>
+        <a href="colegiatura.html"class="menu-option">
+            <img src="https://img.icons8.com/ios-filled/50/money-bag.png" alt="Colegiatura">
+            Colegiatura
+        </a>
+        <a href="grabaciones.html"class="menu-option">
+            <img src="https://img.icons8.com/ios-filled/50/video.png" alt="Grabaciones">
+            Grabaciones
+        </a>
+
+        <a href="kiosko-escolar.html"class="menu-option">
+            <img src="https://img.icons8.com/ios-filled/50/building.png" alt="Kiosko Escolar">
+            Kiosko Escolar
+        </a>
+        <a href="recompensas.html"class="menu-option">
+            <img src="https://img.icons8.com/ios-filled/50/gift.png" alt="Recompensas">
+            Recompensas
+        </a>
+        <a href="adeudos.html"class="menu-option">
+            <img src="https://img.icons8.com/ios-filled/50/error.png" alt="Adeudos">
+            Adeudos
+        </a>
+         <a href="#" onclick="openVideoModal()" class="menu-option">
+        <img src="https://img.icons8.com/ios-filled/50/book.png" alt="Biblioteca">
+        Biblioteca Colombia Aprende
+    </a>
+
+        <a href="mensajes.html"class="menu-option">
+            <img src="https://img.icons8.com/ios-filled/50/sms.png" alt="Mis-Mensajes">
+     Mis Mensajes
+        </a>
+        <a href="diplomas-certificados.html" class="menu-option">
+            <img src="https://img.icons8.com/ios-filled/50/certificate.png" alt="Diplomas y Certificados">
+            Diplomas y Certificados
+        </a>
+    </div>
+     <!-- Otros botones aquí -->
+    </div>
+    <a href="index.html" class="back-button">Atrás</a>
+</div>
+
+
+    
+  <footer style="background: linear-gradient(to right, #34c759, #28a745); padding: 15px; text-align: center; color: rgb(0, 0, 0); font-size: 14px; width: 100%; box-sizing: border-box; position: fixed; bottom: 0; left: 0;">
+    © 2025 Institución Educativa colucas- Plataforma Docente
+
+ <div class="modal" id="videoModal">
+        <div class="modal-content">
+            <video id="video" width="600" controls>
+                <source src="video/video.mp4" type="video/mp4">
+                Tu navegador no soporta la etiqueta de video.
+            </video>
+            <button class="gradient-button" onclick="closeVideoModal()">Omitir y continuar</button>
+        </div>
+    </div>
+
+    <script>
+
+        // Mostrar menú después de la transición
+        setTimeout(() => {
+            document.querySelector('.transition-screen').style.display = 'none';
+            document.querySelector('.main-menu').classList.add('active');
+        }, 3000);
+
+ function toggleMenu() {
+            const menu = document.getElementById('menu');
+            menu.classList.toggle('active');
+        }
+
+        function openVideoModal() {
+            const modal = document.getElementById('videoModal');
+            modal.style.display = 'flex';
+            const video = document.getElementById('video');
+            video.play();
+            video.onended = function() {
+                window.location.href = "https://www.ellibrototal.com/ltotal/"; // URL destino
+            };
+        }
+
+        function closeVideoModal() {
+            const modal = document.getElementById('videoModal');
+            modal.style.display = 'none';
+            const video = document.getElementById('video');
+            video.pause();
+            video.currentTime = 0; // Regresar el video al inicio
+        }
+
+        
+
+    </script>
+</body>
+</html>

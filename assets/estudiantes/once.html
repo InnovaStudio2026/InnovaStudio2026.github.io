@@ -1,0 +1,356 @@
+<!DOCTYPE html> 
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="icon" href="img/icono.png">
+  <title>Sociales</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: url('img/fondo5.jpg') center no-repeat fixed;
+      background-size: cover;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .overlay {
+      background-color: rgba(0, 0, 0, 0.445);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 20px;
+    }
+
+    /* Contenedor para escudo + número */
+    .header-contenedor {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    /* Número 11° con tamaño igual al escudo */
+    .grado-label {
+      font-size: 140px;
+      font-weight: bold;
+      color: white;
+      margin-bottom: 15px;
+      line-height: 1;
+      user-select: none;
+    }
+
+    header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    header img {
+      width: 140px;
+      height: auto;
+      margin-bottom: 15px;
+    }
+
+    .titulo-principal {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .titulo-principal h1 {
+      font-size: 42px;
+      margin: 8px 0;
+      color: #f7f7f7;
+    }
+
+    .titulo-principal h2 {
+      font-size: 26px;
+      margin: 6px 0;
+      color: #e0e0e0;
+    }
+
+    .titulo-principal h3 {
+      font-size: 22px;
+      margin: 4px 0;
+      color: #dcdcdc;
+    }
+
+    .menu {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 50px 0;
+      gap: 20px;
+    }
+
+    .boton-menu {
+      padding: 18px 40px;
+      font-size: 20px;
+      background: linear-gradient(to right, #005f73, #0a9396);
+      border: none;
+      border-radius: 10px;
+      color: white;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.3s;
+      width: 260px;
+      box-shadow: 0 5px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .boton-menu:hover {
+      background: linear-gradient(to right, #0a9396, #94d2bd);
+      transform: scale(1.06);
+    }
+
+    .flip-card {
+      background-color: transparent;
+      width: 260px;
+      height: 70px;
+      perspective: 1000px;
+    }
+
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      transition: transform 0.8s;
+      transform-style: preserve-3d;
+    }
+
+    .flipped {
+      transform: rotateY(180deg);
+    }
+
+    .flip-card-front, .flip-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 10px;
+    }
+
+    .flip-card-front {
+      background: linear-gradient(to right, #005f73, #0a9396);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      cursor: pointer;
+      box-shadow: 0 5px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .flip-card-back {
+      background: #0a9396;
+      color: white;
+      transform: rotateY(180deg);
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      gap: 10px;
+    }
+
+    .flip-card-back input {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: none;
+      width: 120px;
+    }
+
+    .flip-card-back button {
+      padding: 10px 16px;
+      font-size: 16px;
+      border-radius: 6px;
+      background-color: #007a74;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    .flip-card-back button:hover {
+      background-color: #00b4aa;
+    }
+
+    footer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 18px;
+      font-size: 16px;
+      color: #f5f5f5;
+      background-color: rgba(0, 0, 0, 0.5);
+      font-family: 'Lucida Calligraphy', cursive;
+      font-weight: bold;
+      font-style: italic;
+    }
+
+
+    /* Botón Volver con estilo moderno */
+    #btn-volver {
+      position: fixed;
+      bottom: 60px;
+      left: 20px;
+      z-index: 1000;
+      padding: 12px 28px;
+      background: linear-gradient(135deg, #0033cc, #0099ff);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease-in-out;
+    }
+
+    #btn-volver:hover {
+      background: linear-gradient(135deg, #002db3, #007acc);
+      transform: scale(1.07);
+      box-shadow: 0 12px 20px rgba(0, 0, 0, 0.35);
+    }
+
+    #btn-volver:active {
+      transform: scale(0.96);
+      box-shadow: 0 6px 10px rgba(0, 0, 0, 0.25);
+    }
+
+    @media (max-width: 500px) {
+      .cuadro h2 {
+        font-size: 18px;
+      }
+
+      .boton {
+        font-size: 15px;
+        padding: 9px 15px;
+      }
+
+      #btn-volver {
+        font-size: 13px;
+        padding: 10px 22px;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="overlay">
+    <header>
+      <div class="header-contenedor">
+        <img src="img/icono.png" alt="Escudo del colegio" />
+        <div class="grado-label">11°</div>
+      </div>
+      <div class="titulo-principal">
+        <h1>Colegio Integrado Lucas Caballero</h1>
+        <h2>Área de Sociales, Historia & Economicas</h2>
+        <h3>Docente: Marta Emilia Ovalle</h3>
+      </div>
+    </header>
+
+    <section class="menu">
+      <button class="boton-menu" onclick="window.location.href='guia/guia-sociales.html'">Guía Sociales</button>
+      <button class="boton-menu" onclick="window.location.href='guia/guia-historia.html'">Guía Historia</button>
+      <button class="boton-menu" onclick="window.location.href='guia/guia-historia.html'">Economicas</button>
+
+      <!-- Flip card -->
+      <div class="flip-card" onclick="toggleFlip(event)">
+        <div class="flip-card-inner" id="flipInner">
+          <div class="flip-card-front">
+            Prueba de Conocimiento 
+          </div>
+          <div class="flip-card-back">
+            <input type="password" id="password" placeholder="Contraseña">
+            <button onclick="checkPassword(event)">Ingresar</button>
+          </div>
+        </div>
+      </div>
+      <button class="boton-menu" onclick="window.location.href='autoevaluacion.html'">Autoevaluacion</button>
+      <button class="boton-menu" onclick="mostrarAnuncio()">Biblioteca digital 📚</button>
+    </section>
+
+<!-- Botón volver -->
+  <button id="btn-volver" onclick="location.href='menu.html'">⮜ Volver</button>
+
+    <footer>
+      © 2025 Institución Educativa Colucas - Plataforma Docente
+    </footer>
+  </div>
+
+  <!-- ANUNCIO DE VIDEO -->
+  <div id="videoAnuncio" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(3px);">
+    <div style="background: linear-gradient(to bottom right, #528fc4, #ffffff); padding: 20px; border-radius: 16px; box-shadow: 0 0 25px rgba(0,0,0,0.4); max-width: 90%; text-align: center;">
+      <video id="anuncioVideo" width="640" controls style="max-width: 100%; border-radius: 12px; box-shadow: 0 0 12px rgba(0,0,0,0.2);">
+        <source src="video/anuncio.mp4" type="video/mp4">
+        Tu navegador no admite el video.
+      </video>
+      <div style="margin-top: 15px; display: flex; justify-content: center; gap: 20px;">
+        <button onclick="cerrarAnuncio()" style="padding: 10px 22px; font-size: 18px; background: linear-gradient(to bottom right, #0b6e2c, #ffffff); border: none; border-radius: 8px; cursor: pointer;">Volver</button>
+        <button onclick="saltarAnuncio()" style="padding: 10px 22px; font-size: 18px; background: linear-gradient(to bottom right, #0b6e2c, #ffffff); border: none; border-radius: 8px; cursor: pointer;">Saltar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleFlip(e) {
+      const inner = e.currentTarget.querySelector('.flip-card-inner');
+      if (inner.classList.contains('flipped')) return;
+      inner.classList.add('flipped');
+
+      clearTimeout(window.flipTimeout);
+      window.flipTimeout = setTimeout(() => {
+        inner.classList.remove('flipped');
+        document.getElementById("password").value = "";
+      }, 180000); // 3 minutos
+    }
+
+    function checkPassword(e) {
+      e.stopPropagation();
+      const input = document.getElementById("password").value;
+      if (input === "social2025") {
+        clearTimeout(window.flipTimeout);
+        window.location.href = "ptt2025.html";
+      } else {
+        alert("Contraseña incorrecta");
+      }
+    }
+
+    function mostrarAnuncio() {
+      const anuncio = document.getElementById("videoAnuncio");
+      const video = document.getElementById("anuncioVideo");
+      anuncio.style.display = "flex";
+      video.currentTime = 0;
+      video.play();
+      video.onended = function () {
+        window.open("https://www.ellibrototal.com/ltotal/", "_blank");
+        anuncio.style.display = "none";
+      };
+    }
+
+    function cerrarAnuncio() {
+      const anuncio = document.getElementById("videoAnuncio");
+      const video = document.getElementById("anuncioVideo");
+      video.pause();
+      anuncio.style.display = "none";
+    }
+
+    function saltarAnuncio() {
+      const anuncio = document.getElementById("videoAnuncio");
+      const video = document.getElementById("anuncioVideo");
+      video.pause();
+      anuncio.style.display = "none";
+      window.open("https://www.ellibrototal.com/ltotal/", "_blank");
+    }
+  </script>
+</body>
+</html>

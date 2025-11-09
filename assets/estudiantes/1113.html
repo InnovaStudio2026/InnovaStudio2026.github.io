@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Colegio Integrado Lucas Caballero 2021</title>
+    <!--
+
+Template 2094 Mason
+
+http://www.tooplate.com/view/2094-mason
+
+-->
+    <!-- load stylesheets -->
+
+    <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css" />
+    <!-- Font Awesome, http://fontawesome.io/ -->
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <!-- Bootstrap styles, https://getbootstrap.com/ -->
+    <link rel="stylesheet" href="css/tooplate-style.css" />
+    <!-- Templatemo style -->
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style type="text/css">
+      #aviso-movil-horizontal {
+        display: none;
+      }
+      @media only screen and (orientation: portrait) {
+        #wrapper {
+          display: none;
+        }
+        #aviso-movil-horizontal {
+          display: block;
+        }
+      }
+      @media only screen and (orientation: landscape) {
+        #aviso-movil-horizontal {
+          display: none;
+        }
+      }
+
+      body {
+        background: url(img/fondo.jpg);
+        background-size: 1480px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="aviso-movil-horizontal">
+      <center>
+        <img src="img/mensaje_horizontal.jpg" width="280px" height="200px" />
+      </center>
+    </div>
+    <div id="wrapper">
+      <div class="container-fluid">
+        <div class="tm-body">
+          <div id="titulo_prin">
+            <b id="negrita"
+              ><i
+                ><font color="white"
+                  >InforTec - Actividades de apoyo - Sexto
+                </font></i
+              ></b
+            >
+          </div>
+          <br />
+          <div class="tm-banner-inner">
+            <div class="ancho">
+              <table border="0" align="center" width="80%" height="80%">
+                <tr align="center">
+                  <td>
+                    <a href="guia/index.html"
+                      ><img src="img/button_guia.png" width="214" height="56px"
+                    /></a>
+                  </td>
+                  <td></td>
+
+                  <td>
+                    <a href="herramientas/index.html"
+                      ><img
+                        src="img/button_herramientas-de-apoyo.png"
+                        width="214"
+                        height="56px"
+                    /></a>
+                  </td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>
+                    <img src="img/img_centro.png" width="125" height="83px" />
+                  </td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>
+                    <a href="evaluacion/index.html"
+                      ><img
+                        src="img/button_evaluacion.png"
+                        width="214"
+                        height="56px"
+                    /></a>
+                  </td>
+                  <td></td>
+                  <td>
+                    <a href="autoevaluacion/index.html"
+                      ><img
+                        src="img/button_autoevaluacion.png"
+                        width="214"
+                        height="56px"
+                    /></a>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- container-fluid -->
+    </div>
+
+    <!-- load JS files -->
+
+    <script src="js/jquery-1.11.3.min.js"></script>
+    <!-- jQuery (https://jquery.com/download/) -->
+    <script src="js/imagesloaded.pkgd.min.js"></script>
+    <!-- https://masonry.desandro.com/ -->
+    <script src="js/masonry.pkgd.min.js"></script>
+    <!-- https://masonry.desandro.com/ -->
+
+    <!-- Templatemo scripts -->
+    <script>
+      $(document).ready(function () {
+        // init Masonry
+        // https://codepen.io/craigwheeler/pen/MYjBga
+        var $grid = $(".grid").masonry({
+          // set itemSelector so .grid-sizer is not used in layout
+          // itemSelector: '.grid-item',
+          // use element for option
+          // columnWidth: '.grid-sizer',
+          // percentPosition: true
+
+          itemSelector: ".grid-item",
+          isFitWidth: true,
+          columnWidth: 1,
+        });
+        // layout Masonry after each image loads
+        $grid.imagesLoaded().progress(function () {
+          $grid.masonry("layout");
+        });
+
+        // Update the current year in copyright
+        $(".tm-current-year").text(new Date().getFullYear());
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matemáticas | InnovaStudio</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f0f0f0; text-align: center; padding: 50px; }
+        .module-card { 
+            background-color: white; 
+            padding: 20px; 
+            margin: 20px auto; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+        }
+        .complete-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 20px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="module-card">
+        <h1>Módulo 1: Fundamentos de Álgebra</h1>
+        <p>¡Bienvenido! Aquí encontrarás las lecciones interactivas sobre ecuaciones lineales y funciones básicas.</p>
+        
+        <button id="complete-module-btn" class="complete-btn">
+            Marcar Módulo como Completado (+10% Progreso)
+        </button>
+
+        <p><a href="index.html">Volver al Dashboard Principal</a></p>
+    </div>
+
+    <script>
+        document.getElementById('complete-module-btn').addEventListener('click', function() {
+            // 1. Define la clave de progreso para esta área
+            const areaName = 'Matemáticas';
+            const progresoKey = `progreso_${areaName.replace(/\s/g, '_')}`;
+
+            // 2. Carga el progreso actual (o 0 si es la primera vez)
+            let progresoActual = parseInt(localStorage.getItem(progresoKey)) || 0;
+            
+            // 3. Incrementa el progreso (ej. en 10%)
+            const incremento = 10;
+            progresoActual += incremento;
+
+            // 4. Asegura que no exceda el 100%
+            if (progresoActual > 100) {
+                progresoActual = 100;
+            }
+
+            // 5. Guarda el nuevo progreso en el almacenamiento local
+            localStorage.setItem(progresoKey, progresoActual);
+
+            // 6. Notifica al usuario
+            alert(`¡Felicidades! Tu progreso en ${areaName} ahora es del ${progresoActual}%.`);
+
+            // Opcional: Deshabilita el botón para evitar clics múltiples
+            this.disabled = true;
+            this.textContent = `Módulo Completado (${progresoActual}%)`;
+        });
+    </script>
+</body>
+</html>
