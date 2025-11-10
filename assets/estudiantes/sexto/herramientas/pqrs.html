@@ -1,19 +1,4 @@
-
-                        <!DOCTYPE html>
-                        <html lang="en">
-                        <head>
-                            <meta charset="UTF-8">
-                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <style>
-                body {
-                  background-color: white; /* Ensure the iframe has a white background */
-                }
-    
-                
-              </style>
-                        </head>
-                        <body>
-                            <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -264,7 +249,7 @@
       to { transform: rotate(360deg); }
     }
 
-    /* ✅ MODAL DE ÉXITO — NUEVO DISEÑO */
+    /* ✅ MODAL DE ÉXITO SIN RADICADO */
     .modal-overlay {
       position: fixed;
       top: 0;
@@ -291,14 +276,40 @@
       border-radius: 22px;
       width: 92%;
       max-width: 580px;
-      padding: 40px;
+      padding: 40px 40px 36px;
       box-shadow: 0 25px 60px rgba(0,0,0,0.25);
       transform: scale(0.92);
       transition: transform 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
     }
 
     .modal-overlay.show .modal {
       transform: scale(1);
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      width: 36px;
+      height: 36px;
+      border: none;
+      background: #f1f3f5;
+      color: #6c757d;
+      font-size: 22px;
+      font-weight: bold;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .close-btn:hover {
+      background: #e9ecef;
+      color: var(--primary);
+      transform: scale(1.05);
     }
 
     .check-icon {
@@ -318,36 +329,6 @@
       font-size: 1.85rem;
       color: var(--primary);
       margin-bottom: 24px;
-      font-weight: 700;
-    }
-
-    /* ✅ Radicado a la izquierda, texto al lado */
-    .radicado-header {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      background: rgba(26, 58, 95, 0.03);
-      padding: 16px 20px;
-      border-radius: 14px;
-      margin-bottom: 24px;
-    }
-
-    .radicado-number {
-      font-size: 1.6rem;
-      font-weight: 800;
-      color: var(--primary);
-      min-width: 120px;
-      text-align: left;
-    }
-
-    .radicado-text {
-      font-size: 1.15rem;
-      color: #444;
-      line-height: 3.5;
-    }
-
-    .radicado-text .highlight {
-      color: var(--primary);
       font-weight: 700;
     }
 
@@ -397,9 +378,7 @@
       .logo-badge { width: 64px; height: 64px; font-size: 1.6rem; }
       h1 { font-size: 1.9rem; }
       .card, .form-card { padding: 24px 20px; }
-      .modal { padding: 32px 20px; }
-      .radicado-header { flex-direction: column; text-align: center; gap: 12px; }
-      .radicado-number { min-width: auto; font-size: 1.8rem; }
+      .modal { padding: 32px 24px 28px; }
     }
   </style>
 </head>
@@ -416,7 +395,7 @@
 
     <!-- ✅ INFORMACIÓN -->
     <div class="card">
-      <h2>¿Qué puede radicar?</h2>
+      <h2></h2>
       <ul>
         <li><strong>📄 Petición:</strong> Solicitud de información, documentos o trámites académicos.</li>
         <li><strong>⚠️ Queja:</strong> Inconformidad por un servicio deficiente o demora injustificada.</li>
@@ -429,9 +408,9 @@
       </p>
     </div>
 
-    <!-- ✅ FORMULARIO -->
+    <!-- ✅ FORMULARIO — con method="POST" explícito ✅ -->
     <div class="card">
-      <form id="pqrForm">
+      <form id="pqrForm" method="POST">
         <div class="form-group">
           <label for="nombre">Nombre completo <span class="required">*</span></label>
           <input type="text" id="nombre" name="nombre" required placeholder="Ej: Carlos Alberto Ramírez">
@@ -480,7 +459,7 @@
         </div>
 
         <button type="submit" class="btn-submit" id="btnEnviar">
-          <span>Enviar comunicación</span>
+          <span>Enviar</span>
           <div class="spinner"></div>
         </button>
       </form>
@@ -491,41 +470,29 @@
     </footer>
   </div>
 
-  <!-- ✅ MODAL DE ÉXITO — NUEVO DISEÑO -->
+  <!-- ✅ MODAL DE ÉXITO -->
   <div class="modal-overlay" id="modalExito">
     <div class="modal">
+      <button id="cerrarModal" class="close-btn" aria-label="Cerrar mensaje de confirmación">×</button>
       <div class="check-icon">✅</div>
-      <h2>Su comunicación fue recibida</h2>
+      <h2>Su PQRS a sido enviado</h2>
 
-      <!-- ✅ Radicado a la izquierda, texto al lado -->
-      <div class="radicado-header">
-        <div class="radicado-number" id="radicadoMostrado">#000000</div>
-        <div class="radicado-text">
-          Su solicitud ha sido <span class="highlight">radicada exitosamente</span> en nuestro sistema.
-        </div>
-      </div>
-
-      <!-- ✅ Información adicional bien organizada -->
       <div class="info-block">
-        <p><strong>📌 Número de radicado:</strong> <span id="radicadoTexto">000000</span></p>
+        <p><strong>📌 Confirmación:</strong> Su PQR ha sido enviada exitosamente.</p>
         <p><strong>⏳ Plazo de respuesta:</strong> <span class="promise">5 días hábiles</span></p>
-        <p><strong>📬 Verifique:</strong> bandeja de entrada y carpeta de <em>spam</em></p>
+        <p><strong>📬 Verifique:</strong> la bandeja de entrada y carpeta de <em>spam</em></p>
+        <p> del correo ya que por ese medio se le dara respuesta a su solicitud.<p>
       </div>
 
-      <p style="text-align: center; color: #666; margin-top: 10px; font-size: 1.02rem;">
+      <p style="text-align: center; color: #666; margin-top: 20px; font-size: 1.05rem;">
         Gracias por contribuir a la mejora continua de nuestra institución.
       </p>
     </div>
   </div>
 
   <script>
-    // 🔑 ID DE FORMSPREE — ¡REEMPLAZA POR TU ID REAL!
+    // 🔑 FORMSPREE ID — ASEGÚRATE DE REEMPLAZARLO POR TU ID REAL
     const FORMSPREE_ID = "xyzlglpy";
-
-    // 🆕 Generador de radicado (6 dígitos)
-    function generarRadicado() {
-      return Math.floor(100000 + Math.random() * 900000); // 100000 → 999999
-    }
 
     // Selección de tipo PQR
     document.querySelectorAll('.pqr-btn').forEach(btn => {
@@ -547,7 +514,7 @@
       const asunto = document.getElementById('asunto').value.trim();
       const mensaje = document.getElementById('mensaje').value.trim();
 
-      // Validación
+      // Validación básica
       if (!tipo || !nombre || !email || !asunto || !mensaje) {
         alert('⚠️ Por favor complete todos los campos obligatorios.');
         return;
@@ -558,44 +525,37 @@
         return;
       }
 
-      // 🆕 Generar radicado único
-      const radicado = generarRadicado();
-
-      // Datos para Formspree (incluyendo radicado)
+      // ✅ Datos SIN RADICADO
       const formData = new FormData();
       formData.append('nombre', nombre);
       formData.append('email', email);
       formData.append('tipo', tipo);
       formData.append('asunto', asunto);
       formData.append('mensaje', mensaje);
-      formData.append('radicado', radicado);
-      formData.append('_subject', `PQR - ${tipo} recibida | Radicado #${radicado}`);
+      formData.append('_subject', `PQR - ${tipo} recibida`);
       formData.append('_replyto', email);
 
-      // Activar estado de carga
+      // Activar carga
       btn.classList.add('loading');
 
-      // ✉️ Enviar — CORREGIDO: sin espacios en la URL
+      // ✉️ Enviar a Formspree — URL LIMPIA y método POST garantizado
       fetch(`https://formspree.io/f/xyzlglpy`, {
         method: 'POST',
         body: formData
       })
+      .then(response => {
+        if (!response.ok) throw new Error('Error en el envío');
+        return response;
+      })
       .then(() => {
-        // ✅ Mostrar modal con radicado
-        document.getElementById('radicadoMostrado').textContent = `#${radicado}`;
-        document.getElementById('radicadoTexto').textContent = radicado;
+        // ✅ Éxito
         document.getElementById('modalExito').classList.add('show');
-        
-        // Limpiar formulario
         document.getElementById('pqrForm').reset();
         document.querySelectorAll('.pqr-btn').forEach(b => b.classList.remove('active'));
         document.getElementById('tipo').value = '';
       })
       .catch(() => {
-        // También mostrar éxito (según solicitud)
-        const radicadoFallback = generarRadicado();
-        document.getElementById('radicadoMostrado').textContent = `#${radicadoFallback}`;
-        document.getElementById('radicadoTexto').textContent = radicadoFallback;
+        // ✅ Igual mostrar éxito (según solicitud)
         document.getElementById('modalExito').classList.add('show');
         document.getElementById('pqrForm').reset();
         document.querySelectorAll('.pqr-btn').forEach(b => b.classList.remove('active'));
@@ -606,29 +566,16 @@
       });
     });
 
-    // Cierre automático del modal después de 8 segundos
-    const modal = document.getElementById('modalExito');
-    modal.addEventListener('transitionend', function() {
-      if (modal.classList.contains('show')) {
-        setTimeout(() => {
-          modal.classList.remove('show');
-        }, 8000);
+    // Cerrar modal
+    document.getElementById('cerrarModal').addEventListener('click', function() {
+      document.getElementById('modalExito').classList.remove('show');
+    });
+
+    document.getElementById('modalExito').addEventListener('click', function(e) {
+      if (e.target === this) {
+        this.classList.remove('show');
       }
     });
   </script>
-
 </body>
 </html>
-
-
-    
-              <script>
-                                 const FORMSPREE_ID = "xyzlglpy";
-   
-   const FORMSPREE_ID = "xyzlglpy";
-   
-
-              </script>
-                        </body>
-                        </html>
-                    
