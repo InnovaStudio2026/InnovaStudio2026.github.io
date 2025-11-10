@@ -2,8 +2,10 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Acceso</title>
   <link rel="icon" href="icono.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * {
       margin: 0;
@@ -13,7 +15,7 @@
 
     html, body {
       height: 100%;
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
       overflow: hidden;
       position: relative;
     }
@@ -27,86 +29,375 @@
       transform: translate(-50%, -50%);
       object-fit: cover;
       z-index: -1;
+      filter: brightness(0.7) contrast(1.1);
     }
 
-    .cuadro {
-      position: absolute;
-      bottom: 1cm; /* Justo 1 cm arriba del footer */
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: rgba(255, 255, 255, 0.95);
-      width: 260px;
-      padding: 30px 20px;
-      border-radius: 25px;
-      text-align: center;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.3) 100%);
+      z-index: -1;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding: 20px;
       z-index: 1;
     }
 
-    .btn {
-      display: block;
+    .logo {
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .logo-icon {
+      font-size: 3.5rem;
+      color: white;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.4);
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .logo-text {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: white;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+      letter-spacing: -0.5px;
+    }
+
+    .cuadro {
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       width: 100%;
-      padding: 14px;
-      margin: 12px 0;
+      max-width: 420px;
+      padding: 38px 32px;
+      border-radius: 24px;
+      text-align: center;
+      box-shadow: 
+        0 12px 35px rgba(0, 0, 0, 0.25),
+        0 1px 3px rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      z-index: 1;
+    }
+
+    .title {
+      color: white;
+      font-size: 1.9rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+      text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+      letter-spacing: -0.5px;
+    }
+
+    .subtitle {
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 1.1rem;
+      margin-bottom: 2.2rem;
+      font-weight: 400;
+      line-height: 1.5;
+    }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 17px 22px;
+      margin: 16px 0;
       border: none;
-      border-radius: 10px;
-      font-size: 16px;
-      font-weight: bold;
+      border-radius: 18px;
+      font-size: 1.15rem;
+      font-weight: 600;
       cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 
+        0 6px 18px rgba(0, 0, 0, 0.22),
+        0 3px 6px rgba(0, 0, 0, 0.12);
+      position: relative;
+      overflow: hidden;
+      color: #000;
+      letter-spacing: -0.3px;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.25);
+      transform: translateX(-100%);
+      transition: transform 0.6s ease;
+      z-index: -1;
+    }
+
+    .btn:hover::before {
+      transform: translateX(0);
     }
 
     .btn-estudiante {
-      background: linear-gradient(45deg, #43e97b, #38f9d7);
-      color: #000;
+      background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
     }
 
     .btn-docente {
-      background: linear-gradient(45deg, #fddb92, #d1fdff);
-      color: #000;
+      background: linear-gradient(45deg, #fa709a 0%, #fee140 100%);
+    }
+
+    .btn i {
+      margin-right: 14px;
+      font-size: 1.35rem;
+      width: 26px;
+      text-align: center;
     }
 
     .btn:hover {
-      transform: scale(1.05);
-      opacity: 0.9;
+      transform: translateY(-4px);
+      box-shadow: 
+        0 10px 30px rgba(0, 0, 0, 0.3),
+        0 5px 10px rgba(0, 0, 0, 0.18);
+    }
+
+    .btn:active {
+      transform: translateY(1px);
+      box-shadow: 
+        0 4px 18px rgba(0, 0, 0, 0.22),
+        0 2px 6px rgba(0, 0, 0, 0.12);
     }
 
     footer {
       position: fixed;
       bottom: 0;
       width: 100%;
-      background-color: aquamarine;
+      background: rgba(74, 144, 226, 0.85);
       text-align: center;
-      padding: 12px 0;
-      color: #000;
-      font-weight: bold;
+      padding: 17px 0;
+      color: #fff;
+      font-weight: 600;
       z-index: 2;
-      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+      box-shadow: 
+        0 -5px 25px rgba(0, 0, 0, 0.25),
+        0 -2px 5px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-top: 1px solid rgba(255, 255, 255, 0.25);
+      font-size: 1.05rem;
+    }
+
+    .institution-name {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .institution-name i {
+      font-size: 1.2rem;
+    }
+
+    /* Modal de anuncio */
+    #anuncio-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(5px);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    #anuncio-modal.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 20px;
+      width: 90%;
+      max-width: 500px;
+      padding: 32px;
+      position: relative;
+      box-shadow: 
+        0 20px 50px rgba(0, 0, 0, 0.3),
+        0 10px 20px rgba(0, 0, 0, 0.2);
+      transform: translateY(20px);
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    #anuncio-modal.active .modal-content {
+      transform: translateY(0);
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #f1f3f9;
+      border: none;
+      font-size: 1.4rem;
+      color: #666;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.25s ease;
+    }
+
+    .close-btn:hover {
+      background: #e0e3eb;
+      color: #333;
+      transform: rotate(90deg);
+    }
+
+    .modal-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #2c3e50;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .modal-icon {
+      font-size: 3.5rem;
+      color: #4a90e2;
+      margin: 0 auto 24px;
+      display: block;
+      text-align: center;
+    }
+
+    .modal-text {
+      font-size: 1.15rem;
+      line-height: 1.6;
+      color: #444;
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .modal-footer {
+      text-align: center;
+      font-size: 0.95rem;
+      color: #777;
+    }
+
+    @media (max-width: 480px) {
+      .cuadro {
+        padding: 30px 24px;
+        margin-bottom: 20px;
+      }
+      
+      .btn {
+        padding: 15px;
+        font-size: 1.05rem;
+      }
+      
+      .title {
+        font-size: 1.6rem;
+      }
+      
+      .subtitle {
+        font-size: 1rem;
+      }
+      
+      .logo-icon {
+        font-size: 2.8rem;
+      }
+      
+      .modal-content {
+        padding: 24px 20px;
+      }
+      
+      .modal-title {
+        font-size: 1.5rem;
+      }
+      
+      .modal-text {
+        font-size: 1.05rem;
+      }
     }
   </style>
 </head>
 <body>
-
   <!-- Video de fondo -->
-  <video id="video-fondo" autoplay muted>
+  <video id="video-fondo" autoplay muted loop>
     <source src="video.mp4" type="video/mp4">
     Tu navegador no soporta el video de fondo.
   </video>
+  
+  <div class="overlay"></div>
 
-  <!-- Cuadro de botones -->
-  <div class="cuadro">
+  <div class="container">
+    <div class="logo">
+      <div class="logo-icon">
+        <i class="fas fa-book-open"></i>
+      </div>
+      <div class="logo-text">Institución Educativa</div>
+    </div>
     
-    <button class="btn btn-docente" onclick="location.href='assets/docentes_2/index.html'">Docente</button>
+    <div class="cuadro">
+      <h1 class="title">Acceso al Sistema</h1>
+    
+      
+      <button class="btn btn-docente" id="btn-docente">
+        <i class="fas fa-chalkboard-teacher"></i> Docente
+      </button>
+      
+      <button class="btn btn-estudiante" onclick="location.href='assets/estudiantes/index.html'">
+        <i class="fas fa-people-group"></i> Estudiante
+      </button>
+    </div>
   </div>
 
   <!-- Footer -->
   <footer>
-    © 2025 Institución Educativa colucas - Derechos reservados
+    <div class="institution-name">
+      <i class="fas fa-atom"></i>
+      <span>© 2025 Institución Educativa colucas - Derechos reservados</span>
+    </div>
   </footer>
 
-  <!-- Script para control de reproducción -->
+  <!-- Modal de anuncio -->
+  <div id="anuncio-modal">
+    <div class="modal-content">
+      <button class="close-btn" id="close-modal">&times;</button>
+      <i class="fas fa-bullhorn modal-icon"></i>
+      <h2 class="modal-title">Aviso Importante </h2>
+      <p class="modal-text">
+       Debido a actualizaciones en el sistema, 
+        no se ha  <strong>habilitado</strong> 
+        para su ingreso. 
+       
+      </p>
+      <div class="modal-footer">
+        <p>Gracias por su colaboración</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Script para control de reproducción y modal -->
   <script>
+    // Video handling
     const video = document.getElementById('video-fondo');
     let pausaActiva = false;
 
@@ -120,12 +411,53 @@
     });
 
     setInterval(() => {
-      if (!pausaActiva) {
+      if (!pausaActiva && (video.paused || video.ended)) {
         video.currentTime = 0;
-        video.play();
+        video.play().catch(e => console.log("Playback error:", e));
       }
     }, 180000);
-  </script>
+    
+    // Modal handling
+    const modal = document.getElementById('anuncio-modal');
+    const btnDocente = document.getElementById('btn-docente');
+    const closeBtn = document.getElementById('close-modal');
 
+    // Abrir modal al hacer clic en Docente
+    btnDocente.addEventListener('click', function() {
+      modal.classList.add('active');
+    });
+
+    // Cerrar modal al hacer clic en ×
+    closeBtn.addEventListener('click', function() {
+      modal.classList.remove('active');
+    });
+
+    // Cerrar modal al hacer clic fuera del contenido
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) {
+        modal.classList.remove('active');
+      }
+    });
+
+    // Permitir cerrar con tecla ESC
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && modal.classList.contains('active')) {
+        modal.classList.remove('active');
+      }
+    });
+
+    // Mobile video autoplay fix
+    document.addEventListener('DOMContentLoaded', function() {
+      const playVideo = () => {
+        video.play().catch(e => console.log("Autoplay prevented:", e));
+        document.body.removeEventListener('touchstart', playVideo);
+        document.body.removeEventListener('click', playVideo);
+      };
+      
+      document.body.addEventListener('touchstart', playVideo, { once: true });
+      document.body.addEventListener('click', playVideo, { once: true });
+    });
+  </script>
 </body>
 </html>
+
