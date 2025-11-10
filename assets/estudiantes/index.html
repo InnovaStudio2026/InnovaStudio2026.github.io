@@ -5,231 +5,125 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="icon" href="img/icono.png">
   <title>Clave Acceso</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
     }
 
     body {
-      background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
-      background-size: 400% 400%;
-      animation: gradientBG 15s ease infinite;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: url(img/fondo2.jpg) no-repeat center center fixed;
+      background-size: cover;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
+      height: 100vh;
+    }
+
+    #titulo1 {
+      background-color: rgba(3, 56, 214, 0.3);
       padding: 20px;
-      color: #333;
-    }
-
-    @keyframes gradientBG {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    .container {
-      width: 100%;
-      max-width: 500px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 24px;
-    }
-
-    .header {
+      width: 90%;
+      max-width: 600px;
+      color: rgb(0, 0, 0);
       text-align: center;
-      width: 100%;
-    }
-
-    .school-badge {
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(10px);
-      border-radius: 16px;
-      padding: 16px 24px;
-      margin-bottom: 16px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-      border: 1px solid rgba(255, 255, 255, 0.18);
-    }
-
-    .school-badge h1 {
-      font-weight: 700;
       font-size: 28px;
-      color: #fff;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-      letter-spacing: -0.5px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
 
-    .school-badge::before {
-      content: "";
-      position: absolute;
-      top: -2px;
-      left: -2px;
-      right: -2px;
-      bottom: -2px;
-      background: linear-gradient(45deg, #ff8a00, #e52e71, #2193b0);
-      z-index: -1;
-      border-radius: 18px;
-      filter: blur(20px);
-      opacity: 0.7;
-    }
-
-    .login-card {
-      background: rgba(255, 255, 255, 0.92);
-      backdrop-filter: blur(12px);
-      border-radius: 20px;
-      padding: 32px;
-      width: 100%;
-      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .login-card::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 6px;
-      background: linear-gradient(90deg, #4facfe, #00f2fe);
-    }
-
-    .welcome-text {
+    #titulo {
+      background-color: rgba(255, 38, 0, 0.562);
+      padding: 30px;
+      width: 90%;
+      max-width: 600px;
       text-align: center;
-      margin-bottom: 28px;
-    }
-
-    .welcome-text h2 {
-      font-weight: 700;
-      font-size: 22px;
-      color: #2c3e50;
-      margin-bottom: 8px;
-      letter-spacing: -0.3px;
-    }
-
-    .welcome-text p {
-      color: #6c757d;
-      font-size: 15px;
-      line-height: 1.6;
+      color: rgb(0, 0, 0);
+      font-size: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
 
     .form-container {
+      margin-top: 20px;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      align-items: center;
+      gap: 15px;
     }
 
     .input-wrapper {
       position: relative;
+      width: 100%;
+      max-width: 300px;
     }
 
-    .input-icon {
+    .input-wrapper svg.lock {
       position: absolute;
-      left: 16px;
       top: 50%;
+      left: 10px;
       transform: translateY(-50%);
-      color: #6c757d;
+      width: 20px;
+      height: 20px;
+      fill: #013adf;
+      opacity: 0.7;
+    }
+
+    .input-wrapper svg.toggle {
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+      width: 22px;
+      height: 22px;
+      fill: rgba(0, 0, 0, 0.4);
+      cursor: pointer;
+      transition: fill 0.3s;
     }
 
     .input {
       width: 100%;
-      padding: 16px 48px 16px 48px;
-      border: 2px solid #e0e6ef;
-      border-radius: 14px;
+      padding: 12px 40px 12px 35px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
       font-size: 16px;
       outline: none;
-      transition: all 0.3s ease;
-      background-color: #f8fafc;
-      font-weight: 500;
     }
 
     .input:focus {
-      border-color: #4facfe;
-      box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.2);
-      background-color: #fff;
-    }
-
-    .toggle-password {
-      position: absolute;
-      right: 16px;
-      top: 50%;
-      transform: translateY(-50%);
-      cursor: pointer;
-      color: #6c757d;
-      transition: color 0.2s;
-      width: 20px;
-      height: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .toggle-password:hover {
-      color: #4facfe;
+      border-color: #ff7c11;
+      box-shadow: 0 0 6px rgba(219, 132, 18, 0.4);
     }
 
     .button {
-      padding: 16px;
+      padding: 12px 25px;
       border: none;
-      border-radius: 14px;
-      background: linear-gradient(135deg, #2193b0, #6dd5ed);
-      color: white;
+      border-radius: 8px;
+      background: linear-gradient(45deg, #4CAF50, #2e7d32);
+      color: rgb(0, 0, 0);
       font-size: 16px;
-      font-weight: 600;
       cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(33, 147, 176, 0.4);
-      position: relative;
-      overflow: hidden;
-      letter-spacing: 0.5px;
+      transition: transform 0.2s, background 0.3s;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
 
     .button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 7px 20px rgba(33, 147, 176, 0.6);
-    }
-
-    .button:active {
-      transform: translateY(0);
-    }
-
-    .button:disabled {
-      opacity: 0.7;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    .button::after {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -60%;
-      width: 20px;
-      height: 200%;
-      background: rgba(255, 255, 255, 0.3);
-      transform: rotate(30deg);
-      transition: all 0.8s;
-    }
-
-    .button:hover::after {
-      left: 120%;
+      background: linear-gradient(45deg, #45a049, #1b5e20);
+      transform: scale(1.05);
     }
 
     .loader {
-      border: 3px solid rgba(255, 255, 255, 0.3);
-      border-top: 3px solid white;
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      border-top: 4px solid #002699;
       border-radius: 50%;
-      width: 24px;
-      height: 24px;
+      width: 30px;
+      height: 30px;
       animation: spin 1s linear infinite;
-      margin: 0 auto;
+      margin-top: 15px;
       display: none;
     }
 
@@ -238,122 +132,62 @@
       100% { transform: rotate(360deg); }
     }
 
-    .footer {
+    @media (max-width: 600px) {
+      #titulo1, #titulo {
+        font-size: 20px;
+        padding: 15px;
+      }
+
+      .input {
+        font-size: 14px;
+      }
+
+      .button {
+        font-size: 14px;
+      }
+    }
+
+    footer {
       position: fixed;
       bottom: 0;
       width: 100%;
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(10px);
+      background-color: rgb(13, 228, 96);
       text-align: center;
-      padding: 14px 0;
-      color: white;
-      font-weight: 600;
-      z-index: 10;
-      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.2);
-      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 12px 0;
+      color: #000;
+      font-weight: bold;
+      z-index: 2;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
     }
 
-    .shortcut-hint {
-      background: rgba(0, 0, 0, 0.2);
-      border-radius: 8px;
-      padding: 8px 12px;
-      margin-top: 16px;
-      font-size: 13px;
-      color: #e0e6ef;
-      text-align: center;
-    }
-
-    .shortcut-key {
-      display: inline-block;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 4px;
-      padding: 2px 6px;
-      margin: 0 2px;
-      font-family: monospace;
-    }
-
-    @media (max-width: 600px) {
-      .login-card {
-        padding: 24px 20px;
-      }
-      
-      .school-badge h1 {
-        font-size: 24px;
-      }
-      
-      .welcome-text h2 {
-        font-size: 20px;
-      }
-    }
-
-    /* Animated elements */
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .header {
-      animation: fadeInUp 0.8s ease forwards;
-    }
-
-    .login-card {
-      animation: fadeInUp 0.8s ease 0.2s forwards;
-      opacity: 0;
-      transform: translateY(30px);
-    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <div class="school-badge">
-        <h1>Secundaria</h1>
-      </div>
-    </div>
 
-    <div class="login-card">
-      <div class="welcome-text">
-        <h2>Bienvenido, Estudiante</h2>
-        <p>Introduzca su <strong>clave</strong> para acceder al espacio educativo</p>
-      </div>
 
-      <form onsubmit="return acceso()" class="form-container">
-        <div class="input-wrapper">
-          <div class="input-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-            </svg>
-          </div>
-          <input type="password" id="clave" class="input" placeholder="Ingrese su clave de acceso" required />
-          <div class="toggle-password" id="togglePassword">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-              <circle cx="12" cy="12" r="3"></circle>
-            </svg>
-          </div>
-        </div>
-        
-        <button type="submit" class="button">Ingresar al Sistema</button>
-        <div id="loader" class="loader" aria-hidden="true"></div>
-        
-        <div class="shortcut-hint">
-          <span>Atajos:</span>
-          <span class="shortcut-key">Ctrl</span> + <span class="shortcut-key">F3</span> para Certificados • 
-          <span class="shortcut-key">Ctrl</span> + <span class="shortcut-key">F5</span> para Resultados
-        </div>
-      </form>
-    </div>
+  <div id="titulo1">
+    <b> <br />Secundaria</b>
   </div>
 
-  <footer class="footer">
-    © 2025 Institución Educativa Colucas - Derechos reservados
+  <div id="titulo">
+    Bienvenido, Estudiante. Introduzca su <b>clave</b> para acceder al espacio educativo.
+    <form onsubmit="return acceso()" class="form-container">
+      <div class="input-wrapper">
+        <svg class="lock" viewBox="0 0 24 24">
+          <path d="M12 17a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm6-6V9a6 6 0 10-12 0v2H4v10h16V11h-2zm-8-2a4 4 0 118 0v2H10V9z"/>
+        </svg>
+        <input type="password" id="clave" class="input" placeholder="Ingrese la clave" required />
+        <svg class="toggle" id="togglePassword" viewBox="0 0 24 24" tabindex="0">
+          <path d="M12 4.5C7.5 4.5 3.7 7.5 2 12c1.7 4.5 5.5 7.5 10 7.5s8.3-3 10-7.5c-1.7-4.5-5.5-7.5-10-7.5zm0 13a5.5 5.5 0 110-11 5.5 5.5 0 010 11zm0-9a3.5 3.5 0 100 7 3.5 3.5 0 000-7z"/>
+        </svg>
+      </div>
+      <button type="submit" class="button">Ingresar</button>
+      <div id="loader" class="loader" aria-hidden="true"></div>
+    </form>
+  </div>
+
+  <footer>
+    © 2025 Institución Educativa colucas - Derechos reservados
   </footer>
 
   <script>
@@ -362,18 +196,11 @@
     const submitButton = document.querySelector('.button');
     const loader = document.getElementById('loader');
 
-    // Password Toggle Logic
+    // --- Password Toggle Logic ---
     togglePassword.addEventListener('click', () => {
       const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
       passwordInput.setAttribute('type', type);
-      
-      // Update icon
-      const icon = togglePassword.querySelector('svg');
-      if (type === 'password') {
-        icon.innerHTML = `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>`;
-      } else {
-        icon.innerHTML = `<line x1="2" y1="2" x2="22" y2="22"></line><path d="M10.25 6.75a4 4 0 0 0-3 9.25"></path><path d="M10.25 6.75a4 4 0 0 1 3.75-2.25"></path>`;
-      }
+      togglePassword.style.fill = type === 'password' ? 'rgba(0, 0, 0, 0.4)' : '#013adf';
     });
 
     togglePassword.addEventListener('keydown', (e) => {
@@ -383,7 +210,7 @@
       }
     });
 
-    // Access (Login) Logic
+    // --- Access (Login) Logic ---
     function acceso() {
       const claveCorrecta = "Educolucas25";
       const claveIngresada = passwordInput.value.trim();
@@ -403,23 +230,8 @@
         submitButton.disabled = false;
 
         if (claveIngresada === claveCorrecta) {
-          // Add success animation
-          submitButton.innerHTML = '✓ Acceso concedido';
-          submitButton.style.background = 'linear-gradient(135deg, #4CAF50, #2e7d32)';
-          
-          setTimeout(() => {
-            window.location.href = "menu.html";
-          }, 800);
+          window.location.href = "menu.html";
         } else {
-          // Add error animation
-          passwordInput.style.borderColor = '#ff4757';
-          passwordInput.style.boxShadow = '0 0 0 3px rgba(255, 71, 87, 0.3)';
-          
-          setTimeout(() => {
-            passwordInput.style.borderColor = '#e0e6ef';
-            passwordInput.style.boxShadow = 'none';
-          }, 3000);
-          
           alert("Contraseña incorrecta. Inténtelo nuevamente.");
           passwordInput.value = '';
           passwordInput.focus();
@@ -429,30 +241,41 @@
       return false;
     }
 
-    // Keyboard Shortcuts
+    // --- New Keyboard Shortcut Logic (Ctrl + F3) ---
     document.addEventListener('keydown', (event) => {
-      const isCtrlOrCmd = event.ctrlKey || event.metaKey;
-      
-      // Ctrl + F3 for Certificados
-      if (isCtrlOrCmd && (event.key === 'F3' || event.keyCode === 114)) {
-        event.preventDefault();
-        window.location.href = "certificados.html";
-      }
-      
-      // Ctrl + F5 for Resultados
-      if (isCtrlOrCmd && (event.key === 'F5' || event.keyCode === 116)) {
-        event.preventDefault();
-        window.location.href = "resultados2.html";
+      // Check for Ctrl key (or Cmd key on Mac) and F3 key
+      const isCtrlOrCmd = event.ctrlKey || event.metaKey; // event.metaKey is for Cmd on Mac
+      const isF3 = event.key === 'F3' || event.keyCode === 114; // F3 key code is 114
+
+      if (isCtrlOrCmd && isF3) {
+        event.preventDefault(); // Prevent default browser action for Ctrl + F3
+        window.location.href = "certificados.html"; // Navigate to index.html
       }
     });
+
+// --- New Keyboard Shortcut Logic (Ctrl + F5) ---
+    document.addEventListener('keydown', (event) => {
+      // Check for Ctrl key (or Cmd key on Mac) and F5 key
+      const isCtrlOrCmd = event.ctrlKey || event.metaKey; // event.metaKey is for Cmd on Mac
+      const isF5 = event.key === 'F5' || event.keyCode === 116; // F3 key code is 114
+
+      if (isCtrlOrCmd && isF5) {
+        event.preventDefault(); // Prevent default browser action for Ctrl + F3
+        window.location.href = "resultados2.html"; // Navigate to index.html
+      }
+    });
+
+
+
+
   </script>
 
-  <script 
+<script 
     src="https://cdn.builderbot.cloud/sdk.umd.js" 
     data-builderbot-chat
     data-company="BuilderBot"
     data-id="38dbd8cc-c938-4c48-935b-0cbe5f3f3332"
   ></script>
+
 </body>
 </html>
-
