@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <title>Tabla de Resultados - Docente</title>
+  <!-- jsPDF y html2canvas para descarga de PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -84,14 +87,38 @@
     }
 
     .btn-accion {
-      padding: 8px 15px;
+      padding: 6px 10px;
+      margin: 2px;
       border: none;
       border-radius: 5px;
       cursor: pointer;
       font-weight: bold;
       transition: background-color 0.2s, opacity 0.2s;
-      min-width: 120px;
-      text-align: center;
+      min-width: 80px;
+      font-size: 13px;
+    }
+
+    .btn-editar {
+      background-color: #ffc107;
+      color: #212529;
+    }
+
+    .btn-editar:hover {
+      background-color: #e0a800;
+    }
+
+    .btn-eliminar {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .btn-eliminar:hover {
+      background-color: #c82333;
+    }
+
+    .btn-eliminar:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
 
     .btn-activo {
@@ -104,7 +131,7 @@
     }
 
     .btn-inactivo {
-      background-color: #dc3545;
+      background-color: #6c757d;
       color: white;
       opacity: 0.8;
       cursor: not-allowed;
@@ -136,6 +163,19 @@
       background-color: #357bd6;
     }
 
+    .btn-pdf {
+      background-color: #e74c3c;
+      color: white;
+      padding: 8px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .btn-pdf:hover {
+      background-color: #c0392b;
+    }
+
     /* MODALES */
     .modal-overlay {
       display: none;
@@ -150,7 +190,7 @@
       align-items: center;
     }
 
-    #detalleResultado, #editorEstudiante {
+    #detalleResultado, #editorEstudiante, #editorExistente {
       background-color: #fff;
       padding: 30px;
       border-radius: 15px;
@@ -164,13 +204,14 @@
     }
 
     .modal-overlay.active #detalleResultado,
-    .modal-overlay.active #editorEstudiante {
+    .modal-overlay.active #editorEstudiante,
+    .modal-overlay.active #editorExistente {
       display: block;
       transform: scale(1);
       opacity: 1;
     }
 
-    #detalleResultado h3, #editorEstudiante h3 {
+    #detalleResultado h3, #editorEstudiante h3, #editorExistente h3 {
       color: #0a2c58;
       border-bottom: 2px solid #4a90e2;
       padding-bottom: 10px;
@@ -206,23 +247,35 @@
     }
 
     .btn-cerrar-modal {
-      background-color: #dc3545;
+      background-color: #6c757d;
       color: white;
       margin-top: 20px;
       width: 100%;
     }
 
     .btn-cerrar-modal:hover {
-      background-color: #c0392b;
+      background-color: #545b62;
     }
 
-    #editorEstudiante label {
+    .btn-guardar-modal {
+      background-color: #28a745;
+      color: white;
+      margin-top: 20px;
+      width: 100%;
+    }
+
+    .btn-guardar-modal:hover {
+      background-color: #218838;
+    }
+
+    #editorEstudiante label, #editorExistente label {
       display: block;
       margin-top: 10px;
       font-weight: bold;
     }
 
-    #editorEstudiante input, #editorEstudiante select {
+    #editorEstudiante input, #editorEstudiante select,
+    #editorExistente input, #editorExistente select {
       width: 100%;
       padding: 10px;
       margin-top: 5px;
@@ -231,10 +284,30 @@
       box-sizing: border-box;
     }
 
-    #btnGuardarEstudiante {
-      background-color: #28a745;
-      color: white;
-      margin-top: 20px;
+    .mensaje-error {
+      color: #dc3545;
+      font-size: 14px;
+      margin-top: 5px;
+    }
+
+    /* Estilo para PDF en preview (no visible en pantalla) */
+    #tablaPDF {
+      display: none;
+    }
+
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #tablaPDF, #tablaPDF * {
+        visibility: visible;
+      }
+      #tablaPDF {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+      }
     }
   </style>
 </head>
@@ -243,39 +316,61 @@
 
   <!-- ENCABEZADO -->
   <div class="encabezado">
-    <img src="img/logo_colegio.png" alt="Logo Colegio">
-    <div class="frase">
+    <img src="img/logo_colegio.png" alt="Logo Colegio" id="logoPDF">
+    <div class="frase" id="frasePDF">
       <div>Con Excelencia,</div>
       <div>construimos futuro</div>
     </div>
   </div>
 
   <div class="contenedor-resultados">
-    <h1>📊 Resultados Pre-Inscritos</h1>
-    <table>
+    <div class="header-acciones">
+      <h1>📊 Resultados Pre-Inscritos</h1>
+      <button class="btn-accion btn-agregar" onclick="abrirModalNuevo()">➕ Agregar Estudiante</button>
+      <button class="btn-accion btn-pdf" onclick="descargarPDF()">📥 Descargar PDF</button>
+    </div>
+
+    <!-- TABLA VISIBLE -->
+    <table id="tablaVisible">
       <thead>
         <tr>
           <th>Código</th>
           <th>Nombre y Apellido</th>
           <th>Grado</th>
           <th>Nota (Base 5.0)</th>
-          <th>Acción</th>
+          <th>Acciones</th>
         </tr>
       </thead>
       <tbody id="tablaCuerpo"></tbody>
     </table>
+
+    <!-- TABLA PARA PDF (invisible) -->
+    <table id="tablaPDF" style="width:100%; border-collapse: collapse; background:#fff; padding:20px;">
+      <thead>
+        <tr>
+          <th style="background:#4a90e2; color:white; padding:10px;">Código</th>
+          <th style="background:#4a90e2; color:white; padding:10px;">Nombre y Apellido</th>
+          <th style="background:#4a90e2; color:white; padding:10px;">Grado</th>
+          <th style="background:#4a90e2; color:white; padding:10px;">Nota</th>
+        </tr>
+      </thead>
+      <tbody id="tablaCuerpoPDF"></tbody>
+    </table>
   </div>
 
   <div class="modal-overlay" id="modalOverlay">
+    <!-- Detalle del resultado -->
     <div id="detalleResultado">
       <h3 id="detalleTitulo">Detalle del Resultado:</h3>
       <div id="detalleDatos"></div>
-      <button class="btn-accion btn-cerrar-modal" onclick="cerrarDetalle()">Cerrar</button>
+      <button class="btn-accion btn-cerrar-modal" onclick="cerrarModal()">Cerrar</button>
     </div>
 
+    <!-- Registrar nuevo estudiante -->
     <div id="editorEstudiante">
       <h3>📝 Registrar Nuevo Estudiante</h3>
-      <div id="editorMensaje" style="color: red; margin-bottom: 10px;"></div>
+      <div id="mensajeErrorNuevo" class="mensaje-error"></div>
+
       <label for="nuevoCodigo">Código (ej. 106, 107...):</label>
       <input type="number" id="nuevoCodigo" min="101" required>
 
@@ -297,15 +392,49 @@
         <option value="11°">11°</option>
       </select>
 
-      <button class="btn-accion" id="btnGuardarEstudiante" onclick="guardarNuevoEstudiante()">Guardar Estudiante</button>
-      <button class="btn-accion btn-cerrar-modal" onclick="cerrarDetalle()">Cancelar</button>
+      <label for="nuevaNota">Nota (Base 5.0) - opcional:</label>
+      <input type="number" id="nuevaNota" min="0" max="5" step="0.1" placeholder="Dejar vacío para '10'">
+
+      <button class="btn-accion btn-guardar-modal" onclick="guardarNuevoEstudiante()">Guardar Estudiante</button>
+      <button class="btn-accion btn-cerrar-modal" onclick="cerrarModal()">Cancelar</button>
+    </div>
+
+    <!-- Editar estudiante existente -->
+    <div id="editorExistente">
+      <h3>✏️ Editar Estudiante</h3>
+      <div id="mensajeErrorEdicion" class="mensaje-error"></div>
+
+      <label for="editarCodigo">Código:</label>
+      <input type="text" id="editarCodigo" readonly>
+
+      <label for="editarNombre">Nombre y Apellido:</label>
+      <input type="text" id="editarNombre" required>
+
+      <label for="editarGrado">Grado:</label>
+      <select id="editarGrado" required>
+        <option value="6-1">6-1</option>
+        <option value="6-2">6-2</option>
+        <option value="7-1">7-1</option>
+        <option value="7-2">7-2</option>
+        <option value="8-1">8-1</option>
+        <option value="8-2">8-2</option>
+        <option value="9-1">9-1</option>
+        <option value="9-2">9-2</option>
+        <option value="10-1">10-1</option>
+        <option value="11°">11°</option>
+      </select>
+
+      <label for="editarNota">Nota (Base 5.0):</label>
+      <input type="number" id="editarNota" min="0" max="5" step="0.1" placeholder="Dejar vacío para '10'">
+
+      <button class="btn-accion btn-guardar-modal" onclick="guardarEdicion()">Guardar Cambios</button>
+      <button class="btn-accion btn-cerrar-modal" onclick="cerrarModal()">Cancelar</button>
     </div>
   </div>
 
   <script>
-    // === Lógica original sin cambios ===
-
-    let estudiantesFijos = [
+    // === DATOS FIJOS E INICIALIZACIÓN ===
+    const estudiantesFijos = [
       { codigo: '101', nombre: 'Ana María Gómez', grado: '6-1' },
       { codigo: '102', nombre: 'Carlos David Torres', grado: '6-2' },
       { codigo: '103', nombre: 'Laura Sofía Pérez', grado: '6-1' },
@@ -315,80 +444,130 @@
 
     const STORAGE_KEY_LISTA = 'lista_estudiantes_adicionales';
 
+    // Obtener lista completa (fijos + adicionales)
     function obtenerListaEstudiantesCompleta() {
-      let estudiantesAdicionales = [];
+      let adicionales = [];
       try {
         const data = localStorage.getItem(STORAGE_KEY_LISTA);
-        if (data) {
-          estudiantesAdicionales = JSON.parse(data);
-        }
+        if (data) adicionales = JSON.parse(data);
       } catch (e) {
-        console.error("Error al cargar la lista adicional:", e);
+        console.error("Error al cargar estudiantes adicionales:", e);
+        localStorage.removeItem(STORAGE_KEY_LISTA); // Limpiar si corrupto
       }
-      return [...estudiantesFijos, ...estudiantesAdicionales];
+      return [...estudiantesFijos, ...adicionales];
     }
 
+    // Guardar lista adicional (solo los no fijos)
+    function guardarListaAdicional(lista) {
+      const adicionales = lista.filter(est => !estudiantesFijos.some(f => f.codigo === est.codigo));
+      localStorage.setItem(STORAGE_KEY_LISTA, JSON.stringify(adicionales));
+    }
+
+    // === RENDERIZADO DE TABLA ===
     function cargarResultadosFijos() {
-      const tablaCuerpo = document.getElementById('tablaCuerpo');
-      tablaCuerpo.innerHTML = '';
+      const cuerpo = document.getElementById('tablaCuerpo');
+      const cuerpoPDF = document.getElementById('tablaCuerpoPDF');
+      cuerpo.innerHTML = '';
+      cuerpoPDF.innerHTML = '';
 
-      const listaCompleta = obtenerListaEstudiantesCompleta();
-      listaCompleta.sort((a, b) => parseInt(a.codigo) - parseInt(b.codigo));
+      let lista = obtenerListaEstudiantesCompleta();
+      lista.sort((a, b) => parseInt(a.codigo) - parseInt(b.codigo));
 
-      listaCompleta.forEach(estudiante => {
-        const storageKey = `resultado_quizz_${estudiante.codigo}`;
-        const resultadoGuardado = localStorage.getItem(storageKey);
-
-        let nota = 'Pendiente';
-        let botonHTML = '';
-
-        if (resultadoGuardado) {
-          try {
-            const data = JSON.parse(resultadoGuardado);
-            nota = data.nota || 'N/A';
-          } catch (e) {
-            nota = 'Error de datos';
+      lista.forEach(est => {
+        // Obtener nota desde localStorage (quizz) o asignar "10" si no existe
+        const keyQuizz = `resultado_quizz_${est.codigo}`;
+        let nota = '10'; // ← según tu instrucción
+        try {
+          const dataQuizz = JSON.parse(localStorage.getItem(keyQuizz));
+          if (dataQuizz && typeof dataQuizz.nota === 'number') {
+            nota = dataQuizz.nota;
+          } else if (dataQuizz && dataQuizz.nota != null) {
+            nota = dataQuizz.nota;
           }
-
-          botonHTML = `
-            <button class="btn-accion btn-activo" onclick="verDetalle('${estudiante.codigo}')">
-              Ver Resultado
-            </button>
-          `;
-        } else {
-          botonHTML = `
-            <button class="btn-accion btn-inactivo" disabled>
-              Pendiente
-            </button>
-          `;
+        } catch (e) {
+          // Mantener "10" si error
         }
 
-        const fila = tablaCuerpo.insertRow();
-        fila.insertCell().textContent = estudiante.codigo;
-        fila.insertCell().textContent = estudiante.nombre;
-        fila.insertCell().textContent = estudiante.grado;
+        // Renderizar en tabla visible
+        const fila = cuerpo.insertRow();
+        fila.insertCell().textContent = est.codigo;
+        fila.insertCell().textContent = est.nombre;
+        fila.insertCell().textContent = est.grado;
 
         const celdaNota = fila.insertCell();
-        celdaNota.innerHTML = `<span style="font-weight: bold; color: ${nota !== 'Pendiente' ? '#28a745' : '#dc3545'};">${nota}</span>`;
+        celdaNota.innerHTML = `<span style="font-weight: bold; color: ${nota === '10' || nota === 'Pendiente' ? '#dc3545' : '#28a745'};">${nota}</span>`;
 
-        fila.insertCell().innerHTML = botonHTML;
+        const celdaAcciones = fila.insertCell();
+        const esFijo = estudiantesFijos.some(f => f.codigo === est.codigo);
+
+        celdaAcciones.innerHTML = `
+          <button class="btn-accion btn-editar" title="Editar" onclick="abrirModalEdicion('${est.codigo}')">✏️</button>
+          <button class="btn-accion btn-eliminar" 
+                  title="${esFijo ? 'No se puede eliminar estudiante fijo' : 'Eliminar'}"
+                  ${esFijo ? 'disabled' : ''} 
+                  onclick="eliminarEstudiante('${est.codigo}')">🗑️</button>
+          <button class="btn-accion ${nota === '10' ? 'btn-inactivo' : 'btn-activo'}" 
+                  ${nota === '10' ? 'disabled' : ''} 
+                  onclick="verDetalle('${est.codigo}')">
+            ${nota === '10' ? 'Pendiente' : 'Ver Resultado'}
+          </button>
+        `;
+
+        // Renderizar en tabla oculta para PDF
+        const filaPDF = cuerpoPDF.insertRow();
+        filaPDF.insertCell().textContent = est.codigo;
+        filaPDF.insertCell().textContent = est.nombre;
+        filaPDF.insertCell().textContent = est.grado;
+        const celdaNotaPDF = filaPDF.insertCell();
+        celdaNotaPDF.textContent = nota;
+        celdaNotaPDF.style.fontWeight = 'bold';
+        celdaNotaPDF.style.color = nota === '10' ? '#dc3545' : '#28a745';
       });
     }
 
-    function verDetalle(codigo) {
-      document.getElementById('editorEstudiante').style.display = 'none';
-      document.getElementById('detalleResultado').style.display = 'block';
+    // === MODALES ===
+    function abrirModalNuevo() {
+      document.getElementById('mensajeErrorNuevo').textContent = '';
+      document.getElementById('nuevoCodigo').value = '';
+      document.getElementById('nuevoNombre').value = '';
+      document.getElementById('nuevoGrado').value = '';
+      document.getElementById('nuevaNota').value = '';
 
-      const storageKey = `resultado_quizz_${codigo}`;
-      const dataString = localStorage.getItem(storageKey);
-      const modalOverlay = document.getElementById('modalOverlay');
+      mostrarModal('editorEstudiante');
+    }
+
+    function abrirModalEdicion(codigo) {
+      const lista = obtenerListaEstudiantesCompleta();
+      const est = lista.find(e => e.codigo === codigo);
+      if (!est) return;
+
+      document.getElementById('mensajeErrorEdicion').textContent = '';
+      document.getElementById('editarCodigo').value = est.codigo;
+      document.getElementById('editarNombre').value = est.nombre;
+      document.getElementById('editarGrado').value = est.grado;
+
+      // Buscar nota en quizz o usar "10"
+      const key = `resultado_quizz_${codigo}`;
+      let nota = '10';
+      try {
+        const data = JSON.parse(localStorage.getItem(key));
+        if (data && data.nota != null) nota = data.nota;
+      } catch (e) {}
+
+      document.getElementById('editarNota').value = nota === '10' ? '' : nota;
+
+      mostrarModal('editorExistente');
+    }
+
+    function verDetalle(codigo) {
+      const key = `resultado_quizz_${codigo}`;
+      const dataString = localStorage.getItem(key);
       const detalleDatos = document.getElementById('detalleDatos');
 
       if (!dataString) {
-        detalleDatos.innerHTML = `<p style="color:red; text-align:center;">Error: No hay datos de examen completado para el código ${codigo}.</p>`;
+        detalleDatos.innerHTML = `<p style="color:red; text-align:center;">No hay datos del examen para el código ${codigo}.</p>`;
       } else {
         const data = JSON.parse(dataString);
-
         const contenido = `
           <p>👤 <strong>Estudiante:</strong> ${data.nombre || 'N/A'}</p>
           <p>🎓 <strong>Grado:</strong> ${data.grado || 'N/A'}</p>
@@ -402,24 +581,216 @@
           <p>⏱️ <strong>Hora de Inicio:</strong> ${data.horaInicio || 'N/A'}</p>
           <p>⏱️ <strong>Hora de Fin:</strong> ${data.horaFin || 'N/A'}</p>
         `;
-
-        document.getElementById('detalleTitulo').textContent = `Detalle de ${data.nombre} (${codigo})`;
+        document.getElementById('detalleTitulo').textContent = `Detalle de ${data.nombre || 'Estudiante'} (${codigo})`;
         detalleDatos.innerHTML = contenido;
       }
 
-      modalOverlay.style.display = 'flex';
-      modalOverlay.classList.add('active');
+      mostrarModal('detalleResultado');
     }
 
-    function cerrarDetalle() {
-      const modalOverlay = document.getElementById('modalOverlay');
-      modalOverlay.classList.remove('active');
-      document.getElementById('detalleResultado').style.display = 'none';
-      document.getElementById('editorEstudiante').style.display = 'none';
+    function mostrarModal(id) {
+      document.querySelectorAll('#modalOverlay > div').forEach(d => d.style.display = 'none');
+      document.getElementById(id).style.display = 'block';
+      document.getElementById('modalOverlay').style.display = 'flex';
+      document.getElementById('modalOverlay').classList.add('active');
+    }
 
+    function cerrarModal() {
+      document.getElementById('modalOverlay').classList.remove('active');
       setTimeout(() => {
-        modalOverlay.style.display = 'none';
+        document.getElementById('modalOverlay').style.display = 'none';
       }, 300);
+    }
+
+    // === GUARDAR NUEVO ESTUDIANTE ===
+    function guardarNuevoEstudiante() {
+      const codigo = document.getElementById('nuevoCodigo').value.trim();
+      const nombre = document.getElementById('nuevoNombre').value.trim();
+      const grado = document.getElementById('nuevoGrado').value;
+      const notaInput = document.getElementById('nuevaNota').value.trim();
+      const errorDiv = document.getElementById('mensajeErrorNuevo');
+
+      if (!codigo || !nombre || !grado) {
+        errorDiv.textContent = 'Todos los campos son obligatorios.';
+        return;
+      }
+
+      if (isNaN(codigo) || parseInt(codigo) < 101) {
+        errorDiv.textContent = 'Código inválido. Debe ser ≥ 101.';
+        return;
+      }
+
+      // Validar duplicado
+      const lista = obtenerListaEstudiantesCompleta();
+      if (lista.some(e => e.codigo === codigo)) {
+        errorDiv.textContent = `El código ${codigo} ya está en uso.`;
+        return;
+      }
+
+      // Guardar estudiante
+      const nuevo = { codigo, nombre, grado };
+      const listaActual = obtenerListaEstudiantesCompleta();
+      const nuevaLista = [...listaActual, nuevo];
+      guardarListaAdicional(nuevaLista);
+
+      // Guardar nota si se dio (sino, dejar "10" por defecto)
+      if (notaInput !== '') {
+        const nota = parseFloat(notaInput);
+        if (nota < 0 || nota > 5) {
+          errorDiv.textContent = 'La nota debe estar entre 0 y 5.';
+          return;
+        }
+        const key = `resultado_quizz_${codigo}`;
+        const data = {
+          nombre,
+          grado,
+          nota,
+          puntuacion: nota * 20, // ej: 5.0 → 100%
+          fecha: new Date().toLocaleDateString(),
+          horaInicio: "N/A",
+          horaFin: "N/A"
+        };
+        localStorage.setItem(key, JSON.stringify(data));
+      }
+
+      errorDiv.textContent = '';
+      cerrarModal();
+      cargarResultadosFijos();
+    }
+
+    // === GUARDAR EDICIÓN ===
+    function guardarEdicion() {
+      const codigo = document.getElementById('editarCodigo').value;
+      const nombre = document.getElementById('editarNombre').value.trim();
+      const grado = document.getElementById('editarGrado').value;
+      const notaInput = document.getElementById('editarNota').value.trim();
+      const errorDiv = document.getElementById('mensajeErrorEdicion');
+
+      if (!nombre || !grado) {
+        errorDiv.textContent = 'Nombre y grado son obligatorios.';
+        return;
+      }
+
+      const lista = obtenerListaEstudiantesCompleta();
+      const index = lista.findIndex(e => e.codigo === codigo);
+      if (index === -1) {
+        errorDiv.textContent = 'Estudiante no encontrado.';
+        return;
+      }
+
+      // Actualizar datos
+      lista[index].nombre = nombre;
+      lista[index].grado = grado;
+
+      // Actualizar nota en localStorage si aplica
+      const key = `resultado_quizz_${codigo}`;
+      let dataQuizz = null;
+      try {
+        dataQuizz = JSON.parse(localStorage.getItem(key)) || {};
+      } catch (e) { dataQuizz = {}; }
+
+      if (notaInput === '') {
+        // Eliminar nota → se mostrará "10"
+        if (dataQuizz) {
+          delete dataQuizz.nota;
+          delete dataQuizz.puntuacion;
+          localStorage.setItem(key, JSON.stringify(dataQuizz));
+        }
+      } else {
+        const nota = parseFloat(notaInput);
+        if (nota < 0 || nota > 5) {
+          errorDiv.textContent = 'La nota debe estar entre 0 y 5.';
+          return;
+        }
+        dataQuizz = {
+          ...dataQuizz,
+          nombre,
+          grado,
+          nota,
+          puntuacion: nota * 20
+        };
+        localStorage.setItem(key, JSON.stringify(dataQuizz));
+      }
+
+      // Guardar lista (solo adicionales)
+      guardarListaAdicional(lista);
+      errorDiv.textContent = '';
+      cerrarModal();
+      cargarResultadosFijos();
+    }
+
+    // === ELIMINAR ESTUDIANTE ===
+    function eliminarEstudiante(codigo) {
+      if (!confirm(`¿Seguro que desea eliminar al estudiante con código ${codigo}?`)) return;
+
+      const esFijo = estudiantesFijos.some(f => f.codigo === codigo);
+      if (esFijo) {
+        alert("No se pueden eliminar estudiantes fijos.");
+        return;
+      }
+
+      // Eliminar de lista adicional
+      let lista = obtenerListaEstudiantesCompleta();
+      lista = lista.filter(e => e.codigo !== codigo);
+      guardarListaAdicional(lista);
+
+      // Eliminar datos de quizz
+      localStorage.removeItem(`resultado_quizz_${codigo}`);
+
+      cargarResultadosFijos();
+    }
+
+    // === DESCARGAR PDF ===
+    async function descargarPDF() {
+      alert("Preparando PDF... Esto puede tardar unos segundos.");
+
+      // Actualizar tabla PDF con datos actuales
+      cargarResultadosFijos(); // Esto ya actualiza tablaPDF
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF('p', 'mm', 'a4');
+
+      // Título
+      doc.setFontSize(18);
+      doc.setTextColor(10, 44, 88);
+      doc.text("📊 Resultados Pre-Inscritos", 105, 20, null, null, 'center');
+
+      // Frase institucional
+      doc.setFontSize(12);
+      doc.setTextColor(10, 44, 88);
+      doc.text("Con Excelencia,", 105, 30, null, null, 'center');
+      doc.text("construimos futuro", 105, 35, null, null, 'center');
+
+      // Tabla
+      const tablaPDF = document.getElementById('tablaPDF');
+      doc.setFontSize(10);
+
+      // Usar html2canvas para renderizar la tabla (más fácil y con estilo)
+      const canvas = await html2canvas(tablaPDF, {
+        scale: 2,
+        backgroundColor: null,
+        useCORS: true
+      });
+
+      const imgData = canvas.toDataURL('image/png');
+      const imgWidth = 190;
+      const pageHeight = 295;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+      let heightLeft = imgHeight;
+      let position = 50;
+
+      doc.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+
+      while (heightLeft >= 0) {
+        doc.addPage();
+        position = heightLeft - imgHeight;
+        doc.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+
+      doc.save(`resultados_${new Date().toISOString().slice(0,10)}.pdf`);
     }
   </script>
 
