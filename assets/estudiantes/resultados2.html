@@ -3,50 +3,59 @@
 <head>
   <meta charset="UTF-8">
   <title>Tabla de Resultados - Docente</title>
-  <!-- jsPDF y html2canvas para descarga de PDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to bottom right, #0a2c58, #ffffff);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to bottom right, #0a2c58, #e6f0ff);
       padding: 20px;
       color: #333;
       margin: 0;
     }
 
-    /* ENCABEZADO SUPERIOR */
+    /* 🔹 ENCABEZADO: LOGO IZQUIERDA + FRASE DERECHA */
     .encabezado {
+      background: #ffffffcc;
+      backdrop-filter: blur(4px);
+      padding: 20px 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      max-width: 900px;
+      margin: 0 auto 25px auto;
+    }
+
+    .encabezado-contenido {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: #ffffffcc;
-      backdrop-filter: blur(4px);
-      padding: 15px 30px;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      margin-bottom: 25px;
+      flex-wrap: wrap;
+      gap: 20px;
     }
 
-    .encabezado img {
-      height: 80px;
+    .logo-izquierda {
+      height: 100px;
       width: auto;
+      border-radius: 10px;
+      flex-shrink: 0;
     }
 
-    .frase {
-      text-align: right;
+    .frase-derecha {
       color: #0a2c58;
       font-style: italic;
-      font-size: 20px;
-      line-height: 1.2;
-      font-weight: 600;
+      font-size: 22px;
+      line-height: 1.4;
+      font-weight: bold;
+      text-align: right;
+      flex-grow: 1;
+      min-width: 250px;
     }
 
+    /* 🔹 CONTENEDOR PRINCIPAL */
     .contenedor-resultados {
       background-color: #fff;
       padding: 30px;
       border-radius: 15px;
-      max-width: 900px;
+      max-width: 950px;
       margin: 0 auto 40px auto;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
     }
@@ -54,129 +63,113 @@
     h1 {
       color: #0a2c58;
       border-bottom: 2px solid #4a90e2;
-      padding-bottom: 10px;
+      padding-bottom: 12px;
       margin-bottom: 20px;
       text-align: center;
     }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-
-    th, td {
-      padding: 12px 15px;
-      text-align: left;
-      border-bottom: 1px solid #ddd;
-    }
-
-    th {
-      background-color: #4a90e2;
-      color: white;
-      font-weight: bold;
-      text-transform: uppercase;
-    }
-
-    tr:nth-child(even) {
-      background-color: #f9f9f9;
-    }
-
-    tr:hover {
-      background-color: #f1f8ff;
-    }
-
-    .btn-accion {
-      padding: 6px 10px;
-      margin: 2px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: background-color 0.2s, opacity 0.2s;
-      min-width: 80px;
-      font-size: 13px;
-    }
-
-    .btn-editar {
-      background-color: #ffc107;
-      color: #212529;
-    }
-
-    .btn-editar:hover {
-      background-color: #e0a800;
-    }
-
-    .btn-eliminar {
-      background-color: #dc3545;
-      color: white;
-    }
-
-    .btn-eliminar:hover {
-      background-color: #c82333;
-    }
-
-    .btn-eliminar:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    .btn-activo {
-      background-color: #28a745;
-      color: white;
-    }
-
-    .btn-activo:hover {
-      background-color: #218838;
-    }
-
-    .btn-inactivo {
-      background-color: #6c757d;
-      color: white;
-      opacity: 0.8;
-      cursor: not-allowed;
-    }
-
-    .btn-volver {
-      background-color: #6c757d;
-      color: white;
-      margin-bottom: 20px;
-    }
-
-    .btn-volver:hover {
-      background-color: #5a6268;
-    }
-
-    .header-acciones {
+    /* 🔹 BARRA DE ACCIONES */
+    .barra-acciones {
       display: flex;
       justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 25px;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
       align-items: center;
-      margin-bottom: 15px;
+      gap: 6px;
+      font-size: 15px;
+      transition: all 0.25s ease;
+      text-align: center;
     }
 
     .btn-agregar {
-      background-color: #4a90e2;
+      background: linear-gradient(135deg, #28a745, #218838);
       color: white;
     }
-
     .btn-agregar:hover {
-      background-color: #357bd6;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(40, 167, 69, 0.4);
+    }
+
+    .btn-eliminar {
+      background: linear-gradient(135deg, #dc3545, #c82333);
+      color: white;
+    }
+    .btn-eliminar:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(220, 53, 69, 0.4);
     }
 
     .btn-pdf {
-      background-color: #e74c3c;
+      background: linear-gradient(135deg, #0a2c58, #1b5e9e);
       color: white;
-      padding: 8px 15px;
-      border-radius: 5px;
-      cursor: pointer;
+    }
+    .btn-pdf:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(10, 44, 88, 0.4);
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* 🔹 TABLA */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      font-size: 15px;
+    }
+
+    th, td {
+      padding: 14px 16px;
+      text-align: left;
+      border-bottom: 1px solid #e0e6f0;
+    }
+
+    th {
+      background-color: #0a2c58;
+      color: white;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f8fbff;
+    }
+
+    tr:hover {
+      background-color: #edf5ff;
+    }
+
+    tr.selected {
+      background-color: #d0e3ff !important;
+      border-left: 4px solid #4a90e2;
+    }
+
+    .nota-pendiente {
+      color: #dc3545;
+      font-weight: bold;
+    }
+    .nota-lista {
+      color: #28a745;
       font-weight: bold;
     }
 
-    .btn-pdf:hover {
-      background-color: #c0392b;
-    }
-
-    /* MODALES */
+    /* 🔹 MODALES */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -184,256 +177,201 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.7);
+      background: rgba(0, 0, 0, 0.6);
       z-index: 1000;
       justify-content: center;
       align-items: center;
+      backdrop-filter: blur(2px);
     }
 
-    #detalleResultado, #editorEstudiante, #editorExistente {
+    .modal {
       background-color: #fff;
       padding: 30px;
-      border-radius: 15px;
-      max-width: 450px;
+      border-radius: 16px;
+      max-width: 480px;
       width: 90%;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-      transform: scale(0.9);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+      transform: scale(0.95);
       opacity: 0;
-      transition: all 0.3s ease-out;
-      display: none;
+      transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
-    .modal-overlay.active #detalleResultado,
-    .modal-overlay.active #editorEstudiante,
-    .modal-overlay.active #editorExistente {
-      display: block;
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-overlay.active .modal {
       transform: scale(1);
       opacity: 1;
     }
 
-    #detalleResultado h3, #editorEstudiante h3, #editorExistente h3 {
+    .modal h3 {
       color: #0a2c58;
-      border-bottom: 2px solid #4a90e2;
-      padding-bottom: 10px;
       margin-top: 0;
       font-size: 24px;
+      border-bottom: 2px solid #4a90e2;
+      padding-bottom: 12px;
     }
 
-    #detalleResultado p {
-      line-height: 1.6;
-      margin: 8px 0;
-      font-size: 16px;
+    .form-group {
+      margin: 18px 0;
     }
 
-    #detalleResultado p strong {
-      color: #0a2c58;
-      min-width: 120px;
-      display: inline-block;
-    }
-
-    .nota-final {
-      background-color: #e0f2ff;
-      padding: 15px;
-      border-radius: 10px;
-      margin-top: 20px;
-      font-weight: bold;
-      text-align: center;
-      font-size: 1.2em;
-    }
-
-    .nota-final span {
-      color: #dc3545;
-      font-size: 1.3em;
-    }
-
-    .btn-cerrar-modal {
-      background-color: #6c757d;
-      color: white;
-      margin-top: 20px;
-      width: 100%;
-    }
-
-    .btn-cerrar-modal:hover {
-      background-color: #545b62;
-    }
-
-    .btn-guardar-modal {
-      background-color: #28a745;
-      color: white;
-      margin-top: 20px;
-      width: 100%;
-    }
-
-    .btn-guardar-modal:hover {
-      background-color: #218838;
-    }
-
-    #editorEstudiante label, #editorExistente label {
+    .form-group label {
       display: block;
-      margin-top: 10px;
-      font-weight: bold;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: #2c3e50;
     }
 
-    #editorEstudiante input, #editorEstudiante select,
-    #editorExistente input, #editorExistente select {
+    .form-group input,
+    .form-group select {
       width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      box-sizing: border-box;
+      padding: 12px;
+      border: 1px solid #ced4da;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border 0.3s;
     }
 
-    .mensaje-error {
-      color: #dc3545;
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #4a90e2;
+      box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+    }
+
+    .modal-footer {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .modal-footer button {
+      flex: 1;
+    }
+
+    .btn-modal-cancel {
+      background: #6c757d;
+    }
+    .btn-modal-cancel:hover {
+      background: #5a6268;
+    }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      color: #7f8c8d;
       font-size: 14px;
-      margin-top: 5px;
-    }
-
-    /* Estilo para PDF en preview (no visible en pantalla) */
-    #tablaPDF {
-      display: none;
-    }
-
-    @media print {
-      body * {
-        visibility: hidden;
-      }
-      #tablaPDF, #tablaPDF * {
-        visibility: visible;
-      }
-      #tablaPDF {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-      }
+      margin-top: 20px;
     }
   </style>
 </head>
 
 <body onload="cargarResultadosFijos()">
 
-  <!-- ENCABEZADO -->
+  <!-- 🔹 ENCABEZADO: LOGO IZQUIERDA + FRASE DERECHA -->
   <div class="encabezado">
-    <img src="img/logo_colegio.png" alt="Logo Colegio" id="logoPDF">
-    <div class="frase" id="frasePDF">
-      <div>Con Excelencia,</div>
-      <div>construimos futuro</div>
+    <div class="encabezado-contenido">
+      <img src="img/icono.png" alt="Logo del Colegio" class="logo-center">
+      <div class="frase-derecha}">
+        Con Excelencia,<br>
+        Construimos Futuro
+      </div>
     </div>
   </div>
 
   <div class="contenedor-resultados">
-    <div class="header-acciones">
-      <h1>📊 Resultados Pre-Inscritos</h1>
-      <button class="btn-accion btn-agregar" onclick="abrirModalNuevo()">➕ Agregar Estudiante</button>
-      <button class="btn-accion btn-pdf" onclick="descargarPDF()">📥 Descargar PDF</button>
+    <h1>📊 Resultados de Estudiantes</h1>
+
+    <div class="barra-acciones">
+      <button class="btn btn-agregar" onclick="abrirModalAgregar()">
+        ✅ Agregar Estudiante
+      </button>
+      <button class="btn btn-eliminar" id="btnEliminar" onclick="eliminarEstudiante()" disabled>
+        🗑️ Eliminar Seleccionado
+      </button>
+      <button class="btn btn-pdf" onclick="descargarPDF()">
+        📥 Descargar PDF
+      </button>
     </div>
 
-    <!-- TABLA VISIBLE -->
-    <table id="tablaVisible">
+    <table>
       <thead>
         <tr>
           <th>Código</th>
           <th>Nombre y Apellido</th>
           <th>Grado</th>
           <th>Nota (Base 5.0)</th>
-          <th>Acciones</th>
+          <th>Acción</th>
         </tr>
       </thead>
       <tbody id="tablaCuerpo"></tbody>
     </table>
 
-    <!-- TABLA PARA PDF (invisible) -->
-    <table id="tablaPDF" style="width:100%; border-collapse: collapse; background:#fff; padding:20px;">
-      <thead>
-        <tr>
-          <th style="background:#4a90e2; color:white; padding:10px;">Código</th>
-          <th style="background:#4a90e2; color:white; padding:10px;">Nombre y Apellido</th>
-          <th style="background:#4a90e2; color:white; padding:10px;">Grado</th>
-          <th style="background:#4a90e2; color:white; padding:10px;">Nota</th>
-        </tr>
-      </thead>
-      <tbody id="tablaCuerpoPDF"></tbody>
-    </table>
+    <footer>
+      Los cambios se guardan automáticamente. Los estudiantes agregados/eliminados persisten tras recargar.
+    </footer>
   </div>
 
-  <div class="modal-overlay" id="modalOverlay">
-    <!-- Detalle del resultado -->
-    <div id="detalleResultado">
-      <h3 id="detalleTitulo">Detalle del Resultado:</h3>
-      <div id="detalleDatos"></div>
-      <button class="btn-accion btn-cerrar-modal" onclick="cerrarModal()">Cerrar</button>
-    </div>
-
-    <!-- Registrar nuevo estudiante -->
-    <div id="editorEstudiante">
+  <!-- MODAL: AGREGAR ESTUDIANTE -->
+  <div class="modal-overlay" id="modalAgregar">
+    <div class="modal">
       <h3>📝 Registrar Nuevo Estudiante</h3>
-      <div id="mensajeErrorNuevo" class="mensaje-error"></div>
+      <div id="mensajeError" style="color: #e74c3c; margin-bottom: 10px; font-weight: 500;"></div>
 
-      <label for="nuevoCodigo">Código (ej. 106, 107...):</label>
-      <input type="number" id="nuevoCodigo" min="101" required>
+      <div class="form-group">
+        <label for="nuevoCodigo">Código *</label>
+        <input type="text" id="nuevoCodigo" placeholder="Ej. 106" required>
+      </div>
 
-      <label for="nuevoNombre">Nombre y Apellido:</label>
-      <input type="text" id="nuevoNombre" required>
+      <div class="form-group">
+        <label for="nuevoNombre">Nombre y Apellido *</label>
+        <input type="text" id="nuevoNombre" placeholder="Ej. Juan Pérez" required>
+      </div>
 
-      <label for="nuevoGrado">Grado:</label>
-      <select id="nuevoGrado" required>
-        <option value="">Seleccione</option>
-        <option value="6-1">6-1</option>
-        <option value="6-2">6-2</option>
-        <option value="7-1">7-1</option>
-        <option value="7-2">7-2</option>
-        <option value="8-1">8-1</option>
-        <option value="8-2">8-2</option>
-        <option value="9-1">9-1</option>
-        <option value="9-2">9-2</option>
-        <option value="10-1">10-1</option>
-        <option value="11°">11°</option>
-      </select>
+      <div class="form-group">
+        <label for="nuevoGrado">Grado *</label>
+        <select id="nuevoGrado" required>
+          <option value="">Seleccione grado</option>
+          <option value="6-1">6-1</option>
+          <option value="6-2">6-2</option>
+          <option value="7-1">7-1</option>
+          <option value="7-2">7-2</option>
+          <option value="8-1">8-1</option>
+          <option value="8-2">8-2</option>
+          <option value="9-1">9-1</option>
+          <option value="9-2">9-2</option>
+          <option value="10-1">10-1</option>
+          <option value="11°">11°</option>
+        </select>
+      </div>
 
-      <label for="nuevaNota">Nota (Base 5.0) - opcional:</label>
-      <input type="number" id="nuevaNota" min="0" max="5" step="0.1" placeholder="Dejar vacío para '10'">
+      <div class="form-group">
+        <label for="nuevaNota">Nota (opcional, 0–5)</label>
+        <input type="number" id="nuevaNota" min="0" max="5" step="0.1" placeholder="Si no, se usará 10 (en PDF)">
+      </div>
 
-      <button class="btn-accion btn-guardar-modal" onclick="guardarNuevoEstudiante()">Guardar Estudiante</button>
-      <button class="btn-accion btn-cerrar-modal" onclick="cerrarModal()">Cancelar</button>
+      <div class="modal-footer">
+        <button class="btn btn-agregar" onclick="guardarNuevoEstudiante()">Guardar</button>
+        <button class="btn btn-modal-cancel" onclick="cerrarModal('modalAgregar')">Cancelar</button>
+      </div>
     </div>
+  </div>
 
-    <!-- Editar estudiante existente -->
-    <div id="editorExistente">
-      <h3>✏️ Editar Estudiante</h3>
-      <div id="mensajeErrorEdicion" class="mensaje-error"></div>
-
-      <label for="editarCodigo">Código:</label>
-      <input type="text" id="editarCodigo" readonly>
-
-      <label for="editarNombre">Nombre y Apellido:</label>
-      <input type="text" id="editarNombre" required>
-
-      <label for="editarGrado">Grado:</label>
-      <select id="editarGrado" required>
-        <option value="6-1">6-1</option>
-        <option value="6-2">6-2</option>
-        <option value="7-1">7-1</option>
-        <option value="7-2">7-2</option>
-        <option value="8-1">8-1</option>
-        <option value="8-2">8-2</option>
-        <option value="9-1">9-1</option>
-        <option value="9-2">9-2</option>
-        <option value="10-1">10-1</option>
-        <option value="11°">11°</option>
-      </select>
-
-      <label for="editarNota">Nota (Base 5.0):</label>
-      <input type="number" id="editarNota" min="0" max="5" step="0.1" placeholder="Dejar vacío para '10'">
-
-      <button class="btn-accion btn-guardar-modal" onclick="guardarEdicion()">Guardar Cambios</button>
-      <button class="btn-accion btn-cerrar-modal" onclick="cerrarModal()">Cancelar</button>
+  <!-- MODAL: DETALLE -->
+  <div class="modal-overlay" id="modalDetalle">
+    <div class="modal" id="detalleResultado">
+      <h3 id="detalleTitulo">Detalle del Resultado</h3>
+      <div id="detalleDatos"></div>
+      <button class="btn btn-modal-cancel" style="width:100%; margin-top:20px;" onclick="cerrarModal('modalDetalle')">Cerrar</button>
     </div>
   </div>
 
   <script>
-    // === DATOS FIJOS E INICIALIZACIÓN ===
+    const { jsPDF } = window.jspdf;
+
+    // Estudiantes fijos (no editables)
     const estudiantesFijos = [
       { codigo: '101', nombre: 'Ana María Gómez', grado: '6-1' },
       { codigo: '102', nombre: 'Carlos David Torres', grado: '6-2' },
@@ -442,355 +380,282 @@
       { codigo: '105', nombre: 'Valeria Patricia Castro', grado: '6-2' }
     ];
 
-    const STORAGE_KEY_LISTA = 'lista_estudiantes_adicionales';
+    const STORAGE_KEY_ADICIONALES = 'estudiantes_adicionales';
+    let estudiantesAdicionales = JSON.parse(localStorage.getItem(STORAGE_KEY_ADICIONALES)) || [];
+    let filaSeleccionada = null;
 
-    // Obtener lista completa (fijos + adicionales)
-    function obtenerListaEstudiantesCompleta() {
-      let adicionales = [];
-      try {
-        const data = localStorage.getItem(STORAGE_KEY_LISTA);
-        if (data) adicionales = JSON.parse(data);
-      } catch (e) {
-        console.error("Error al cargar estudiantes adicionales:", e);
-        localStorage.removeItem(STORAGE_KEY_LISTA); // Limpiar si corrupto
-      }
-      return [...estudiantesFijos, ...adicionales];
+    // ==================================
+    // FUNCIONES PRINCIPALES
+    // ==================================
+
+    function obtenerListaCompleta() {
+      return [...estudiantesFijos, ...estudiantesAdicionales].sort((a, b) => 
+        parseInt(a.codigo) - parseInt(b.codigo)
+      );
     }
 
-    // Guardar lista adicional (solo los no fijos)
-    function guardarListaAdicional(lista) {
-      const adicionales = lista.filter(est => !estudiantesFijos.some(f => f.codigo === est.codigo));
-      localStorage.setItem(STORAGE_KEY_LISTA, JSON.stringify(adicionales));
+    function guardarEstudiantesAdicionales() {
+      localStorage.setItem(STORAGE_KEY_ADICIONALES, JSON.stringify(estudiantesAdicionales));
+      renderTabla();
     }
 
-    // === RENDERIZADO DE TABLA ===
-    function cargarResultadosFijos() {
-      const cuerpo = document.getElementById('tablaCuerpo');
-      const cuerpoPDF = document.getElementById('tablaCuerpoPDF');
-      cuerpo.innerHTML = '';
-      cuerpoPDF.innerHTML = '';
+    function renderTabla() {
+      const tbody = document.getElementById('tablaCuerpo');
+      tbody.innerHTML = '';
 
-      let lista = obtenerListaEstudiantesCompleta();
-      lista.sort((a, b) => parseInt(a.codigo) - parseInt(b.codigo));
+      const lista = obtenerListaCompleta();
 
       lista.forEach(est => {
-        // Obtener nota desde localStorage (quizz) o asignar "10" si no existe
-        const keyQuizz = `resultado_quizz_${est.codigo}`;
-        let nota = '10'; // ← según tu instrucción
-        try {
-          const dataQuizz = JSON.parse(localStorage.getItem(keyQuizz));
-          if (dataQuizz && typeof dataQuizz.nota === 'number') {
-            nota = dataQuizz.nota;
-          } else if (dataQuizz && dataQuizz.nota != null) {
-            nota = dataQuizz.nota;
+        const tr = document.createElement('tr');
+        tr.dataset.codigo = est.codigo;
+
+        // Buscar resultado guardado (del quiz)
+        const storageKey = `resultado_quizz_${est.codigo}`;
+        const resultadoGuardado = localStorage.getItem(storageKey);
+        let notaMostrar = 'Pendiente';
+        let claseNota = 'nota-pendiente';
+        let notaPDF = 10; // Si no hay resultado → 10 en PDF
+
+        if (resultadoGuardado) {
+          try {
+            const data = JSON.parse(resultadoGuardado);
+            const notaBase5 = parseFloat(data.nota) || 0;
+            notaMostrar = notaBase5.toFixed(1);
+            notaPDF = notaBase5;
+            claseNota = 'nota-lista';
+          } catch (e) {
+            console.warn(`Error al parsear resultado de ${est.codigo}`);
           }
-        } catch (e) {
-          // Mantener "10" si error
+        } else if (est.hasOwnProperty('nota') && est.nota !== undefined) {
+          // Si fue agregado manualmente con nota
+          const notaManual = parseFloat(est.nota);
+          notaMostrar = isNaN(notaManual) ? 'Pendiente' : notaManual.toFixed(1);
+          notaPDF = isNaN(notaManual) ? 10 : notaManual;
+          claseNota = isNaN(notaManual) ? 'nota-pendiente' : 'nota-lista';
         }
 
-        // Renderizar en tabla visible
-        const fila = cuerpo.insertRow();
-        fila.insertCell().textContent = est.codigo;
-        fila.insertCell().textContent = est.nombre;
-        fila.insertCell().textContent = est.grado;
-
-        const celdaNota = fila.insertCell();
-        celdaNota.innerHTML = `<span style="font-weight: bold; color: ${nota === '10' || nota === 'Pendiente' ? '#dc3545' : '#28a745'};">${nota}</span>`;
-
-        const celdaAcciones = fila.insertCell();
-        const esFijo = estudiantesFijos.some(f => f.codigo === est.codigo);
-
-        celdaAcciones.innerHTML = `
-          <button class="btn-accion btn-editar" title="Editar" onclick="abrirModalEdicion('${est.codigo}')">✏️</button>
-          <button class="btn-accion btn-eliminar" 
-                  title="${esFijo ? 'No se puede eliminar estudiante fijo' : 'Eliminar'}"
-                  ${esFijo ? 'disabled' : ''} 
-                  onclick="eliminarEstudiante('${est.codigo}')">🗑️</button>
-          <button class="btn-accion ${nota === '10' ? 'btn-inactivo' : 'btn-activo'}" 
-                  ${nota === '10' ? 'disabled' : ''} 
-                  onclick="verDetalle('${est.codigo}')">
-            ${nota === '10' ? 'Pendiente' : 'Ver Resultado'}
-          </button>
+        tr.innerHTML = `
+          <td>${est.codigo}</td>
+          <td>${est.nombre}</td>
+          <td>${est.grado}</td>
+          <td><span class="${claseNota}">${notaMostrar}</span></td>
+          <td>
+            ${notaMostrar !== 'Pendiente' 
+              ? `<button class="btn btn-agregar" style="padding:6px 12px; font-size:13px;" onclick="verDetalle('${est.codigo}')">Ver</button>`
+              : `<span style="color:#999; font-style:italic;">Sin examen</span>`
+            }
+          </td>
         `;
 
-        // Renderizar en tabla oculta para PDF
-        const filaPDF = cuerpoPDF.insertRow();
-        filaPDF.insertCell().textContent = est.codigo;
-        filaPDF.insertCell().textContent = est.nombre;
-        filaPDF.insertCell().textContent = est.grado;
-        const celdaNotaPDF = filaPDF.insertCell();
-        celdaNotaPDF.textContent = nota;
-        celdaNotaPDF.style.fontWeight = 'bold';
-        celdaNotaPDF.style.color = nota === '10' ? '#dc3545' : '#28a745';
+        tr.addEventListener('click', () => {
+          if (filaSeleccionada) filaSeleccionada.classList.remove('selected');
+          filaSeleccionada = tr;
+          tr.classList.add('selected');
+          document.getElementById('btnEliminar').disabled = false;
+        });
+
+        tbody.appendChild(tr);
       });
     }
 
-    // === MODALES ===
-    function abrirModalNuevo() {
-      document.getElementById('mensajeErrorNuevo').textContent = '';
+    // ==================================
+    // MODALES
+    // ==================================
+
+    function abrirModalAgregar() {
+      document.getElementById('mensajeError').textContent = '';
       document.getElementById('nuevoCodigo').value = '';
       document.getElementById('nuevoNombre').value = '';
       document.getElementById('nuevoGrado').value = '';
       document.getElementById('nuevaNota').value = '';
-
-      mostrarModal('editorEstudiante');
+      abrirModal('modalAgregar');
     }
 
-    function abrirModalEdicion(codigo) {
-      const lista = obtenerListaEstudiantesCompleta();
-      const est = lista.find(e => e.codigo === codigo);
-      if (!est) return;
-
-      document.getElementById('mensajeErrorEdicion').textContent = '';
-      document.getElementById('editarCodigo').value = est.codigo;
-      document.getElementById('editarNombre').value = est.nombre;
-      document.getElementById('editarGrado').value = est.grado;
-
-      // Buscar nota en quizz o usar "10"
-      const key = `resultado_quizz_${codigo}`;
-      let nota = '10';
-      try {
-        const data = JSON.parse(localStorage.getItem(key));
-        if (data && data.nota != null) nota = data.nota;
-      } catch (e) {}
-
-      document.getElementById('editarNota').value = nota === '10' ? '' : nota;
-
-      mostrarModal('editorExistente');
+    function abrirModal(id) {
+      document.getElementById(id).classList.add('active');
     }
 
-    function verDetalle(codigo) {
-      const key = `resultado_quizz_${codigo}`;
-      const dataString = localStorage.getItem(key);
-      const detalleDatos = document.getElementById('detalleDatos');
-
-      if (!dataString) {
-        detalleDatos.innerHTML = `<p style="color:red; text-align:center;">No hay datos del examen para el código ${codigo}.</p>`;
-      } else {
-        const data = JSON.parse(dataString);
-        const contenido = `
-          <p>👤 <strong>Estudiante:</strong> ${data.nombre || 'N/A'}</p>
-          <p>🎓 <strong>Grado:</strong> ${data.grado || 'N/A'}</p>
-          <p>🆔 <strong>Código:</strong> ${codigo}</p>
-          <p>✅ <strong>Estado:</strong> Completado</p>
-          <p>⭐ <strong>Puntuación:</strong> ${data.puntuacion || 'N/A'}</p>
-          <div class="nota-final">
-            NOTA FINAL: <span>${data.nota || 'N/A'}</span> / 5.0
-          </div>
-          <p>📅 <strong>Fecha:</strong> ${data.fecha || 'N/A'}</p>
-          <p>⏱️ <strong>Hora de Inicio:</strong> ${data.horaInicio || 'N/A'}</p>
-          <p>⏱️ <strong>Hora de Fin:</strong> ${data.horaFin || 'N/A'}</p>
-        `;
-        document.getElementById('detalleTitulo').textContent = `Detalle de ${data.nombre || 'Estudiante'} (${codigo})`;
-        detalleDatos.innerHTML = contenido;
-      }
-
-      mostrarModal('detalleResultado');
+    function cerrarModal(id) {
+      document.getElementById(id).classList.remove('active');
     }
 
-    function mostrarModal(id) {
-      document.querySelectorAll('#modalOverlay > div').forEach(d => d.style.display = 'none');
-      document.getElementById(id).style.display = 'block';
-      document.getElementById('modalOverlay').style.display = 'flex';
-      document.getElementById('modalOverlay').classList.add('active');
-    }
+    // ==================================
+    // AGREGAR ESTUDIANTE
+    // ==================================
 
-    function cerrarModal() {
-      document.getElementById('modalOverlay').classList.remove('active');
-      setTimeout(() => {
-        document.getElementById('modalOverlay').style.display = 'none';
-      }, 300);
-    }
-
-    // === GUARDAR NUEVO ESTUDIANTE ===
     function guardarNuevoEstudiante() {
       const codigo = document.getElementById('nuevoCodigo').value.trim();
       const nombre = document.getElementById('nuevoNombre').value.trim();
       const grado = document.getElementById('nuevoGrado').value;
-      const notaInput = document.getElementById('nuevaNota').value.trim();
-      const errorDiv = document.getElementById('mensajeErrorNuevo');
+      const notaInput = document.getElementById('nuevaNota').value;
+      const mensajeError = document.getElementById('mensajeError');
 
+      mensajeError.textContent = '';
+
+      // Validaciones
       if (!codigo || !nombre || !grado) {
-        errorDiv.textContent = 'Todos los campos son obligatorios.';
+        mensajeError.textContent = '⚠️ Todos los campos marcados con * son obligatorios.';
         return;
       }
 
-      if (isNaN(codigo) || parseInt(codigo) < 101) {
-        errorDiv.textContent = 'Código inválido. Debe ser ≥ 101.';
+      if (codigo.length < 3) {
+        mensajeError.textContent = '⚠️ El código debe tener al menos 3 caracteres.';
         return;
       }
 
-      // Validar duplicado
-      const lista = obtenerListaEstudiantesCompleta();
-      if (lista.some(e => e.codigo === codigo)) {
-        errorDiv.textContent = `El código ${codigo} ya está en uso.`;
+      // Verificar duplicado (en fijos + adicionales)
+      const existe = [...estudiantesFijos, ...estudiantesAdicionales].some(e => e.codigo === codigo);
+      if (existe) {
+        mensajeError.textContent = `⚠️ Ya existe un estudiante con código ${codigo}.`;
         return;
       }
 
-      // Guardar estudiante
-      const nuevo = { codigo, nombre, grado };
-      const listaActual = obtenerListaEstudiantesCompleta();
-      const nuevaLista = [...listaActual, nuevo];
-      guardarListaAdicional(nuevaLista);
+      const nuevoEst = {
+        codigo,
+        nombre,
+        grado,
+        nota: notaInput ? parseFloat(notaInput) : undefined
+      };
 
-      // Guardar nota si se dio (sino, dejar "10" por defecto)
-      if (notaInput !== '') {
-        const nota = parseFloat(notaInput);
-        if (nota < 0 || nota > 5) {
-          errorDiv.textContent = 'La nota debe estar entre 0 y 5.';
-          return;
-        }
-        const key = `resultado_quizz_${codigo}`;
-        const data = {
-          nombre,
-          grado,
-          nota,
-          puntuacion: nota * 20, // ej: 5.0 → 100%
-          fecha: new Date().toLocaleDateString(),
-          horaInicio: "N/A",
-          horaFin: "N/A"
-        };
-        localStorage.setItem(key, JSON.stringify(data));
-      }
-
-      errorDiv.textContent = '';
-      cerrarModal();
-      cargarResultadosFijos();
+      estudiantesAdicionales.push(nuevoEst);
+      guardarEstudiantesAdicionales();
+      cerrarModal('modalAgregar');
     }
 
-    // === GUARDAR EDICIÓN ===
-    function guardarEdicion() {
-      const codigo = document.getElementById('editarCodigo').value;
-      const nombre = document.getElementById('editarNombre').value.trim();
-      const grado = document.getElementById('editarGrado').value;
-      const notaInput = document.getElementById('editarNota').value.trim();
-      const errorDiv = document.getElementById('mensajeErrorEdicion');
+    // ==================================
+    // ELIMINAR ESTUDIANTE
+    // ==================================
 
-      if (!nombre || !grado) {
-        errorDiv.textContent = 'Nombre y grado son obligatorios.';
+    function eliminarEstudiante() {
+      if (!filaSeleccionada) {
+        alert('⚠️ Por favor, seleccione un estudiante de la tabla.');
         return;
       }
 
-      const lista = obtenerListaEstudiantesCompleta();
-      const index = lista.findIndex(e => e.codigo === codigo);
-      if (index === -1) {
-        errorDiv.textContent = 'Estudiante no encontrado.';
+      const codigo = filaSeleccionada.dataset.codigo;
+
+      // No permitir eliminar estudiantes fijos
+      if (estudiantesFijos.some(e => e.codigo === codigo)) {
+        alert('🔒 No puede eliminar estudiantes predefinidos (101–105).');
         return;
       }
 
-      // Actualizar datos
-      lista[index].nombre = nombre;
-      lista[index].grado = grado;
+      if (!confirm(`¿Está seguro de eliminar al estudiante con código ${codigo}?`)) return;
 
-      // Actualizar nota en localStorage si aplica
-      const key = `resultado_quizz_${codigo}`;
-      let dataQuizz = null;
-      try {
-        dataQuizz = JSON.parse(localStorage.getItem(key)) || {};
-      } catch (e) { dataQuizz = {}; }
-
-      if (notaInput === '') {
-        // Eliminar nota → se mostrará "10"
-        if (dataQuizz) {
-          delete dataQuizz.nota;
-          delete dataQuizz.puntuacion;
-          localStorage.setItem(key, JSON.stringify(dataQuizz));
-        }
-      } else {
-        const nota = parseFloat(notaInput);
-        if (nota < 0 || nota > 5) {
-          errorDiv.textContent = 'La nota debe estar entre 0 y 5.';
-          return;
-        }
-        dataQuizz = {
-          ...dataQuizz,
-          nombre,
-          grado,
-          nota,
-          puntuacion: nota * 20
-        };
-        localStorage.setItem(key, JSON.stringify(dataQuizz));
-      }
-
-      // Guardar lista (solo adicionales)
-      guardarListaAdicional(lista);
-      errorDiv.textContent = '';
-      cerrarModal();
-      cargarResultadosFijos();
+      estudiantesAdicionales = estudiantesAdicionales.filter(e => e.codigo !== codigo);
+      guardarEstudiantesAdicionales();
+      filaSeleccionada = null;
+      document.getElementById('btnEliminar').disabled = true;
     }
 
-    // === ELIMINAR ESTUDIANTE ===
-    function eliminarEstudiante(codigo) {
-      if (!confirm(`¿Seguro que desea eliminar al estudiante con código ${codigo}?`)) return;
+    // ==================================
+    // DESCARGAR PDF
+    // ==================================
 
-      const esFijo = estudiantesFijos.some(f => f.codigo === codigo);
-      if (esFijo) {
-        alert("No se pueden eliminar estudiantes fijos.");
-        return;
-      }
-
-      // Eliminar de lista adicional
-      let lista = obtenerListaEstudiantesCompleta();
-      lista = lista.filter(e => e.codigo !== codigo);
-      guardarListaAdicional(lista);
-
-      // Eliminar datos de quizz
-      localStorage.removeItem(`resultado_quizz_${codigo}`);
-
-      cargarResultadosFijos();
-    }
-
-    // === DESCARGAR PDF ===
-    async function descargarPDF() {
-      alert("Preparando PDF... Esto puede tardar unos segundos.");
-
-      // Actualizar tabla PDF con datos actuales
-      cargarResultadosFijos(); // Esto ya actualiza tablaPDF
-
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF('p', 'mm', 'a4');
+    function descargarPDF() {
+      const doc = new jsPDF();
+      const pageWidth = doc.internal.pageSize.width;
 
       // Título
       doc.setFontSize(18);
+      doc.setFont('helvetica', 'bold');
       doc.setTextColor(10, 44, 88);
-      doc.text("📊 Resultados Pre-Inscritos", 105, 20, null, null, 'center');
+      doc.text('REPORTE DE ESTUDIANTES', pageWidth / 2, 20, { align: 'center' });
 
-      // Frase institucional
-      doc.setFontSize(12);
-      doc.setTextColor(10, 44, 88);
-      doc.text("Con Excelencia,", 105, 30, null, null, 'center');
-      doc.text("construimos futuro", 105, 35, null, null, 'center');
+      doc.setFontSize(11);
+      doc.setTextColor(80, 80, 80);
+      doc.text(`Generado el: ${new Date().toLocaleDateString('es-ES', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      })}`, pageWidth / 2, 30, { align: 'center' });
 
-      // Tabla
-      const tablaPDF = document.getElementById('tablaPDF');
-      doc.setFontSize(10);
+      // Datos
+      const lista = obtenerListaCompleta();
+      const headers = [['Código', 'Nombre y Apellido', 'Grado', 'Nota (Base 5.0)']];
+      const data = lista.map(est => {
+        let notaPDF = 10;
+        const resultadoGuardado = localStorage.getItem(`resultado_quizz_${est.codigo}`);
+        if (resultadoGuardado) {
+          try {
+            const data = JSON.parse(resultadoGuardado);
+            notaPDF = parseFloat(data.nota) || 10;
+          } catch (e) {}
+        } else if (est.nota !== undefined) {
+          notaPDF = parseFloat(est.nota) || 10;
+        }
 
-      // Usar html2canvas para renderizar la tabla (más fácil y con estilo)
-      const canvas = await html2canvas(tablaPDF, {
-        scale: 2,
-        backgroundColor: null,
-        useCORS: true
+        return [
+          est.codigo,
+          est.nombre,
+          est.grado,
+          notaPDF === 10 ? '10 (por defecto)' : notaPDF.toFixed(1)
+        ];
       });
 
-      const imgData = canvas.toDataURL('image/png');
-      const imgWidth = 190;
-      const pageHeight = 295;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      doc.autoTable({
+        head: headers,
+        body: data,
+        startY: 45,
+        theme: 'grid',
+        headStyles: {
+          fillColor: [10, 44, 88],
+          fontSize: 12
+        },
+        bodyStyles: { fontSize: 11 },
+        columnStyles: {
+          0: { cellWidth: 30, halign: 'center' },
+          1: { cellWidth: 75 },
+          2: { cellWidth: 40, halign: 'center' },
+          3: { cellWidth: 45, halign: 'center' }
+        },
+        margin: { horizontal: 15 },
+        didDrawPage: function (data) {
+          doc.setFontSize(10);
+          doc.setTextColor(150);
+          doc.text('Sistema de Gestión Académica © 2025', data.settings.margin.left, doc.internal.pageSize.height - 10);
+        }
+      });
 
-      let heightLeft = imgHeight;
-      let position = 50;
+      doc.save(`reporte_estudiantes_${new Date().toISOString().slice(0,10)}.pdf`);
+    }
 
-      doc.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
+    // ==================================
+    // DETALLE
+    // ==================================
 
-      while (heightLeft >= 0) {
-        doc.addPage();
-        position = heightLeft - imgHeight;
-        doc.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
+    function verDetalle(codigo) {
+      const storageKey = `resultado_quizz_${codigo}`;
+      const dataString = localStorage.getItem(storageKey);
+      const detalleDatos = document.getElementById('detalleDatos');
+
+      if (!dataString) {
+        detalleDatos.innerHTML = `<p style="color:#e74c3c; text-align:center;">No hay resultados guardados para este estudiante.</p>`;
+        document.getElementById('detalleTitulo').textContent = `Resultados: ${codigo}`;
+      } else {
+        const data = JSON.parse(dataString);
+        detalleDatos.innerHTML = `
+          <p><strong>Estudiante:</strong> ${data.nombre || '—'}</p>
+          <p><strong>Grado:</strong> ${data.grado || '—'}</p>
+          <p><strong>Código:</strong> ${codigo}</p>
+          <p><strong>Puntuación:</strong> ${data.puntuacion || '—'}</p>
+          <p><strong>Nota:</strong> <span style="color:#28a745; font-weight:bold;">${data.nota || '—'}</span></p>
+          <p><strong>Fecha:</strong> ${data.fecha || '—'}</p>
+          <p><strong>Hora Inicio/Fin:</strong> ${data.horaInicio || '—'} / ${data.horaFin || '—'}</p>
+        `;
+        document.getElementById('detalleTitulo').textContent = `Resultados: ${data.nombre} (${codigo})`;
       }
 
-      doc.save(`resultados_${new Date().toISOString().slice(0,10)}.pdf`);
+      abrirModal('modalDetalle');
+    }
+
+    // ==================================
+    // INICIALIZAR
+    // ==================================
+
+    function cargarResultadosFijos() {
+      renderTabla();
     }
   </script>
 
