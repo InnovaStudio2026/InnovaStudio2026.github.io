@@ -233,20 +233,15 @@
             position: relative;
             overflow: hidden;
             border-radius: 8px;
-            /* ✅ FONDO EDUCATIVO CON FIGURAS Y LÍNEAS */
             background:
-                /* Capa 1: formas geométricas dispersas */
                 radial-gradient(circle at 10% 20%, #4fc3f710 0%, transparent 50%),
                 radial-gradient(circle at 90% 15%, #81c78410 0%, transparent 50%),
                 radial-gradient(circle at 20% 85%, #ffd54f10 0%, transparent 50%),
                 radial-gradient(circle at 85% 80%, #ba68c810 0%, transparent 50%),
-                /* Capa 2: triángulos y hexágonos sutiles (con pseudo SVG) */
                 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='120' viewBox='0 0 200 120'%3E%3Cpath d='M40,20 L60,40 L20,40 Z' fill='%2381c784' opacity='0.03'/%3E%3Cpath d='M160,100 L180,80 L140,80 Z' fill='%23ffd54f' opacity='0.03'/%3E%3Cpath d='M100,60 L110,77.3 L90,77.3 Z' fill='%234fc3f7' opacity='0.02'/%3E%3Cpath d='M70,90 L80,107.3 L60,107.3 Z' fill='%23ba68c8' opacity='0.02'/%3E%3C/svg%3E"),
-                /* Capa 3: líneas suaves - ejes, malla */
                 linear-gradient(transparent 98%, #00c9ff20 98%, #00c9ff20 100%),
                 linear-gradient(90deg, transparent 98%, #92fe9d20 98%, #92fe9d20 100%),
                 repeating-linear-gradient(45deg, transparent, transparent 10px, #e0e0e008 10px, #e0e0e008 11px),
-                /* Capa base blanca */
                 white;
             background-size: 
                 400px 400px, 400px 400px, 400px 400px, 400px 400px,
@@ -262,7 +257,6 @@
                 0 0;
         }
 
-        /* ✅ Refuerzo: líneas de fondo con ::before y ::after */
         .certificate::before,
         .certificate::after {
             content: '';
@@ -275,7 +269,6 @@
             z-index: 0;
         }
 
-        /* Líneas diagonales sutiles (malla de aprendizaje) */
         .certificate::before {
             background: 
                 linear-gradient(135deg, transparent 98%, #00c9ff10 98%, #00c9ff10 100%),
@@ -283,14 +276,11 @@
             background-size: 60mm 60mm;
         }
 
-        /* Hexágonos y círculos dispersos (simbolismo STEM/educación) */
         .certificate::after {
             background:
-                /* Círculos */
                 radial-gradient(circle, #ffd54f15 0%, transparent 60%) 20% 15%,
                 radial-gradient(circle, #ba68c815 0%, transparent 50%) 85% 25%,
                 radial-gradient(circle, #81c78415 0%, transparent 55%) 15% 80%,
-                /* Hexágonos como SVG inline */
                 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpolygon points='50,5 67,15 67,35 50,45 33,35 33,15' fill='%234fc3f7' opacity='0.04'/%3E%3C/svg%3E") 70% 75%,
                 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpolygon points='50,5 67,15 67,35 50,45 33,35 33,15' fill='%23ffd54f' opacity='0.03'/%3E%3C/svg%3E") 30% 65%;
             background-size: 80px 80px, 70px 70px, 75px 75px, 60px 60px, 55px 55px;
@@ -304,7 +294,7 @@
             flex-direction: column;
             justify-content: space-between;
             position: relative;
-            z-index: 1; /* Para que el contenido esté encima del fondo */
+            z-index: 1;
         }
         
         .certificate-header {
@@ -592,6 +582,7 @@
             <h3>📌 Instrucciones:</h3>
             <ul>
                 <li>Complete todos los campos con la información del estudiante</li>
+                <li>El <strong>nombre y grado</strong> deben coincidir EXACTAMENTE con un registro de la <em>Tabla de Resultados</em></li>
                 <li>Ingrese el código de verificación que aparece arriba</li>
                 <li>Haga clic en "Generar Certificado" para crear una vista previa</li>
                 <li>Revise el certificado y haga clic en "Descargar PDF" para guardar</li>
@@ -605,18 +596,18 @@
                     <div class="form-group">
                         <label for="studentName">Nombre Completo:</label>
                         <input type="text" id="studentName" placeholder="Ingrese el nombre completo del estudiante">
-                        <div class="form-info">Ej: Juan Carlos Pérez Rodríguez</div>
+                        <div class="form-info">Ej: Ana María Gómez (debe coincidir con la tabla)</div>
                     </div>
                     <div class="form-group">
                         <label for="grade">Grado o Nivel Educativo:</label>
-                        <input type="text" id="grade" placeholder="Ej: 8º Básico, 2º Medio, 4º Primaria">
-                        <div class="form-info">Ej: 5º Básico, II Medio, 10º, etc.</div>
+                        <input type="text" id="grade" placeholder="Ej: 6-1, 7-2, 11°">
+                        <div class="form-info">Ej: 6-1, 7-2, 11° (igual que en la tabla)</div>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="area">Área de Participación:</label>
                     <input type="text" id="area" placeholder="Ingrese el área específica">
-                    <div class="form-info">Ej: Ciencias Naturales, Ciencias Sociales, Lenguaje, Matemáticas</div>
+                    <div class="form-info">Ej: Ciencias Naturales, Matemáticas, etc.</div>
                 </div>
                 
                 <div class="verification-section">
@@ -637,6 +628,13 @@
                         <div class="error-message" id="verificationError">❌ El código de verificación no coincide</div>
                     </div>
                 </div>
+
+                <!-- ✅ MENSAJE DE ERROR INTEGRADO PARA ESTUDIANTE NO ENCONTRADO -->
+                <div class="error-message" id="studentNotFoundError" style="display:none; margin-top:12px; background:#fff8f8; padding:12px; border-radius:8px; border-left:4px solid #e74c3c;">
+                    ❌ <strong>Estudiante no encontrado.</strong><br>
+                    El nombre y grado ingresados no coinciden con ningún registro en la <em>Tabla de Resultados de examenes y /o pruebas</em>.<br>
+                    Verifique tildes, espacios y formato del grado (ej: <code>6-1</code>, no <code>6°</code>).
+                </div>
                 
                 <button id="generateBtn" class="btn">✨ Generar Certificado de Participación</button>
             </div>
@@ -644,7 +642,7 @@
         
         <div class="card">
             <div class="preview-section">
-                <h2 class="preview-title">Vista Previa del Certificado (Tamaño Oficio)</h2>
+                <h2 class="preview-title">Vista Previa del Certificado (Tamaño Oficio: 21.6 × 33 cm)</h2>
                 <div class="certificate-container">
                     <div class="certificate-wrapper">
                         <div class="certificate" id="certificate">
@@ -689,7 +687,7 @@
                             <polyline points="7 10 12 15 17 10"></polyline>
                             <line x1="12" y1="15" x2="12" y2="3"></line>
                         </svg>
-                        Descargar Certificado en PDF (Tamaño Oficio)
+                        Descargar Certificado en PDF (Tamaño Oficio: 21.6 × 33 cm)
                     </button>
                 </div>
             </div>
@@ -722,6 +720,7 @@
             document.getElementById('verificationCode').textContent = currentCode;
             document.getElementById('verificationInput').value = '';
             document.getElementById('verificationError').style.display = 'none';
+            document.getElementById('studentNotFoundError').style.display = 'none';
         });
         
         // Validar código de verificación en tiempo real
@@ -735,40 +734,91 @@
                 errorElement.style.display = 'none';
             }
         });
-        
-        // Función para generar el certificado
+
+        // ✅ OBTENER LISTA DE ESTUDIANTES (igual que en tabla de resultados)
+        function obtenerListaEstudiantesCompleta() {
+            const estudiantesFijos = [
+                { codigo: '101', nombre: 'Ana María Gómez', grado: '6-1' },
+                { codigo: '102', nombre: 'Carlos David Torres', grado: '6-2' },
+                { codigo: '103', nombre: 'Laura Sofía Pérez', grado: '6-1' },
+                { codigo: '104', nombre: 'Miguel Ángel Rojas', grado: '6-2' },
+                { codigo: '105', nombre: 'Valeria Patricia Castro', grado: '6-2' }
+            ];
+
+            let adicionales = [];
+            try {
+                const data = localStorage.getItem('lista_estudiantes_adicionales');
+                if (data) adicionales = JSON.parse(data);
+            } catch (e) {
+                console.warn("No se pudieron cargar estudiantes adicionales:", e);
+                localStorage.removeItem('lista_estudiantes_adicionales');
+            }
+
+            return [...estudiantesFijos, ...adicionales].map(est => ({
+                codigo: est.codigo,
+                nombre: est.nombre.trim().toLowerCase(),
+                grado: est.grado.trim().toLowerCase()
+            }));
+        }
+
+        // ✅ BUSCAR ESTUDIANTE POR NOMBRE Y GRADO (case-insensitive, trim)
+        function buscarEstudiante(nombre, grado) {
+            const lista = obtenerListaEstudiantesCompleta();
+            const nombreNorm = nombre.trim().toLowerCase();
+            const gradoNorm = grado.trim().toLowerCase();
+
+            return lista.find(est =>
+                est.nombre === nombreNorm && est.grado === gradoNorm
+            );
+        }
+
+        // ✅ GENERAR CERTIFICADO (con validación de existencia)
         document.getElementById('generateBtn').addEventListener('click', function() {
-            const name = document.getElementById('studentName').value.trim();
-            const grade = document.getElementById('grade').value.trim();
-            const area = document.getElementById('area').value.trim();
+            const nombreInput = document.getElementById('studentName').value;
+            const gradoInput = document.getElementById('grade').value;
+            const areaInput = document.getElementById('area').value;
             const verificationInput = document.getElementById('verificationInput').value.trim().toUpperCase();
             
+            // Ocultar errores previos
+            document.getElementById('verificationError').style.display = 'none';
+            document.getElementById('studentNotFoundError').style.display = 'none';
+
             // Validar campos obligatorios
-            if (!name || !grade || !area) {
-                alert('Por favor complete todos los campos obligatorios (Nombre, Grado y Área de Participación).');
+            if (!nombreInput.trim() || !gradoInput.trim() || !areaInput.trim()) {
+                alert('⚠️ Por favor complete todos los campos: Nombre, Grado y Área de Participación.');
                 return;
             }
-            
+
             // Validar código de verificación
             if (verificationInput !== currentCode) {
                 document.getElementById('verificationError').style.display = 'block';
-                alert('❌ El código de verificación no coincide. Por favor verifique e intente nuevamente.');
                 return;
             }
+
+            // ✅ 🔍 BUSCAR ESTUDIANTE EN LA LISTA DE LA TABLA DE RESULTADOS
+            const estudiante = buscarEstudiante(nombreInput, gradoInput);
+
+            if (!estudiante) {
+                // ❌ NO EXISTE → mostrar error integrado
+                document.getElementById('studentNotFoundError').style.display = 'block';
+                // Desplazar hasta el error
+                document.getElementById('studentNotFoundError').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
+
+            // ✅ EXISTE → cargar datos en vista previa
+            document.getElementById('previewName').textContent = nombreInput;
+            document.getElementById('previewGrade').textContent = gradoInput;
+            document.getElementById('previewArea').textContent = areaInput;
             
-            // Actualizar la vista previa
-            document.getElementById('previewName').textContent = name;
-            document.getElementById('previewGrade').textContent = grade;
-            document.getElementById('previewArea').textContent = area;
-            
-            // Habilitar botón de descarga
+            // Habilitar descarga
             document.getElementById('downloadBtn').disabled = false;
-            
+
             // Scroll suave hasta la vista previa
             document.querySelector('.preview-section').scrollIntoView({ behavior: 'smooth' });
         });
         
-        // Función para descargar el certificado como PDF
+        // ✅ DESCARGAR CERTIFICADO
         document.getElementById('downloadBtn').addEventListener('click', function() {
             const name = document.getElementById('previewName').textContent;
             if (name === 'NOMBRE DEL ESTUDIANTE') {
@@ -776,18 +826,15 @@
                 return;
             }
             
-            // Mostrar mensaje de carga
+            // Mensaje de carga
             const originalBtnText = this.innerHTML;
             this.innerHTML = '<span>🎨 Generando certificado con IA NOVA... ⏳</span>';
             this.disabled = true;
             
             const certificate = document.getElementById('certificate');
-            
-            // Ajustar el contenedor para la captura
             const originalTransform = certificate.style.transform;
             certificate.style.transform = 'scale(1)';
             
-            // Configurar html2canvas
             html2canvas(certificate, {
                 scale: 2,
                 useCORS: true,
@@ -801,35 +848,40 @@
             }).then(canvas => {
                 const imgData = canvas.toDataURL('image/png', 1.0);
                 
-                // Crear PDF en tamaño oficio vertical
-                const pdf = new jspdf.jsPDF({
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF({
                     orientation: 'portrait',
                     unit: 'mm',
-                    format: [216, 330]
+                    format: [216, 330] // Oficio chileno/colombiano
                 });
                 
                 pdf.addImage(imgData, 'PNG', 0, 0, 216, 330);
                 
-                // Descargar el PDF
-                const studentName = document.getElementById('studentName').value.replace(/\s+/g, '_');
-                pdf.save(`certificado_participacion_${studentName}.pdf`);
+                // Nombre seguro para archivo
+                const safeName = nombreInput.trim()
+                    .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // quita tildes
+                    .replace(/[<>:"/\\|?*\x00-\x1F]/g, '_') // quita caracteres inválidos
+                    .replace(/\s+/g, '_')
+                    .substring(0, 50);
                 
-                // Restaurar transformación y botón
+                pdf.save(`certificado_participacion_${safeName}.pdf`);
+                
+                // Restaurar
                 certificate.style.transform = originalTransform;
                 this.innerHTML = originalBtnText;
                 this.disabled = false;
                 
-                alert('✅ Certificado generado exitosamente con IA NOVA\n\nEl archivo PDF ha sido descargado en tamaño oficio vertical (21.6cm x 33cm) con ajuste perfecto.');
+                alert('✅ Certificado generado exitosamente con IA NOVA\n\nArchivo descargado en tamaño oficio (21.6 × 33 cm).');
             }).catch(error => {
                 console.error('Error al generar el PDF:', error);
-                alert('❌ Hubo un error al generar el PDF. Por favor intente nuevamente.\nError: ' + error.message);
+                alert('❌ Error al generar el PDF. Intente nuevamente.\nDetalles: ' + (error.message || 'Desconocido'));
                 certificate.style.transform = originalTransform;
                 this.innerHTML = originalBtnText;
                 this.disabled = false;
             });
         });
         
-        // Generar nuevo código cada 3 minutos para seguridad
+        // Renovar código cada 3 minutos
         setInterval(function() {
             currentCode = generateVerificationCode();
             document.getElementById('verificationCode').textContent = currentCode;
