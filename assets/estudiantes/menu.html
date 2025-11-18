@@ -48,10 +48,10 @@
 
         /* --- Estilos del Flip Card (Contenedor de Botón y Reverso) --- */
         .boton-container {
-            perspective: 1000px; /* Para el efecto 3D */
+            perspective: 1000px;
             display: block;
             width: 90%; 
-            height: 58px; /* Altura fija para evitar saltos al girar */
+            height: 58px;
             margin: 15px auto;
         }
 
@@ -72,7 +72,7 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            -webkit-backface-visibility: hidden; /* Oculta la cara trasera al girar */
+            -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
             border-radius: 10px;
             display: flex;
@@ -96,63 +96,99 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
         }
 
-        /* --- Estilo de la Cara Trasera (Formulario) --- */
+        /* --- Estilo de la Cara Trasera (Formulario de Sextos) --- */
         .card-back {
-            background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
-            transform: rotateY(180deg); /* La cara trasera está inicialmente volteada */
-            padding: 0 5px;
+            background: linear-gradient(135deg, #2c3e50, #4a6491);
+            transform: rotateY(180deg);
+            padding: 0 8px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            color: #333;
+            justify-content: center;
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
         }
+
         .card-back form {
             display: flex;
             width: 100%;
-            gap: 5px;
-            padding: 0 10px;
+            gap: 8px;
+            padding: 10px 12px;
+            align-items: center;
         }
+
         .card-back input {
-            flex-grow: 1;
-            padding: 5px 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 14px;
+            flex: 1;
+            padding: 12px 16px 12px 38px; /* espacio para ícono */
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            background: rgba(255, 255, 255, 0.92);
+            color: #2c3e50;
+            outline: none;
+            box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
         }
+
+        .card-back input::placeholder {
+            color: #7f8c8d;
+            font-style: italic;
+        }
+
+        .card-back input:focus {
+            background: white;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.4), inset 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* ✅ Botón Ingresar — estilo premium */
         .card-back button {
-            padding: 5px 10px;
-            background-color: #007bff;
+            background: linear-gradient(135deg, #00b09b, #96c93d);
             color: white;
             border: none;
-            border-radius: 5px;
-            font-size: 14px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 12px 20px;
             cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 176, 155, 0.3);
+            min-width: 85px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
+
         .card-back button:hover {
-            background-color: #0056b3;
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 6px 14px rgba(0, 176, 155, 0.5);
         }
 
+        .card-back button:active {
+            transform: translateY(1px) scale(0.99);
+            box-shadow: 0 2px 6px rgba(0, 176, 155, 0.4);
+        }
 
-        /* --- Colores de Grado --- */
+        /* --- Colores de Grado (otros botones) --- */
         .sextos .card-front {
             background: linear-gradient(45deg, #e0f7fa, #80deea);
         }
         .septimo .card-front {
             background: linear-gradient(45deg, #ffcdd2, #ef9a9a);
         }
-        /* Los demás grados son botones simples */
+
         .octavos, .novenos, .decimos, .once {
-             padding: 15px 18px; /* Estilo de botón simple */
-             border-radius: 10px;
-             font-size: 22px;
-             font-weight: bold;
-             color: #000;
-             cursor: pointer;
-             transition: transform 0.2s, box-shadow 0.3s;
-             display: block;
-             width: 90%;
-             margin: 15px auto;
-             border: none;
+            padding: 15px 18px;
+            border-radius: 10px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #000;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.3s;
+            display: block;
+            width: 90%;
+            margin: 15px auto;
+            border: none;
         }
         .octavos:hover, .novenos:hover, .decimos:hover, .once:hover {
             transform: scale(1.02);
@@ -164,8 +200,42 @@
         .decimos { background: linear-gradient(45deg, #e1bee7, #ce93d8); }
         .once { background: linear-gradient(45deg, #c5e1a5, #aed581); }
 
+        /* --- Feedback visual: error y éxito --- */
+        .input-error {
+            animation: shake 0.5s, borderColorError 0.4s forwards;
+        }
+        .input-success {
+            animation: borderColorSuccess 0.4s forwards;
+            box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.5) !important;
+        }
 
-        /* Anuncio de actualización y otros estilos (sin cambios) */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
+        }
+
+        @keyframes borderColorError {
+            to { 
+                border-color: #e74c3c; 
+                box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.3), inset 0 2px 6px rgba(0, 0, 0, 0.1); 
+            }
+        }
+
+        @keyframes borderColorSuccess {
+            to { border-color: #2ecc71; }
+        }
+
+        #clave-sextos.input-error {
+            border: 2px solid #e74c3c !important;
+            background: #fdf2f2;
+        }
+        #clave-sextos.input-success {
+            border: 2px solid #2ecc71 !important;
+            background: #f2fdf5;
+        }
+
+        /* --- Anuncio de actualización --- */
         #anuncioActualizacion {
             display: none;
             position: fixed;
@@ -257,9 +327,13 @@
             .card-front {
                 font-size: 18px;
             }
-            .card-back input, .card-back button {
-                font-size: 12px;
-                padding: 4px 8px;
+            .card-back input {
+                font-size: 14px;
+                padding: 10px 14px 10px 34px;
+            }
+            .card-back button {
+                font-size: 14px;
+                padding: 10px 16px;
             }
             #btn-volver {
                 font-size: 13px;
@@ -275,6 +349,7 @@
     <div class="cuadro">
         <h2>Seleccione su grado</h2>
         
+        <!-- Botón Sextos con flip card mejorado -->
         <div class="boton-container sextos">
             <div class="flip-card" id="flip-sextos">
                 <button class="card-face card-front" onclick="flipCard('flip-sextos')">
@@ -282,14 +357,17 @@
                 </button>
                 <div class="card-face card-back">
                     <form onsubmit="return validarAcceso(event, 'clave-sextos')">
-                        <input type="password" id="clave-sextos" placeholder="Ingrese clave" required>
+                        <div style="position: relative; flex: 1;">
+                            <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #95a5a6; font-size: 18px;">🔒</span>
+                            <input type="password" id="clave-sextos" placeholder="Clave de acceso" required>
+                        </div>
                         <button type="submit">Ingresar</button>
                     </form>
                 </div>
             </div>
         </div>
         
-        
+        <!-- Otros grados -->
         <button class="octavos" onclick="mostrarAnuncioActualizacion()">📙 Séptimo</button>
         <button class="octavos" onclick="mostrarAnuncioActualizacion()">📗 Octavos</button>
         <button class="novenos" onclick="mostrarAnuncioActualizacion()">📕 Novenos</button>
@@ -304,83 +382,81 @@
     <div id="anuncioActualizacion">
         <div class="contenido">
             <h2> 📢 </h2>
-            <h3> Esta página se encuentra Inabilitada</h>
+            <h3> Esta página se encuentra Inabilitada</h3>
             <p>Pronto estarán disponibles los módulos de estos grados.</p>
             <button onclick="cerrarAnuncioActualizacion()">Cerrar</button>
         </div>
     </div>
 
     <script>
-        // --- Configuración de Contraseñas y Destinos ---
+        // --- Contraseñas y destinos ---
         const passwords = {
-            // GRADO SEXTO
             "sextos_estudiante": "menu_sextos_estudiante.html", 
             "sextos26": "sexto/areas1.html",
-            
-            // GRADO SÉPTIMO
             "septimo_estudiante": "menu_septimo_estudiante.html", 
             "septimo_profe": "menu_septimo_profe.html"
         };
         
-        let activeFlipCard = null; // Para rastrear qué tarjeta está girada
+        let activeFlipCard = null;
 
-        // --- Funciones de Interfaz ---
+        // --- Voltear tarjeta ---
         function flipCard(cardId) {
             const card = document.getElementById(cardId);
             
-            // Si hay otra tarjeta activa, la volteamos de nuevo al frente
             if (activeFlipCard && activeFlipCard !== card) {
                 activeFlipCard.classList.remove('flipped');
-                // Limpiamos su campo de contraseña
                 const prevInput = activeFlipCard.querySelector('input[type="password"]');
                 if (prevInput) prevInput.value = '';
             }
             
-            // Voltea la tarjeta actual
             card.classList.toggle('flipped');
             
             if (card.classList.contains('flipped')) {
                 activeFlipCard = card;
-                // Enfoca el campo de contraseña en la cara trasera
                 setTimeout(() => {
                     const input = card.querySelector('input[type="password"]');
                     if (input) input.focus();
-                }, 300); // Espera a que el giro termine a medias
+                }, 300);
             } else {
                 activeFlipCard = null;
             }
         }
 
-        // --- Lógica de Validación de Acceso ---
+        // --- Validar acceso con feedback visual ---
         function validarAcceso(event, inputId) {
-            event.preventDefault(); // Previene el envío estándar del formulario
-            
+            event.preventDefault();
             const input = document.getElementById(inputId);
             const claveIngresada = input.value.trim();
 
-            // 1. Manejo de campo vacío
+            // Limpiar clases previas
+            input.classList.remove('input-error', 'input-success');
+
             if (claveIngresada === '') {
-                alert("Por favor, ingrese una clave.");
+                input.classList.add('input-error');
+                setTimeout(() => input.classList.remove('input-error'), 500);
+                alert("⚠️ Por favor, ingrese una clave.");
                 input.focus();
                 return false;
             }
 
-            // 2. Búsqueda de la clave en el objeto 'passwords'
-            const destino = passwords[claveIngresada]; 
+            const destino = passwords[claveIngresada];
 
             if (destino) {
-                // Clave correcta, redirigir
-                window.location.href = destino; 
+                input.classList.add('input-success');
+                setTimeout(() => {
+                    window.location.href = destino;
+                }, 300);
             } else {
-                // 3. Clave incorrecta: Muestra alerta y limpia/enfoca el input
-                alert("Clave de acceso incorrecta. Inténtelo de nuevo.");
+                input.classList.add('input-error');
+                setTimeout(() => input.classList.remove('input-error'), 500);
+                alert("❌ Clave incorrecta. Inténtelo de nuevo.");
                 input.value = '';
                 input.focus();
             }
             return false;
         }
 
-        // --- Funciones para el Anuncio de Actualización (Sin cambios) ---
+        // --- Anuncio de actualización ---
         function mostrarAnuncioActualizacion() {
             document.getElementById("anuncioActualizacion").style.display = "flex";
         }
