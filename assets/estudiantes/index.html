@@ -11,7 +11,7 @@
     }
 
     body {
-      background: url(img/fondo2.jpg) no-repeat center center fixed;
+      background: url(img/fondo6.jpg) no-repeat center center fixed;
       background-size: cover;
       margin: 0;
       padding: 0;
@@ -186,89 +186,162 @@
     </form>
   </div>
 
+
+<!-- Overlay para opacar fondo -->
+<div id="overlay" style="
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s;
+"></div>
+
+
+<div id="mensaje-error" 
+     role="alert" 
+     aria-live="assertive"
+     aria-atomic="true"
+     style="
+       position: fixed;
+       top: 50%;
+       left: 50%;
+       transform: translate(-50%, -50%) scale(0.9);
+       background: rgba(220, 53, 69, 0.95);
+       color: white;
+       padding: 16px 24px;
+       border-radius: 10px;
+       font-size: 18px;
+       font-weight: bold;
+       text-align: center;
+       box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+       z-index: 1000;
+       opacity: 0;
+       transition: opacity 0.4s ease, transform 0.4s ease;
+       pointer-events: none;
+     ">
+  <!-- Mensaje dinámico -->
+</div>
+
   <footer>
     © 2025 Institución Educativa colucas - Derechos reservados
   </footer>
 
-  <script>
-    const togglePassword = document.getElementById('togglePassword');
-    const passwordInput = document.getElementById('clave');
-    const submitButton = document.querySelector('.button');
-    const loader = document.getElementById('loader');
+ <script>
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('clave');
+    const submitButton = document.querySelector('.button');
+    const loader = document.getElementById('loader');
+    const mensajeError = document.getElementById('mensaje-error'); // Obtener el elemento del mensaje de error
+    const overlay = document.getElementById('overlay'); // Obtener el elemento del overlay
 
-    // --- Password Toggle Logic ---
-    togglePassword.addEventListener('click', () => {
-      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-      passwordInput.setAttribute('type', type);
-      togglePassword.style.fill = type === 'password' ? 'rgba(0, 0, 0, 0.4)' : '#013adf';
-    });
+    // --- Password Toggle Logic ---
+    togglePassword.addEventListener('click', () => {
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
+      togglePassword.style.fill = type === 'password' ? 'rgba(0, 0, 0, 0.4)' : '#013adf';
+    });
 
-    togglePassword.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        togglePassword.click();
-      }
-    });
+    togglePassword.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        togglePassword.click();
+      }
+    });
 
-    // --- Access (Login) Logic ---
-    function acceso() {
-      const claveCorrecta = "Educolucas25";
-      const claveIngresada = passwordInput.value.trim();
+    // --- Mostrar mensaje de error centrado con overlay ---
+    function mostrarError(mensaje) {
+        mensajeError.textContent = mensaje;
+        mensajeError.style.opacity = '1';
+        // Ajustar el transform para centrarlo y darle la animación de entrada
+        mensajeError.style.transform = 'translate(-50%, -50%) scale(1)';
+        mensajeError.setAttribute('aria-hidden', 'false');
 
-      if (claveIngresada === '') {
-        passwordInput.focus();
-        return false;
-      }
+        // Activar overlay para opacar el fondo
+        overlay.style.opacity = '1';
+        overlay.style.visibility = 'visible';
+        overlay.setAttribute('aria-hidden', 'false');
 
-      submitButton.disabled = true;
-      loader.style.display = 'block';
-      loader.setAttribute('aria-hidden', 'false');
 
-      setTimeout(() => {
-        loader.style.display = 'none';
-        loader.setAttribute('aria-hidden', 'true');
-        submitButton.disabled = false;
-
-        if (claveIngresada === claveCorrecta) {
-          window.location.href = "menu.html";
-        } else {
-          alert("Contraseña incorrecta. Inténtelo nuevamente.");
-          passwordInput.value = '';
-          passwordInput.focus();
-        }
-      }, 1500);
-
-      return false;
+        // Ocultar automáticamente después de 4 segundos
+        setTimeout(() => {
+            ocultarError();
+        }, 4000);
     }
 
-    // --- New Keyboard Shortcut Logic (Ctrl + F3) ---
-    document.addEventListener('keydown', (event) => {
-      // Check for Ctrl key (or Cmd key on Mac) and F3 key
-      const isCtrlOrCmd = event.ctrlKey || event.metaKey; // event.metaKey is for Cmd on Mac
-      const isF3 = event.key === 'F3' || event.keyCode === 114; // F3 key code is 114
+    function ocultarError() {
+        mensajeError.style.opacity = '0';
+        // Animación de salida
+        mensajeError.style.transform = 'translate(-50%, -50%) scale(0.9)';
+        mensajeError.setAttribute('aria-hidden', 'true');
 
-      if (isCtrlOrCmd && isF3) {
-        event.preventDefault(); // Prevent default browser action for Ctrl + F3
-        window.location.href = "certificados.html"; // Navigate to index.html
-      }
-    });
+        // Desactivar overlay
+        overlay.style.opacity = '0';
+        overlay.style.visibility = 'hidden';
+        overlay.setAttribute('aria-hidden', 'true');
+    }
 
-// --- New Keyboard Shortcut Logic (Ctrl + F5) ---
-    document.addEventListener('keydown', (event) => {
-      // Check for Ctrl key (or Cmd key on Mac) and F5 key
-      const isCtrlOrCmd = event.ctrlKey || event.metaKey; // event.metaKey is for Cmd on Mac
-      const isF5 = event.key === 'F5' || event.keyCode === 116; // F3 key code is 114
+    // --- Access (Login) Logic - MODIFICADO ---
+    function acceso() {
+      const claveCorrecta = "Educolucas25";
+      const claveIngresada = passwordInput.value.trim();
 
-      if (isCtrlOrCmd && isF5) {
-        event.preventDefault(); // Prevent default browser action for Ctrl + F3
-        window.location.href = "resultados2.html"; // Navigate to index.html
-      }
-    });
+      if (claveIngresada === '') {
+        passwordInput.focus();
+        return false;
+      }
 
+      submitButton.disabled = true;
+      loader.style.display = 'block';
+      loader.setAttribute('aria-hidden', 'false');
 
+      setTimeout(() => {
+        loader.style.display = 'none';
+        loader.setAttribute('aria-hidden', 'true');
+        submitButton.disabled = false;
 
+        if (claveIngresada === claveCorrecta) {
+          window.location.href = "menu.html";
+        } else {
+          // *** CAMBIO AQUÍ: Llamar a la función de modal de error centrado ***
+          mostrarError("Contraseña incorrecta. Inténtelo nuevamente.");
+          passwordInput.value = '';
+          passwordInput.focus();
+        }
+      }, 1500);
 
-  </script>
+      return false;
+    }
+
+    // Ya no necesitas duplicar mostrarError y ocultarError aquí, las he movido arriba y ajustado.
+    // Además, eliminé las duplicadas que tenías en el código original para mantenerlo limpio.
+
+    // --- New Keyboard Shortcut Logic (Ctrl + F3) ---
+    document.addEventListener('keydown', (event) => {
+      // Check for Ctrl key (or Cmd key on Mac) and F3 key
+      const isCtrlOrCmd = event.ctrlKey || event.metaKey; // event.metaKey is for Cmd on Mac
+      const isF3 = event.key === 'F3' || event.keyCode === 114; // F3 key code is 114
+
+      if (isCtrlOrCmd && isF3) {
+        event.preventDefault(); // Prevent default browser action for Ctrl + F3
+        window.location.href = "certificados.html"; // Navigate to certificados.html
+      }
+    });
+
+    // --- New Keyboard Shortcut Logic (Ctrl + F5) ---
+    document.addEventListener('keydown', (event) => {
+      // Check for Ctrl key (or Cmd key on Mac) and F5 key
+      const isCtrlOrCmd = event.ctrlKey || event.metaKey; // event.metaKey is for Cmd on Mac
+      const isF5 = event.key === 'F5' || event.keyCode === 116; // F5 key code is 116
+
+      if (isCtrlOrCmd && isF5) {
+        event.preventDefault(); // Prevent default browser action for Ctrl + F5
+        window.location.href = "resultados2.html"; // Navigate to resultados2.html
+      }
+    });
+  </script>
 
 <script 
     src="https://cdn.builderbot.cloud/sdk.umd.js" 
