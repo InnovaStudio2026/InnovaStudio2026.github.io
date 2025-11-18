@@ -10,36 +10,31 @@
         /* CSS: ESTILOS CON LOGO, FUENTES PERSONALIZADAS Y DEGRADADO */
         /* ======================================================= */
 
-        /* Importación de fuentes de Google Fonts */
-        @import url('https://fonts.com/css2?family=Montserrat:wght@400;600;800&family=Roboto:wght@300;400&family=Playfair+Display:ital,wght@1,700&family=Lato:wght@300&display=swap');
+        /* ✅ CORREGIDO: URL de Google Fonts (antes era fonts.com) */
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Roboto:wght@300;400&family=Playfair+Display:ital,wght@1,700&family=Lato:wght@300&display=swap');
 
         :root {
-            --color-principal: #28a745; /* Verde Bosque para énfasis */
-            --color-fondo: #f8f9fa; /* Beige muy suave */
-            --color-texto: #495057; /* Gris oscuro para el cuerpo */
-            
-            /* NUEVO: Colores para el degradado del header */
-            --header-color-1: #2c3e50; /* Azul muy oscuro */
-            --header-color-2: #34495e; /* Azul grisáceo */
-            --header-color-3: #2c3e50; /* Repetir el primero para un efecto más sutil */
-
+            --color-principal: #28a745;
+            --color-fondo: #f8f9fa;
+            --color-texto: #495057;
+            --header-color-1: #2c3e50;
+            --header-color-2: #34495e;
+            --header-color-3: #2c3e50;
             --color-card-bg: #ffffff;
             --sombra-suave: 0 4px 12px rgba(0, 0, 0, 0.08);
-            --color-bloqueo: #ccc; 
-
-            /* Colores de Áreas de Conocimiento */
-            --area-quimica: #dc3545;    /* Rojo Ladrillo */
-            --area-fisica: #007bff;     /* Azul Medianoche */
-            --area-biologia: #17a2b8;   /* Turquesa */
-            --area-matematicas: #ffc107;/* Amarillo Mostaza */
-            --area-informatica: #6f42c1;/* Púrpura */
-            --area-literatura: #fd7e14; /* Naranja Oscuro */
-            --area-historia: #6c757d;   /* Gris Pizarra */
-            --area-geografia: #20c997;  /* Menta */
-            --area-idiomas: #343a40;    /* Negro Suave */
-            --area-arte: #e83e8c;       /* Rosa Fuerte */
-            --area-economia: #6610f2;   /* Índigo */
-            --area-agropecuarias: #6c8c36; /* Verde Oliva Intenso */
+            --color-bloqueo: #ccc;
+            --area-quimica: #dc3545;
+            --area-fisica: #007bff;
+            --area-biologia: #17a2b8;
+            --area-matematicas: #ffc107;
+            --area-informatica: #6f42c1;
+            --area-literatura: #fd7e14;
+            --area-historia: #6c757d;
+            --area-geografia: #20c997;
+            --area-idiomas: #343a40;
+            --area-arte: #e83e8c;
+            --area-economia: #6610f2;
+            --area-agropecuarias: #6c8c36;
         }
 
         * {
@@ -52,89 +47,87 @@
             background-color: var(--color-fondo);
             color: var(--color-texto);
             line-height: 1.6;
-            font-family: 'Roboto', sans-serif; /* Fuente base para el cuerpo */
+            font-family: 'Roboto', sans-serif;
         }
 
-        /* ---------------------- HEADER Y LOGO (MODIFICADO) ---------------------- */
+        .lab-header {
+            background: linear-gradient(90deg, var(--header-color-1) 0%, var(--header-color-2) 50%, var(--header-color-3) 100%);
+            color: white;
+            padding: 30px 20px;
+            box-shadow: var(--sombra-suave);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
+        #colegio-logo {
+            position: absolute;
+            left: 90px;
+            height: 120px;
+            width: auto;
+            top: 50%;
+            transform: translateY(-50%);
+            max-width: 180px;
+        }
 
-/* Modificación de la cabecera para mejor alineación */
-.lab-header {
-    /* Mantener el degradado y la posición relativa */
-    background: linear-gradient(90deg, var(--header-color-1) 0%, var(--header-color-2) 50%, var(--header-color-3) 100%);
-    color: white;
-    padding: 30px 20px;
-    box-shadow: var(--sombra-suave);
-    position: relative; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-}
+        /* ✅ Fallback visual si la imagen no carga */
+        #colegio-logo[alt]::after {
+            content: "[Logo]";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 14px;
+            color: rgba(255,255,255,0.7);
+        }
 
-#colegio-logo {
-    position: absolute; 
-    /* AJUSTES SOLICITADOS */
-    left: 90px;        /* 3 cm (30px) de distancia desde la izquierda */
-    height: 120px;      /* Tamaño un poco más grande (ajustado de 70px a 90px) */
-    width: auto;
-    
-    top: 50%;          
-    transform: translateY(-50%); 
-    max-width: 180px;  /* Límite de ancho para pantallas grandes */
-}
+        .header-content {
+            flex-grow: 1;
+            text-align: center;
+            margin-left: 140px;
+            margin-right: 140px;
+        }
 
-.header-content {
-    flex-grow: 1; 
-    text-align: center;
-    /* Ajuste de margen para evitar que el texto se solape con el logo más grande y movido a la derecha (30px + espacio extra) */
-    margin-left: 140px; 
-    margin-right: 140px;
-}
-
-/* El resto de las reglas para .institucion-logo, .institucion-slogan y Media Queries se mantienen igual */
-
-/* AJUSTE PARA MÓVILES (es importante revisarlo) */
-@media (max-width: 768px) {
-    .lab-header {
-        flex-direction: column; 
-        padding: 20px 10px;
-    }
-    #colegio-logo {
-        position: static; 
-        transform: none; 
-        margin-bottom: 15px; 
-        height: 60px; /* Mantener un tamaño pequeño en móviles */
-    }
-    .header-content {
-        margin: 0; 
-    }
-}
-
+        @media (max-width: 768px) {
+            .lab-header {
+                flex-direction: column;
+                padding: 20px 10px;
+            }
+            #colegio-logo {
+                position: static;
+                transform: none;
+                margin-bottom: 15px;
+                height: 60px;
+            }
+            .header-content {
+                margin: 0;
+            }
+        }
 
         .institucion-logo {
-            font-family: 'Playfair Display', serif; /* NUEVO: Fuente cursiva */
-            font-size: 3.5em; /* NUEVO: Tamaño de letra grande */
-            font-weight: 700; /* Negrita */
-            font-style: italic; /* Cursiva */
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5em;
+            font-weight: 700;
+            font-style: italic;
             margin-bottom: 5px;
             letter-spacing: 2px;
-            color: white; /* Asegurarse que el color del texto sea blanco */
+            color: white;
         }
 
         .institucion-slogan {
-            font-family: 'Lato', sans-serif; /* NUEVO: Nueva fuente para el subtítulo */
-            font-size: 1.3em; /* NUEVO: Tamaño de letra del subtítulo */
+            font-family: 'Lato', sans-serif;
+            font-size: 1.3em;
             font-weight: 300;
-            margin-bottom: 0; /* Quitado el margen inferior excesivo */
-            color: #dcdcdc; /* Un gris muy claro para el subtítulo */
+            margin-bottom: 0;
+            color: #dcdcdc;
         }
 
-        /* ---------------------- MENÚ HORIZONTAL DE ÁREAS ---------------------- */
         .menu-areas {
             background-color: white;
             padding: 10px 0;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            font-family: 'Montserrat', sans-serif; /* Usar Montserrat para el menú */
+            font-family: 'Montserrat', sans-serif;
         }
 
         .menu-areas ul {
@@ -167,7 +160,11 @@
             transform: translateY(-2px);
         }
 
-        /* Asignación de colores de áreas */
+        /* ✅ Añadido: cursor not-allowed en menú deshabilitado */
+        .menu-areas a[onclick] {
+            cursor: not-allowed;
+        }
+
         .area-quimica { background-color: var(--area-quimica); }
         .area-fisica { background-color: var(--area-fisica); }
         .area-biologia { background-color: var(--area-biologia); }
@@ -179,9 +176,8 @@
         .area-idiomas { background-color: var(--area-idiomas); }
         .area-arte { background-color: var(--area-arte); }
         .area-economia { background-color: var(--area-economia); }
-        .area-agropecuarias { background-color: var(--area-agropecuarias); } 
+        .area-agropecuarias { background-color: var(--area-agropecuarias); }
 
-        /* ---------------------- GRID DE OPCIONES ---------------------- */
         .lab-main {
             padding: 40px 20px;
             max-width: 1400px;
@@ -190,9 +186,9 @@
 
         .lab-main h2 {
             text-align: center;
-            color: var(--color-principal); 
+            color: var(--color-principal);
             margin-bottom: 30px;
-            font-family: 'Montserrat', sans-serif; 
+            font-family: 'Montserrat', sans-serif;
             font-weight: 600;
         }
 
@@ -208,7 +204,7 @@
             padding: 25px;
             box-shadow: var(--sombra-suave);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border-top: 5px solid transparent; 
+            border-top: 5px solid transparent;
             overflow: hidden;
             position: relative;
         }
@@ -217,7 +213,7 @@
             transform: translateY(-8px);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
         }
-        
+
         .area-tag {
             position: absolute;
             top: 0;
@@ -234,7 +230,7 @@
             color: var(--color-texto);
             margin-bottom: 10px;
             font-size: 1.3em;
-            padding-top: 15px; 
+            padding-top: 15px;
             font-family: 'Montserrat', sans-serif;
         }
 
@@ -249,7 +245,7 @@
             display: block;
             width: 100%;
             padding: 12px;
-            background-color: var(--color-principal); 
+            background-color: var(--color-principal);
             color: white;
             border: none;
             border-radius: 5px;
@@ -260,18 +256,18 @@
             font-family: 'Montserrat', sans-serif;
         }
 
-        .opcion-card button:hover:not(:disabled) {
-            background-color: #1e7e34; /* Tono más oscuro del nuevo color principal */
+        .opcion-card button:hover:not([onclick*="mostrarError"]) {
+            background-color: #1e7e34;
         }
-        
-        /* ---------------------- ESTILO DE BLOQUEO ---------------------- */
+
+        /* ✅ Corregido: .bloqueado solo aplica a tarjetas con clase explícita */
         .bloqueado {
             opacity: 0.4;
-            pointer-events: none; 
+            pointer-events: none;
             background-color: #f0f0f0;
             position: relative;
         }
-        
+
         .bloqueado::after {
             content: "SE ENCUENTRA INABILITADO";
             position: absolute;
@@ -287,14 +283,8 @@
             z-index: 10;
         }
 
-        .bloqueado button {
-            background-color: var(--color-bloqueo);
-            cursor: not-allowed;
-        }
-
-        /* ---------------------- MODAL DE CARGA ---------------------- */
         #loading-modal {
-            display: none; 
+            display: none;
             position: fixed;
             z-index: 1000;
             left: 0;
@@ -324,105 +314,93 @@
             to {opacity: 1;}
         }
 
-        /* ---------------------- FOOTER ---------------------- */
         .lab-footer {
             text-align: center;
             padding: 20px;
-            background: linear-gradient(90deg, var(--header-color-1) 0%, var(--header-color-2) 50%, var(--header-color-3) 100%); /* Usar el mismo degradado del header */
+            background: linear-gradient(90deg, var(--header-color-1) 0%, var(--header-color-2) 50%, var(--header-color-3) 100%);
             color: #bdc3c7;
             margin-top: 40px;
             font-size: 0.85em;
             font-family: 'Roboto', sans-serif;
         }
 
-        /* ---------------------- Mapeo de colores (Bordes de cards y tags) ---------------------- */
         .card-quimica { border-top-color: var(--area-quimica); }
         .tag-quimica { background-color: var(--area-quimica); }
-
         .card-fisica { border-top-color: var(--area-fisica); }
         .tag-fisica { background-color: var(--area-fisica); }
-
         .card-biologia { border-top-color: var(--area-biologia); }
         .tag-biologia { background-color: var(--area-biologia); }
-
         .card-matematicas { border-top-color: var(--area-matematicas); }
         .tag-matematicas { background-color: var(--area-matematicas); }
-
         .card-informatica { border-top-color: var(--area-informatica); }
         .tag-informatica { background-color: var(--area-informatica); }
-
         .card-literatura { border-top-color: var(--area-literatura); }
         .tag-literatura { background-color: var(--area-literatura); }
-
         .card-historia { border-top-color: var(--area-historia); }
         .tag-historia { background-color: var(--area-historia); }
-        
         .card-geografia { border-top-color: var(--area-geografia); }
         .tag-geografia { background-color: var(--area-geografia); }
-        
         .card-idiomas { border-top-color: var(--area-idiomas); }
         .tag-idiomas { background-color: var(--area-idiomas); }
-        
         .card-arte { border-top-color: var(--area-arte); }
         .tag-arte { background-color: var(--area-arte); }
-        
         .card-economia { border-top-color: var(--area-economia); }
         .tag-economia { background-color: var(--area-economia); }
-        
-        .card-agropecuarias { border-top-color: var(--area-agropecuarias); } 
+        .card-agropecuarias { border-top-color: var(--area-agropecuarias); }
         .tag-agropecuarias { background-color: var(--area-agropecuarias); }
 
-        /* Media Queries para responsividad */
+        #error-toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #e74c3c;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 2000;
+            display: none;
+        }
+
         @media (max-width: 768px) {
-            .lab-header {
-                flex-direction: column; /* Apilar elementos en pantallas pequeñas */
-                padding: 20px 10px;
-            }
-            #colegio-logo {
-                position: static; /* Quitar posicionamiento absoluto */
-                transform: none; /* Quitar transformación */
-                margin-bottom: 15px; /* Espacio entre logo y texto */
-                height: 60px;
-            }
-            .header-content {
-                margin: 0; /* Resetear márgenes */
-            }
-            .institucion-logo {
-                font-size: 2.5em;
-            }
-            .institucion-slogan {
-                font-size: 1em;
-            }
-            .menu-areas ul {
-                justify-content: flex-start; /* Alinear a la izquierda en pantallas pequeñas */
-            }
+            .lab-header { flex-direction: column; padding: 20px 10px; }
+            #colegio-logo { position: static; transform: none; margin-bottom: 15px; height: 60px; }
+            .header-content { margin: 0; }
+            .institucion-logo { font-size: 2.5em; }
+            .institucion-slogan { font-size: 1em; }
+            .menu-areas ul { justify-content: flex-start; }
         }
     </style>
 </head>
 <body>
 
     <header class="lab-header">
-        <img id="colegio-logo" src="img/icono.png" alt="Logo del Colegio"> <div class="header-content">
+        <!-- ✅ Imagen con fallback -->
+        <img id="colegio-logo" src="img/icono.png" alt="Logo del Colegio" onerror="this.style.display='none'">
+        <div class="header-content">
             <div class="institucion-logo">
-                <span style="color: var(--color-principal);">HUB</span> | Laboratorio de Ideas            </div>
+                <span style="color: var(--color-principal);">HUB</span> | Laboratorio de Ideas
+            </div>
             <div class="institucion-slogan">Experiencias digitales, interactivas y presenciales.</div>
         </div>
     </header>
 
     <nav class="menu-areas">
         <ul>
-            <li><a href="#quimica" class="area-quimica">Química</a></li>
-            <li><a href="#fisica" class="area-fisica">Física</a></li>
-            <li><a href="#biologia" class="area-biologia">Biología</a></li>
-            <li><a href="#matematicas" class="area-matematicas">Matemáticas</a></li>
-            <li><a href="#informatica" class="area-informatica">Informática</a></li>
-            <li><a href="#literatura" class="area-literatura">Literatura</a></li>
-            <li><a href="#historia" class="area-historia">Historia</a></li>
-            <li><a href="#geografia" class="area-geografia">Geografía</a></li>
-            <li><a href="#idiomas" class="area-idiomas">Idiomas</a></li>
-            <li><a href="#arte" class="area-arte">Arte</a></li>
-            <li><a href="#economia" class="area-economia">Economía</a></li>
-            <li><a href="#agropecuarias" class="area-agropecuarias">Agropecuarias</a></li>
+            <li><a href="#" class="area-quimica" onclick="mostrarError(); return false;">Química</a></li>
+            <li><a href="#" class="area-fisica" onclick="mostrarError(); return false;">Física</a></li>
+            <li><a href="laboratorio_quimicayciencias.html" class="area-biologia">Biología</a></li>
+            <li><a href="#" class="area-matematicas" onclick="mostrarError(); return false;">Matemáticas</a></li>
+            <li><a href="#" class="area-informatica" onclick="mostrarError(); return false;">Informática</a></li>
+            <li><a href="#" class="area-literatura" onclick="mostrarError(); return false;">Literatura</a></li>
+            <li><a href="#" class="area-historia" onclick="mostrarError(); return false;">Historia</a></li>
+            <li><a href="#" class="area-geografia" onclick="mostrarError(); return false;">Geografía</a></li>
+            <li><a href="#" class="area-idiomas" onclick="mostrarError(); return false;">Idiomas</a></li>
+            <li><a href="#" class="area-arte" onclick="mostrarError(); return false;">Arte</a></li>
+            <li><a href="#" class="area-economia" onclick="mostrarError(); return false;">Economía</a></li>
+            <li><a href="#" class="area-agropecuarias" onclick="mostrarError(); return false;">Agropecuarias</a></li>
         </ul>
     </nav>
 
@@ -430,112 +408,112 @@
         <h2>Panel de Experiencias y Recursos Interactivos (15 Opciones)</h2>
 
         <div class="opcion-grid">
-            
             <article class="opcion-card card-quimica bloqueado">
                 <div class="area-tag tag-quimica">Química</div>
                 <h3>Módulo de Titulación Ácido-Base ⚗️</h3>
                 <p>Maneje equipos virtuales y obtenga curvas de pH en tiempo real. Ideal para entender la estequiometría.</p>
-                <button onclick="iniciarOpcion('quimica-titulacion')">Abrir Entorno Activo</button>
+                <button onclick="mostrarError()">Abrir Entorno Activo</button>
             </article>
 
             <article class="opcion-card card-fisica bloqueado">
                 <div class="area-tag tag-fisica">Física</div>
                 <h3>Laboratorio de Mecánica Cuántica ⚛️</h3>
                 <p>Experimente con el principio de incertidumbre y la función de onda de partículas.</p>
-                <button disabled>Acceso Restringido</button>
+                <button onclick="mostrarError()">Acceso Restringido</button>
             </article>
-            
-            <article class="opcion-card card-biologia  bloqueado">
+
+            <!-- ✅ Biología 1: SIN clase bloqueado -->
+            <article class="opcion-card card-biologia">
                 <div class="area-tag tag-biologia">Biología</div>
                 <h3>Visualizador de Sistemas Biológicos 3D 🧬</h3>
                 <p>Desglose el cuerpo humano o animal por capas y sistemas. Con etiquetado dinámico.</p>
-                <button onclick="iniciarOpcion('biologia-anatomia')">Ver Módulo Interactivo</button>
+                <button onclick="abrirBiologia()">Ver Módulo Interactivo</button>
             </article>
 
             <article class="opcion-card card-informatica bloqueado">
                 <div class="area-tag tag-informatica">Informática</div>
                 <h3>Entorno de Desarrollo Sandbox 💻</h3>
                 <p>Espacio aislado para practicar código Python, JavaScript o SQL sin instalación local.</p>
-                <button onclick="iniciarOpcion('informatica-sandbox')">Acceder al Compilador</button>
+                <button onclick="mostrarError()">Acceder al Compilador</button>
             </article>
 
             <article class="opcion-card card-matematicas bloqueado">
                 <div class="area-tag tag-matematicas">Matemáticas</div>
                 <h3>Visualizador de Ecuaciones Diferenciales 📈</h3>
                 <p>Gráficos dinámicos para explorar soluciones a ecuaciones diferenciales de primer y segundo orden.</p>
-                <button disabled>Acceso Restringido</button>
+                <button onclick="mostrarError()">Acceso Restringido</button>
             </article>
 
             <article class="opcion-card card-agropecuarias bloqueado">
                 <div class="area-tag tag-agropecuarias">Agropecuarias</div>
                 <h3>Laboratorio de Manejo de Suelos y Cultivos 🌱</h3>
                 <p>Módulo interactivo para planificar la rotación de cultivos y analizar la composición del suelo virtual.</p>
-                <button onclick="iniciarOpcion('agropecuarias-suelos')">Iniciar Módulo de Análisis</button>
+                <button onclick="mostrarError()">Iniciar Módulo de Análisis</button>
             </article>
 
             <article class="opcion-card card-historia bloqueado">
                 <div class="area-tag tag-historia">Historia</div>
                 <h3>Cronología Interactiva Global 🌍</h3>
                 <p>Exploración temporal de eventos históricos con mapas dinámicos y fuentes primarias digitalizadas.</p>
-                <button onclick="iniciarOpcion('historia-cronologia')">Explorar Historia</button>
+                <button onclick="mostrarError()">Explorar Historia</button>
             </article>
 
             <article class="opcion-card card-economia bloqueado">
                 <div class="area-tag tag-economia">Economía</div>
                 <h3>Entorno de Mercado de Valores 💲</h3>
                 <p>Práctica de trading con capital virtual y datos de mercado simulados. ¡Aprenda a invertir!</p>
-                <button disabled>Acceso Restringido</button>
+                <button onclick="mostrarError()">Acceso Restringido</button>
             </article>
 
-            <article class="opcion-card card-biologia bloqueado">
+            <!-- ✅ Biología 2: SIN clase bloqueado -->
+            <article class="opcion-card card-biologia">
                 <div class="area-tag tag-biologia">Biología</div>
                 <h3>Gestión de Equipos de Laboratorio Físico 🦠</h3>
                 <p>Acceso a la agenda y preparación para el uso de equipos de laboratorio físico avanzado.</p>
-                <button onclick="iniciarOpcion('biologia-reserva')">Reservar Equipo</button>
+                <button onclick="abrirBiologia()">Reservar Equipo</button>
             </article>
 
             <article class="opcion-card card-idiomas bloqueado">
                 <div class="area-tag tag-idiomas">Idiomas</div>
                 <h3>Laboratorio de Pronunciación con IA 🗣️</h3>
                 <p>Entrenamiento vocal con retroalimentación automática por reconocimiento de voz.</p>
-                <button onclick="iniciarOpcion('idiomas-pronunciacion')">Acceder a Práctica</button>
+                <button onclick="mostrarError()">Acceder a Práctica</button>
             </article>
 
             <article class="opcion-card card-geografia bloqueado">
                 <div class="area-tag tag-geografia">Geografía</div>
                 <h3>Modelado Climático Regional 🌦️</h3>
                 <p>Ajuste variables (temperatura, presión) y observe el impacto en patrones climáticos modelados.</p>
-                <button disabled>Acceso Restringido</button>
+                <button onclick="mostrarError()">Acceso Restringido</button>
             </article>
 
             <article class="opcion-card card-literatura bloqueado">
                 <div class="area-tag tag-literatura">Literatura</div>
                 <h3>Analizador de Estilo Literario 🖋️</h3>
                 <p>Herramienta para cargar un texto y obtener estadísticas sobre sintaxis, tono y complejidad.</p>
-                <button onclick="iniciarOpcion('literatura-analizador')">Abrir Analizador</button>
+                <button onclick="mostrarError()">Abrir Analizador</button>
             </article>
 
             <article class="opcion-card card-arte bloqueado">
                 <div class="area-tag tag-arte">Arte</div>
                 <h3>Estudio de Color y Luz Digital 🎨</h3>
                 <p>Entorno para mezclar pigmentos y fuentes de luz, ideal para teoría del color y diseño.</p>
-                <button disabled>Acceso Restringido</button>
+                <button onclick="mostrarError()">Acceso Restringido</button>
             </article>
-            
+
             <article class="opcion-card card-fisica bloqueado">
                 <div class="area-tag tag-fisica">Física</div>
                 <h3>Módulo de Circuitos Eléctricos 💡</h3>
                 <p>Construya circuitos virtuales con resistencias, capacitores e inductores. Mida voltajes.</p>
-                <button onclick="iniciarOpcion('fisica-circuitos')">Construir Circuito</button>
+                <button onclick="mostrarError()">Construir Circuito</button>
             </article>
-            
+
             <article class="opcion-card card-informatica bloqueado">
                 <div class="area-tag tag-informatica">Informática</div>
                 <h3>Visor de Estructuras de Datos 📊</h3>
                 <p>Animación y demostración paso a paso de árboles binarios, listas enlazadas y grafos.</p>
-                <button onclick="iniciarOpcion('informatica-estructuras')">Ver Animaciones</button>
+                <button onclick="mostrarError()">Ver Animaciones</button>
             </article>
-
         </div>
     </main>
 
@@ -545,86 +523,29 @@
         </div>
     </div>
 
+    <div id="error-toast">⚠️ Esta área está temporalmente deshabilitada.</div>
+
     <footer class="lab-footer">
         <p>Laboratorio de Ideas | &copy; 2025 Institución Educativa Colucas | Derechos Reservados.</p>
     </footer>
 
     <script>
-        /**
-         * Mapa de URLs de destino.
-         */
-        const destinos = {
-            // Biología (Ejemplo de redirección a un archivo HTML local):
-            'biologia-anatomia': 'biologia_anatomia.html', 
-            'biologia-reserva': 'biologia_reserva.html',   
-
-            // El resto usa una búsqueda de Google como marcador de posición para un módulo externo/simulación
-            'quimica-titulacion': 'https://www.google.com/search?q=módulo+titulación+química',
-            'fisica-circuitos': 'https://www.google.com/search?q=constructor+circuito+eléctricos',
-            'informatica-sandbox': 'https://www.google.com/search?q=editor+código+sandbox',
-            'informatica-estructuras': 'https://www.google.com/search?q=visor+estructuras+datos+animadas',
-            'agropecuarias-suelos': 'https://www.google.com/search?q=análisis+suelos+virtual',
-            'historia-cronologia': 'https://www.google.com/search?q=cronología+interactiva',
-            'idiomas-pronunciacion': 'https://www.google.com/search?q=laboratorio+pronunciación+ia',
-            'literatura-analizador': 'https://www.google.com/search?q=analizador+estilo+literario',
-        };
-        
-        /**
-         * Mapa de mensajes para el modal de carga.
-         */
-        const mensajes = {
-            'quimica-titulacion': '🚀 Módulo de Titulación iniciado. ¡Cargando entorno interactivo!',
-            'fisica-circuitos': '🔌 Iniciando constructor de circuitos. ¡Preparando instrumentos de medición!',
-            'biologia-anatomia': '👁️ Accediendo al Visualizador 3D. Espere un momento...',
-            'biologia-reserva': '📅 Abriendo formulario de gestión de equipos. Redirigiendo...',
-            'informatica-sandbox': '🖥️ Entorno Sandbox listo. Su código se ejecutará en un espacio seguro.',
-            'informatica-estructuras': '🔗 Visor de Estructuras de Datos iniciado. Siguiendo la animación.',
-            'agropecuarias-suelos': '🌾 Laboratorio de Suelos activo. Calcule la cantidad de fertilizante requerida.',
-            'historia-cronologia': '📜 Cargando la Cronología Global. Viajando en el tiempo...',
-            'idiomas-pronunciacion': '🎤 Laboratorio de Pronunciación listo. Iniciando reconocimiento de voz.',
-            'literatura-analizador': '📝 Cargue un texto para iniciar el análisis estilístico.',
-            
-            // Mensajes para elementos BLOQUEADOS
-            'fisica-cuantica': '🚫 Laboratorio Cuántico: Acceso Denegado (Inabilitado).',
-            'matematicas-ecuaciones': '🚫 Visualizador de Ecuaciones: Acceso Denegado (Inabilitado).',
-            'economia-bolsa': '🚫 Entorno de Mercado: Acceso Denegado (Inabilitado).',
-            'geografia-clima': '🚫 Modelado Climático: Acceso Denegado (Inabilitado).',
-            'arte-color': '🚫 Estudio de Color: Acceso Denegado (Inabilitado).',
-        };
-
-        const modal = document.getElementById('loading-modal');
-        const modalMessage = document.getElementById('modal-message');
-        const TIEMPO_ESPERA = 5000; // 5 segundos
-
-        /**
-         * Muestra el modal, espera 5 segundos, oculta el modal y luego redirige a la página de destino.
-         */
-        function iniciarOpcion(opcionId) {
-            const mensaje = mensajes[opcionId] || 'Iniciando módulo...';
-            const urlDestino = destinos[opcionId];
-
-            if (!urlDestino) {
-                alert(mensaje);
-                return;
-            }
-
-            modalMessage.textContent = mensaje;
-            modal.style.display = 'flex'; 
-
-            setTimeout(() => {
-                modal.style.display = 'none';
-                window.location.href = urlDestino; 
-
-                console.log(`Módulo ${opcionId} cargado. Redirigiendo a: ${urlDestino}`);
-
-            }, TIEMPO_ESPERA); 
+        function abrirBiologia() {
+            window.location.href = "laboratorio_quimicayciencias.html";
         }
 
-        document.querySelectorAll('.menu-areas a').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                console.log(`Filtro seleccionado: ${this.getAttribute('href')}`);
-            });
+        function mostrarError() {
+            const toast = document.getElementById('error-toast');
+            toast.style.display = 'block';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+            alert("⚠️ Esta área está temporalmente deshabilitada.");
+        }
+
+        // Evitar scroll en menú (seguro)
+        document.querySelectorAll('.menu-areas a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', e => e.preventDefault());
         });
     </script>
 </body>

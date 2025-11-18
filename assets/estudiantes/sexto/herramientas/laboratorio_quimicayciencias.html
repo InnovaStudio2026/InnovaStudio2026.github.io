@@ -1,0 +1,947 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratorio Digital - Prácticas Científicas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e'
+                        },
+                        secondary: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            300: '#86efac',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f8fafc, #e0f2fe, #ccfbf1);
+        }
+        .practice-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .gradient-border {
+            position: relative;
+            overflow: hidden;
+        }
+        .gradient-border::before {
+            content: '';
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            background: linear-gradient(45deg, #0ea5e9, #22c55e, #8b5cf6, #f59e0b);
+            z-index: -1;
+            border-radius: 16px;
+            animation: gradientRotate 3s linear infinite;
+        }
+        @keyframes gradientRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .modal-content {
+            max-height: 95vh;
+            overflow-y: auto;
+        }
+        .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-700 text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                <div class="flex items-center gap-4">
+                    <div class="bg-white/20 p-3 rounded-2xl">
+                        <i class="fas fa-flask text-2xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl md:text-3xl font-bold">Laboratorio Digital</h1>
+                        <p class="text-cyan-100 text-sm md:text-base">Prácticas científicas para aprendizaje presencial y virtual</p>
+                    </div>
+                </div>
+                
+                <div class="flex flex-wrap gap-3">
+                    <div class="bg-white/10 backdrop-blur-sm rounded-xl p-3 min-w-[140px]">
+                        <div class="flex items-center gap-2 text-sm">
+                            <i class="fas fa-calendar-alt mr-1"></i>
+                            <span>Nov 19, 2025</span>
+                        </div>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-sm rounded-xl p-3 min-w-[140px]">
+                        <div class="flex items-center gap-2 text-sm">
+                            <i class="fas fa-users mr-1"></i>
+                            <span>1,250 Practicantes</span>
+                        </div>
+                    </div>
+                    <button id="mobileMenuBtn" class="md:hidden p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-colors">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation -->
+    <div id="mobileMenu" class="hidden md:hidden bg-white shadow-lg border-b">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex flex-col gap-3">
+                <button id="digitalTabMobile" class="w-full text-left px-4 py-3 rounded-lg font-medium transition-colors text-gray-700 hover:bg-gray-100">
+                    <div class="flex items-center gap-3">
+                        <i class="fas fa-laptop mr-2"></i>
+                        Prácticas Digitales
+                    </div>
+                </button>
+                <button id="manualTabMobile" class="w-full text-left px-4 py-3 rounded-lg font-medium transition-colors text-gray-700 hover:bg-gray-100">
+                    <div class="flex items-center gap-3">
+                        <i class="fas fa-book-open mr-2"></i>
+                        Prácticas Presenciales
+                    </div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Desktop Navigation -->
+    <nav class="hidden md:block bg-white border-b border-gray-200 shadow-sm">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between">
+                <div class="flex space-x-1">
+                    <button id="digitalTab" class="px-6 py-4 font-medium text-sm transition-all duration-200 text-cyan-700 border-b-3 border-cyan-500 bg-cyan-50">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-laptop mr-1"></i>
+                            Prácticas Digitales
+                        </div>
+                    </button>
+                    <button id="manualTab" class="px-6 py-4 font-medium text-sm transition-all duration-200 text-gray-600 hover:text-gray-900 hover:bg-gray-50">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-book-open mr-1"></i>
+                            Prácticas Presenciales
+                        </div>
+                    </button>
+                </div>
+                
+                <div class="relative w-80">
+                    <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 ml-1"></i>
+                    <input type="text" id="searchInput" placeholder="Buscar prácticas, temas o materiales..." 
+                           class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-3 focus:ring-cyan-200 focus:border-cyan-500 outline-none transition-all">
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="mb-8">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
+                <div>
+                    <h2 id="sectionTitle" class="text-2xl md:text-3xl font-bold text-gray-900">
+                        Prácticas Digitales
+                    </h2>
+                    <p id="sectionDescription" class="text-gray-600 mt-2 max-w-2xl">
+                        Simulaciones interactivas, videos educativos y documentos científicos para experimentos virtuales
+                    </p>
+                </div>
+                
+                <div class="bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-6 py-3 rounded-xl font-medium">
+                    <span id="practiceCount" class="font-bold">4</span> prácticas disponibles
+                </div>
+            </div>
+
+            <!-- Practice Grid -->
+            <div id="practiceGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Practice cards will be generated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Featured Section -->
+        <div class="bg-gradient-to-r from-purple-500 via-pink-500 to-rose-500 rounded-3xl p-8 text-white mb-8 shadow-xl">
+            <div class="max-w-4xl mx-auto text-center">
+                <i class="fas fa-award text-4xl mx-auto mb-4 opacity-90"></i>
+                <h3 class="text-2xl md:text-3xl font-bold mb-4">Práctica Destacada de la Semana</h3>
+                <p class="text-xl mb-6">Simulación de Reacciones Químicas Avanzadas</p>
+                <p class="text-purple-100 mb-6 text-lg">
+                    Explora reacciones químicas complejas con visualización 3D interactiva y análisis en tiempo real.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button class="bg-white text-purple-600 hover:bg-gray-100 px-8 py-4 rounded-xl font-semibold text-lg transition-colors shadow-lg">
+                        Probar Simulación Gratuita
+                    </button>
+                    <button class="border-2 border-white text-white hover:bg-white/10 px-8 py-4 rounded-xl font-semibold text-lg transition-colors">
+                        Ver Guía Detallada
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+            <div class="bg-gradient-to-br from-cyan-500 to-blue-500 text-white p-6 rounded-2xl shadow-lg">
+                <div class="text-3xl font-bold mb-2">156</div>
+                <div class="text-cyan-100">Prácticas Digitales</div>
+            </div>
+            <div class="bg-gradient-to-br from-emerald-500 to-teal-500 text-white p-6 rounded-2xl shadow-lg">
+                <div class="text-3xl font-bold mb-2">89</div>
+                <div class="text-emerald-100">Prácticas Presenciales</div>
+            </div>
+            <div class="bg-gradient-to-br from-purple-500 to-indigo-500 text-white p-6 rounded-2xl shadow-lg">
+                <div class="text-3xl font-bold mb-2">24</div>
+                <div class="text-purple-100">Áreas Científicas</div>
+            </div>
+            <div class="bg-gradient-to-br from-amber-500 to-orange-500 text-white p-6 rounded-2xl shadow-lg">
+                <div class="text-3xl font-bold mb-2">12K+</div>
+                <div class="text-amber-100">Estudiantes Activos</div>
+            </div>
+        </div>
+
+        <!-- Quick Access Section -->
+        <div class="bg-white rounded-2xl shadow-sm p-6 mb-8">
+            <h3 class="text-xl font-bold text-gray-900 mb-6">Acceso Rápido</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <button class="bg-gradient-to-r from-cyan-500 to-blue-500 text-white p-4 rounded-xl hover:shadow-md transition-all">
+                    <div class="flex flex-col items-center">
+                        <i class="fas fa-microscope text-2xl mb-2"></i>
+                        <span class="font-medium">Microscopía</span>
+                    </div>
+                </button>
+                <button class="bg-gradient-to-r from-red-500 to-amber-500 text-white p-4 rounded-xl hover:shadow-md transition-all">
+                    <div class="flex flex-col items-center">
+                        <i class="fas fa-atom text-2xl mb-2"></i>
+                        <span class="font-medium">Química</span>
+                    </div>
+                </button>
+                <button class="bg-gradient-to-r from-emerald-500 to-teal-500 text-white p-4 rounded-xl hover:shadow-md transition-all">
+                    <div class="flex flex-col items-center">
+                        <i class="fas fa-leaf text-2xl mb-2"></i>
+                        <span class="font-medium">Biología</span>
+                    </div>
+                </button>
+                <button class="bg-gradient-to-r from-purple-500 to-indigo-500 text-white p-4 rounded-xl hover:shadow-md transition-all">
+                    <div class="flex flex-col items-center">
+                        <i class="fas fa-brain text-2xl mb-2"></i>
+                        <span class="font-medium">Física</span>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gradient-to-r from-gray-900 to-black text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="bg-gradient-to-r from-cyan-500 to-blue-500 p-3 rounded-2xl">
+                            <i class="fas fa-flask text-2xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold">Laboratorio Digital</h3>
+                    </div>
+                    <p class="text-gray-400 mb-6 max-w-md leading-relaxed">
+                        Plataforma educativa innovadora que combina tecnología digital con metodologías prácticas tradicionales 
+                        para crear experiencias de aprendizaje científicas completas y accesibles.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="#" class="bg-gray-800 hover:bg-gray-700 p-3 rounded-lg transition-colors">
+                            <i class="fab fa-facebook-f text-xl"></i>
+                        </a>
+                        <a href="#" class="bg-gray-800 hover:bg-gray-700 p-3 rounded-lg transition-colors">
+                            <i class="fab fa-instagram text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Recursos</h4>
+                    <ul class="space-y-3 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors flex items-center gap-2"><i class="fas fa-chevron-right text-xs"></i> Guías para Profesores</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors flex items-center gap-2"><i class="fas fa-chevron-right text-xs"></i> Manual de Seguridad</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors flex items-center gap-2"><i class="fas fa-chevron-right text-xs"></i> Certificaciones</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors flex items-center gap-2"><i class="fas fa-chevron-right text-xs"></i> Soporte Técnico</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors flex items-center gap-2"><i class="fas fa-chevron-right text-xs"></i> Base de Conocimiento</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Contacto</h4>
+                    <ul class="space-y-3 text-gray-400">
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-envelope mt-0.5"></i>
+                            <span>eduproyectos@gmail.com</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-map-marker-alt mt-0.5"></i>
+                            <span>Vereda Juda</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-500">
+                <p>&copy; 2025 Laboratorio Digital. Todos los derechos reservados.</p>
+                <p class="text-sm mt-2">Plataforma educativa diseñada para dispositivos móviles y desktop</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Practice Modal -->
+    <div id="practiceModal" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50 p-4 overflow-y-auto">
+        <div class="bg-white rounded-3xl max-w-6xl w-full max-h-[95vh] overflow-y-auto modal-content">
+            <div class="relative">
+                <img id="modalImage" src="https://placehold.co/800x400/10b981/white?text=Reacciones+Químicas" 
+                     alt="Práctica" class="w-full h-64 md:h-80 object-cover rounded-t-3xl">
+                <button id="closeModal" class="absolute top-6 right-6 bg-white/95 rounded-full p-3 shadow-lg hover:bg-white transition-all duration-200 z-10">
+                    <i class="fas fa-times text-gray-700 text-xl"></i>
+                </button>
+                <div class="absolute top-6 left-6 z-10">
+                    <span id="modalTypeBadge" class="px-5 py-2.5 rounded-full text-sm font-bold bg-gradient-to-r from-cyan-500 to-blue-500 text-white">
+                        PRÁCTICA DIGITAL
+                    </span>
+                </div>
+            </div>
+            
+            <div class="p-8">
+                <div class="flex flex-col md:flex-row md:justify-between md:items-start gap-6 mb-8">
+                    <div class="flex-1">
+                        <div id="modalTags" class="flex flex-wrap items-center gap-4 mb-4">
+                            <span class="text-sm px-3 py-1.5 rounded-full font-medium bg-blue-100 text-blue-800">Intermedio</span>
+                            <span class="bg-gray-100 text-gray-700 text-sm px-3 py-1.5 rounded-full">Secundaria</span>
+                            <span class="bg-gray-100 text-gray-700 text-sm px-3 py-1.5 rounded-full flex items-center gap-1">
+                                <i class="far fa-clock mr-1"></i> 45 min
+                            </span>
+                        </div>
+                        
+                        <h2 id="modalTitle" class="text-3xl font-bold text-gray-900 mb-3">Simulación de Reacciones Químicas</h2>
+                        <p id="modalDescription" class="text-xl text-gray-700 mb-6">Explora diferentes tipos de reacciones químicas mediante simulaciones interactivas 3D. Incluye análisis de energía de activación y cinética química.</p>
+                    </div>
+                    
+                    <div class="flex flex-col items-center text-center">
+                        <div class="flex items-center gap-2 mb-3">
+                            <i class="fas fa-star text-amber-400 text-2xl"></i>
+                            <span id="modalRating" class="text-2xl font-bold text-gray-900">4.8</span>
+                            <span class="text-gray-500">/5.0</span>
+                        </div>
+                        <div class="w-24 h-2 bg-gray-200 rounded-full overflow-hidden">
+                            <div id="ratingBar" class="h-full bg-gradient-to-r from-amber-400 to-amber-600 rounded-full" style="width: 96%"></div>
+                        </div>
+                        <p id="ratingText" class="text-sm text-gray-500 mt-2">Excelente</p>
+                    </div>
+                </div>
+                
+                <div id="digitalResources" class="bg-gradient-to-r from-cyan-50 to-blue-50 rounded-2xl p-6 mb-8 border border-cyan-100">
+                    <h3 class="text-2xl font-bold text-cyan-900 mb-6 flex items-center gap-3">
+                        <i class="fas fa-laptop mr-2"></i>
+                        Recursos Digitales Disponibles
+                    </h3>
+                    
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <a id="pdfLink" href="https://www.sciencedirect.com/science/article/pii/S2211464521000452/pdf?md5=8b3c5bd2c0a0e0e1b3d6e2d0d5a5e5e5&pid=1-s2.0-S2211464521000452-main.pdf" target="_blank" 
+                           class="bg-white hover:bg-cyan-50 border border-cyan-200 rounded-xl p-4 transition-all duration-200 hover:shadow-md">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="bg-cyan-100 p-2 rounded-lg">
+                                    <i class="fas fa-file-pdf text-cyan-700 text-xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-900">Guía Teórica</h4>
+                                    <p class="text-sm text-gray-600">Documento PDF</p>
+                                </div>
+                            </div>
+                            <button class="w-full bg-gradient-to-r from-cyan-500 to-blue-500 text-white py-2 rounded-lg font-medium flex items-center justify-center gap-2 hover:from-cyan-600 hover:to-blue-600 transition-all">
+                                <i class="fas fa-external-link-alt mr-1"></i> Abrir PDF
+                            </button>
+                        </a>
+                        
+                        <a id="videoLink" href="https://www.youtube.com/watch?v=Q7V6qZ8zZ7M" target="_blank" 
+                           class="bg-white hover:bg-cyan-50 border border-cyan-200 rounded-xl p-4 transition-all duration-200 hover:shadow-md">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="bg-red-100 p-2 rounded-lg">
+                                    <i class="fab fa-youtube text-red-600 text-xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-900">Tutorial en Video</h4>
+                                    <p class="text-sm text-gray-600">YouTube</p>
+                                </div>
+                            </div>
+                            <button class="w-full bg-gradient-to-r from-red-500 to-red-600 text-white py-2 rounded-lg font-medium flex items-center justify-center gap-2 hover:from-red-600 hover:to-red-700 transition-all">
+                                <i class="fas fa-play mr-1"></i> Ver Video
+                            </button>
+                        </a>
+                        
+                        <a id="interactiveLink" href="https://phet.colorado.edu/sims/html/reactions-and-rates/latest/reactions-and-rates_en.html" target="_blank" 
+                           class="bg-white hover:bg-cyan-50 border border-cyan-200 rounded-xl p-4 transition-all duration-200 hover:shadow-md">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="bg-purple-100 p-2 rounded-lg">
+                                    <i class="fas fa-expand-arrows-alt text-purple-700 text-xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-900">Simulación Interactiva</h4>
+                                    <p class="text-sm text-gray-600">PhET Interactive</p>
+                                </div>
+                            </div>
+                            <button class="w-full bg-gradient-to-r from-purple-500 to-indigo-600 text-white py-2 rounded-lg font-medium flex items-center justify-center gap-2 hover:from-purple-600 hover:to-indigo-700 transition-all">
+                                <i class="fas fa-play mr-1"></i> Iniciar Simulación
+                            </button>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="manualResources" class="hidden bg-gradient-to-r from-emerald-50 to-teal-50 rounded-2xl p-6 mb-8 border border-emerald-100">
+                    <h3 class="text-2xl font-bold text-emerald-900 mb-6 flex items-center gap-3">
+                        <i class="fas fa-book-open mr-2"></i>
+                        Recursos para Laboratorio Presencial
+                    </h3>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                                <i class="fas fa-flask text-emerald-600 mr-1"></i>
+                                Materiales Necesarios
+                            </h4>
+                            <ul id="materialsList" class="space-y-2">
+                                <li class="flex items-start gap-2">
+                                    <span class="text-emerald-600 mt-1">•</span>
+                                    <span class="text-gray-700">Hojas verdes</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-emerald-600 mt-1">•</span>
+                                    <span class="text-gray-700">Alcohol etílico 96%</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                                <i class="fas fa-users text-red-600 mr-1"></i>
+                                Protocolo de Seguridad
+                            </h4>
+                            <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded">
+                                <p id="safetyProtocol" class="text-red-800">Uso obligatorio de guantes de nitrilo y gafas de seguridad. Trabajar en campana extractora.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="bg-gray-50 p-6 rounded-2xl">
+                        <h4 class="font-bold text-gray-900 mb-3 flex items-center gap-2">
+                            <i class="fas fa-brain text-indigo-600 mr-1"></i>
+                            Objetivos de Aprendizaje
+                        </h4>
+                        <ul class="text-gray-700 space-y-2 text-sm">
+                            <li>• Comprender los principios fundamentales del tema</li>
+                            <li>• Desarrollar habilidades prácticas y experimentales</li>
+                            <li>• Analizar y interpretar resultados científicamente</li>
+                            <li>• Fomentar el pensamiento crítico y científico</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-6 rounded-2xl">
+                        <h4 class="font-bold text-gray-900 mb-3 flex items-center gap-2">
+                            <i class="fas fa-award text-amber-600 mr-1"></i>
+                            Competencias Desarrolladas
+                        </h4>
+                        <ul class="text-gray-700 space-y-2 text-sm">
+                            <li>• Pensamiento crítico y analítico</li>
+                            <li>• Trabajo colaborativo en equipo</li>
+                            <li>• Comunicación científica escrita</li>
+                            <li>• Resolución de problemas prácticos</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-6 rounded-2xl">
+                        <h4 class="font-bold text-gray-900 mb-3 flex items-center gap-2">
+                            <i class="fas fa-vial text-purple-600 mr-1"></i>
+                            Evaluación
+                        </h4>
+                        <ul class="text-gray-700 space-y-2 text-sm">
+                            <li>• Informe de laboratorio estructurado</li>
+                            <li>• Participación activa durante la práctica</li>
+                            <li>• Análisis crítico de resultados</li>
+                            <li>• Presentación de conclusiones</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Search -->
+    <div class="md:hidden bg-white border-b border-gray-200 p-4">
+        <div class="relative">
+            <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 ml-1"></i>
+            <input type="text" id="mobileSearchInput" placeholder="Buscar prácticas..." 
+                   class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-3 focus:ring-cyan-200 focus:border-cyan-500 outline-none">
+        </div>
+    </div>
+
+    <script>
+        // Mock data for practices
+        const digitalPractices = [
+            {
+                id: 1,
+                title: "Simulación de Reacciones Químicas",
+                description: "Explora diferentes tipos de reacciones químicas mediante simulaciones interactivas 3D. Incluye análisis de energía de activación y cinética química.",
+                subject: "Química",
+                level: "Secundaria",
+                duration: "45 min",
+                tags: ["química", "simulación", "reacciones", "cinética"],
+                difficulty: "Intermedio",
+                rating: 4.8,
+                completed: false,
+                image: "https://placehold.co/400x250/10b981/white?text=Reacciones+Químicas",
+                pdfUrl: "https://www.sciencedirect.com/science/article/pii/S2211464521000452/pdf?md5=8b3c5bd2c0a0e0e1b3d6e2d0d5a5e5e5&pid=1-s2.0-S2211464521000452-main.pdf",
+                videoUrl: "https://www.youtube.com/watch?v=Q7V6qZ8zZ7M",
+                interactiveUrl: "https://phet.colorado.edu/sims/html/reactions-and-rates/latest/reactions-and-rates_en.html"
+            },
+            {
+                id: 2,
+                title: "Análisis de ADN Virtual",
+                description: "Realiza experimentos de biotecnología para extraer y analizar secuencias de ADN. Incluye PCR virtual y secuenciación genética.",
+                subject: "Biología",
+                level: "Bachillerato",
+                duration: "60 min",
+                tags: ["biología", "genética", "ADN", "biotecnología"],
+                difficulty: "Avanzado",
+                rating: 4.9,
+                completed: true,
+                image: "https://placehold.co/400x250/8b5cf6/white?text=Análisis+ADN",
+                pdfUrl: "https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0245778&type=printable",
+                videoUrl: "https://www.youtube.com/watch?v=J1zQ0jK8YwI",
+                interactiveUrl: "https://learn.genetics.utah.edu/content/labs/extraction/"
+            },
+            {
+                id: 3,
+                title: "Circuitos Eléctricos Interactivos",
+                description: "Construye y prueba diferentes configuraciones de circuitos eléctricos en entorno virtual. Leyes de Ohm y Kirchhoff incluidas.",
+                subject: "Física",
+                level: "Secundaria",
+                duration: "30 min",
+                tags: ["física", "electricidad", "circuitos", "ohm"],
+                difficulty: "Básico",
+                rating: 4.6,
+                completed: false,
+                image: "https://placehold.co/400x250/f59e0b/white?text=Circuitos+Eléctricos",
+                interactiveUrl: "https://phet.colorado.edu/sims/html/circuit-construction-kit-dc/latest/circuit-construction-kit-dc_en.html"
+            },
+            {
+                id: 4,
+                title: "Microscopio Virtual",
+                description: "Explora diferentes muestras biológicas con un microscopio digital de alta resolución. Incluye preparación de muestras virtuales.",
+                subject: "Biología",
+                level: "Primaria",
+                duration: "25 min",
+                tags: ["biología", "microscopio", "células", "histología"],
+                difficulty: "Básico",
+                rating: 4.7,
+                completed: false,
+                image: "https://placehold.co/400x250/06b6d4/white?text=Microscopio+Virtual",
+                interactiveUrl: "https://www.microscopemaster.com/virtual-microscope.html"
+            }
+        ];
+
+        const manualPractices = [
+            {
+                id: 1,
+                title: "Extracción de Clorofila",
+                description: "Procedimiento manual para extraer clorofila de hojas verdes y analizar sus propiedades mediante cromatografía en papel.",
+                subject: "Biología",
+                level: "Secundaria",
+                duration: "90 min",
+                tags: ["biología", "clorofila", "extracción", "cromatografía"],
+                difficulty: "Intermedio",
+                rating: 4.5,
+                materials: ["Hojas verdes", "Alcohol etílico 96%", "Mortero y pistilo", "Filtro de papel", "Tubo de ensayo", "Embudo", "Varilla de vidrio"],
+                safety: "Uso obligatorio de guantes de nitrilo y gafas de seguridad. Trabajar en campana extractora.",
+                image: "https://placehold.co/400x250/059669/white?text=Extracción+Clorofila",
+                pdfUrl: "https://www.researchgate.net/profile/Maria-Rodriguez-258/publication/349285210/figure/fig1/AS:990578075914240@1613082345678/Chlorophyll-extraction-and-chromatography-experiment-for-secondary-school-students.pdf"
+            },
+            {
+                id: 2,
+                title: "Neutralización Ácido-Base",
+                description: "Experimento práctico para determinar el punto de equivalencia en reacciones de neutralización mediante titulación ácido-base.",
+                subject: "Química",
+                level: "Bachillerato",
+                duration: "120 min",
+                tags: ["química", "ácidos", "bases", "titulación", "pH"],
+                difficulty: "Avanzado",
+                rating: 4.8,
+                materials: ["HCl 0.1M", "NaOH 0.1M", "Fenolftaleína", "Bureta de 50ml", "Matraz Erlenmeyer 250ml", "Soporte universal", "Pinza de bureta"],
+                safety: "Mantener distancia de ácidos y bases concentrados. Uso de bata de laboratorio y gafas de protección.",
+                image: "https://placehold.co/400x250/4f46e5/white?text=Neutralización",
+                pdfUrl: "https://chemed.chem.purdue.edu/genchem/lab/equipment/buret/titration.pdf"
+            },
+            {
+                id: 3,
+                title: "Construcción de un Electroscopio",
+                description: "Fabrica un electroscopio casero para detectar cargas eléctricas estáticas y realizar experimentos de electrostática.",
+                subject: "Física",
+                level: "Secundaria",
+                duration: "60 min",
+                tags: ["física", "electricidad", "estática", "electroscopio"],
+                difficulty: "Básico",
+                rating: 4.4,
+                materials: ["Botella de vidrio con tapa", "Alambre de cobre 18 AWG", "Papel de aluminio", "Corcho", "Papel celofán"],
+                safety: "Evitar materiales punzantes y trabajar con supervisión adulta.",
+                image: "https://placehold.co/400x250/dc2626/white?text=Electroscopio"
+            },
+            {
+                id: 4,
+                title: "Observación de Microorganismos",
+                description: "Preparación de cultivos y observación de microorganismos bajo microscopio óptico. Técnicas de tinción incluidas.",
+                subject: "Biología",
+                level: "Bachillerato",
+                duration: "150 min",
+                tags: ["biología", "microbiología", "cultivos", "microscopía"],
+                difficulty: "Avanzado",
+                rating: 4.7,
+                materials: ["Medio de cultivo LB", "Placas Petri estériles", "Asa bacteriológica", "Microscopio óptico", "Colorantes (Gram)", "Portaobjetos"],
+                safety: "Esterilización de materiales y manejo de cultivos en condiciones asépticas.",
+                image: "https://placehold.co/400x250/0891b2/white?text=Microorganismos"
+            }
+        ];
+
+        // DOM Elements
+        const practiceGrid = document.getElementById('practiceGrid');
+        const searchInput = document.getElementById('searchInput');
+        const mobileSearchInput = document.getElementById('mobileSearchInput');
+        const digitalTab = document.getElementById('digitalTab');
+        const manualTab = document.getElementById('digitalTabMobile');
+        const digitalTabMobile = document.getElementById('digitalTabMobile');
+        const manualTabMobile = document.getElementById('manualTabMobile');
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const sectionTitle = document.getElementById('sectionTitle');
+        const sectionDescription = document.getElementById('sectionDescription');
+        const practiceCount = document.getElementById('practiceCount');
+        const practiceModal = document.getElementById('practiceModal');
+        const closeModal = document.getElementById('closeModal');
+        const modalImage = document.getElementById('modalImage');
+        const modalTypeBadge = document.getElementById('modalTypeBadge');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalDescription = document.getElementById('modalDescription');
+        const modalTags = document.getElementById('modalTags');
+        const modalRating = document.getElementById('modalRating');
+        const ratingBar = document.getElementById('ratingBar');
+        const ratingText = document.getElementById('ratingText');
+        const digitalResources = document.getElementById('digitalResources');
+        const manualResources = document.getElementById('manualResources');
+        const materialsList = document.getElementById('materialsList');
+        const safetyProtocol = document.getElementById('safetyProtocol');
+        const pdfLink = document.getElementById('pdfLink');
+        const videoLink = document.getElementById('videoLink');
+        const interactiveLink = document.getElementById('interactiveLink');
+
+        // State
+        let activeTab = 'digital';
+        let selectedPractice = null;
+
+        // Initialize
+        function init() {
+            renderPractices();
+            setupEventListeners();
+        }
+
+        // Setup Event Listeners
+        function setupEventListeners() {
+            // Tab switching
+            digitalTab.addEventListener('click', () => switchTab('digital'));
+            manualTab.addEventListener('click', () => switchTab('manual'));
+            digitalTabMobile.addEventListener('click', () => switchTab('digital'));
+            manualTabMobile.addEventListener('click', () => switchTab('manual'));
+            
+            // Mobile menu
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Search
+            searchInput.addEventListener('input', handleSearch);
+            mobileSearchInput.addEventListener('input', handleSearch);
+            
+            // Modal
+            closeModal.addEventListener('click', () => {
+                practiceModal.classList.add('hidden');
+            });
+            
+            // Close modal when clicking outside
+            practiceModal.addEventListener('click', (e) => {
+                if (e.target === practiceModal) {
+                    practiceModal.classList.add('hidden');
+                }
+            });
+        }
+
+        // Switch Tab
+        function switchTab(tab) {
+            activeTab = tab;
+            
+            // Update UI
+            if (tab === 'digital') {
+                digitalTab.classList.add('text-cyan-700', 'border-b-3', 'border-cyan-500', 'bg-cyan-50');
+                digitalTab.classList.remove('text-gray-600', 'hover:text-gray-900', 'hover:bg-gray-50');
+                manualTab.classList.add('text-gray-600', 'hover:text-gray-900', 'hover:bg-gray-50');
+                manualTab.classList.remove('text-emerald-700', 'border-b-3', 'border-emerald-500', 'bg-emerald-50');
+                
+                sectionTitle.textContent = 'Prácticas Digitales';
+                sectionDescription.textContent = 'Simulaciones interactivas, videos educativos y documentos científicos para experimentos virtuales';
+            } else {
+                manualTab.classList.add('text-emerald-700', 'border-b-3', 'border-emerald-500', 'bg-emerald-50');
+                manualTab.classList.remove('text-gray-600', 'hover:text-gray-900', 'hover:bg-gray-50');
+                digitalTab.classList.add('text-gray-600', 'hover:text-gray-900', 'hover:bg-gray-50');
+                digitalTab.classList.remove('text-cyan-700', 'border-b-3', 'border-cyan-500', 'bg-cyan-50');
+                
+                sectionTitle.textContent = 'Prácticas Presenciales';
+                sectionDescription.textContent = 'Guías detalladas con listas de materiales, protocolos de seguridad y procedimientos paso a paso';
+            }
+            
+            mobileMenu.classList.add('hidden');
+            renderPractices();
+        }
+
+        // Handle Search
+        function handleSearch(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            renderPractices(searchTerm);
+        }
+
+        // Render Practices
+        function renderPractices(searchTerm = '') {
+            const practices = activeTab === 'digital' ? digitalPractices : manualPractices;
+            
+            // Filter practices
+            const filteredPractices = practices.filter(practice => 
+                practice.title.toLowerCase().includes(searchTerm) ||
+                practice.description.toLowerCase().includes(searchTerm) ||
+                practice.tags.some(tag => tag.toLowerCase().includes(searchTerm))
+            );
+            
+            // Update count
+            practiceCount.textContent = filteredPractices.length;
+            
+            // Render cards
+            practiceGrid.innerHTML = '';
+            
+            if (filteredPractices.length === 0) {
+                practiceGrid.innerHTML = `
+                    <div class="col-span-full text-center py-12 bg-white rounded-2xl shadow-sm">
+                        <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-search text-3xl text-gray-400"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">No se encontraron prácticas</h3>
+                        <p class="text-gray-600 mb-4 max-w-md mx-auto">
+                            Intenta con diferentes términos de búsqueda o explora todas las prácticas disponibles.
+                        </p>
+                        <button onclick="clearSearch()" 
+                                class="bg-gradient-to-r from-cyan-500 to-blue-500 text-white hover:from-cyan-600 hover:to-blue-600 px-6 py-3 rounded-lg font-medium transition-all">
+                            Ver todas las prácticas
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+            
+            filteredPractices.forEach(practice => {
+                const difficultyClass = practice.difficulty === 'Básico' 
+                    ? 'bg-blue-100 text-blue-800' 
+                    : practice.difficulty === 'Intermedio' 
+                        ? 'bg-amber-100 text-amber-800' 
+                        : 'bg-red-100 text-red-800';
+                
+                const typeClass = activeTab === 'digital' 
+                    ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white' 
+                    : 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white';
+                
+                const typeText = activeTab === 'digital' ? 'Digital' : 'Presencial';
+                
+                const card = document.createElement('div');
+                card.className = 'practice-card bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-gray-200 cursor-pointer';
+                card.innerHTML = `
+                    <div class="relative overflow-hidden">
+                        <img src="${practice.image}" alt="${practice.title}" 
+                             class="w-full h-48 object-cover hover:scale-105 transition-transform duration-500">
+                        <div class="absolute top-4 right-4 z-10">
+                            <span class="px-3 py-1 rounded-full text-xs font-medium ${typeClass}">
+                                ${typeText}
+                            </span>
+                        </div>
+                        ${practice.completed && activeTab === 'digital' ? `
+                            <div class="absolute top-4 left-4 z-10">
+                                <div class="bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-full p-1">
+                                    <i class="fas fa-check w-4 h-4"></i>
+                                </div>
+                            </div>
+                        ` : ''}
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                            <button class="bg-white/90 hover:bg-white text-gray-900 px-4 py-2 rounded-lg font-medium text-sm flex items-center gap-2 transition-all">
+                                <i class="fas fa-play mr-1"></i> Ver detalles
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="p-6">
+                        <div class="flex flex-wrap items-center gap-2 mb-3">
+                            <span class="text-xs font-semibold px-2 py-1 rounded ${difficultyClass}">
+                                ${practice.difficulty}
+                            </span>
+                            <span class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                                ${practice.level}
+                            </span>
+                            <span class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded flex items-center gap-1">
+                                <i class="far fa-clock text-xs mr-1"></i>
+                                ${practice.duration}
+                            </span>
+                        </div>
+                        
+                        <h3 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2">${practice.title}</h3>
+                        <p class="text-gray-600 text-sm mb-4 line-clamp-3">${practice.description}</p>
+                        
+                        <div class="flex flex-wrap gap-1 mb-4">
+                            ${practice.tags.slice(0, 3).map(tag => `
+                                <span class="px-2 py-1 bg-gray-50 text-gray-700 text-xs rounded-md">${tag}</span>
+                            `).join('')}
+                        </div>
+                        
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-1 text-amber-500">
+                                <i class="fas fa-star"></i>
+                                <span class="font-semibold text-gray-900">${practice.rating}</span>
+                            </div>
+                            
+                            <button class="text-cyan-600 hover:text-cyan-800 font-medium text-sm flex items-center gap-1 transition-colors">
+                                Explorar
+                                <i class="fas fa-chevron-right text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                card.addEventListener('click', () => openPracticeModal(practice, activeTab));
+                practiceGrid.appendChild(card);
+            });
+        }
+
+        // Open Practice Modal
+        function openPracticeModal(practice, type) {
+            selectedPractice = practice;
+            
+            // Set modal content
+            modalImage.src = practice.image;
+            modalTitle.textContent = practice.title;
+            modalDescription.textContent = practice.description;
+            
+            // Set type badge
+            if (type === 'digital') {
+                modalTypeBadge.textContent = 'PRÁCTICA DIGITAL';
+                modalTypeBadge.className = 'px-5 py-2.5 rounded-full text-sm font-bold bg-gradient-to-r from-cyan-500 to-blue-500 text-white';
+                digitalResources.classList.remove('hidden');
+                manualResources.classList.add('hidden');
+            } else {
+                modalTypeBadge.textContent = 'PRÁCTICA PRESENCIAL';
+                modalTypeBadge.className = 'px-5 py-2.5 rounded-full text-sm font-bold bg-gradient-to-r from-emerald-500 to-teal-500 text-white';
+                digitalResources.classList.add('hidden');
+                manualResources.classList.remove('hidden');
+            }
+            
+            // Set rating
+            modalRating.textContent = practice.rating;
+            ratingBar.style.width = `${(practice.rating / 5) * 100}%`;
+            ratingText.textContent = practice.rating >= 4.5 ? 'Excelente' : practice.rating >= 4.0 ? 'Muy Bueno' : 'Bueno';
+            
+            // Set tags
+            let tagsHTML = '';
+            tagsHTML += `<span class="text-sm px-3 py-1.5 rounded-full font-medium ${
+                practice.difficulty === 'Básico' ? 'bg-blue-100 text-blue-800' : 
+                practice.difficulty === 'Intermedio' ? 'bg-amber-100 text-amber-800' : 'bg-red-100 text-red-800'
+            }">${practice.difficulty}</span>`;
+            tagsHTML += `<span class="bg-gray-100 text-gray-700 text-sm px-3 py-1.5 rounded-full">${practice.level}</span>`;
+            tagsHTML += `<span class="bg-gray-100 text-gray-700 text-sm px-3 py-1.5 rounded-full flex items-center gap-1">
+                <i class="far fa-clock mr-1"></i> ${practice.duration}
+            </span>`;
+            modalTags.innerHTML = tagsHTML;
+            
+            // Set digital resources
+            if (practice.pdfUrl) {
+                pdfLink.href = practice.pdfUrl;
+                pdfLink.classList.remove('hidden');
+            } else {
+                pdfLink.classList.add('hidden');
+            }
+            
+            if (practice.videoUrl) {
+                videoLink.href = practice.videoUrl;
+                videoLink.classList.remove('hidden');
+            } else {
+                videoLink.classList.add('hidden');
+            }
+            
+            if (practice.interactiveUrl) {
+                interactiveLink.href = practice.interactiveUrl;
+                interactiveLink.classList.remove('hidden');
+            } else {
+                interactiveLink.classList.add('hidden');
+            }
+            
+            // Set manual resources
+            if (practice.materials) {
+                materialsList.innerHTML = practice.materials.map(material => `
+                    <li class="flex items-start gap-2">
+                        <span class="text-emerald-600 mt-1">•</span>
+                        <span class="text-gray-700">${material}</span>
+                    </li>
+                `).join('');
+            }
+            
+            if (practice.safety) {
+                safetyProtocol.textContent = practice.safety;
+            }
+            
+            // Show modal
+            practiceModal.classList.remove('hidden');
+        }
+
+        // Clear Search
+        window.clearSearch = function() {
+            searchInput.value = '';
+            mobileSearchInput.value = '';
+            renderPractices();
+        };
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
