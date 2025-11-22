@@ -10,6 +10,11 @@
             font-size: 20px;
             background: linear-gradient(to bottom right, #0a2c58, #ffffff);
             color: #333;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
         }
         header {
             background: url('https://grupogeard.com/co/wp-content/uploads/sites/3/2020/07/Blog-saber-11.jpg') no-repeat center center;
@@ -37,7 +42,6 @@
             font-size: 14px;
         }
 
-        /* ESTILO PARA PREGUNTAS */
         .contenedor.pregunta {
             background-color: rgba(173, 216, 230, 0.8);
             margin-top: 10px;
@@ -47,7 +51,6 @@
             box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
         }
 
-        /* Estilo para contenedor puntuación */
         .contenedor.puntuacion {
             background-color: rgba(173, 216, 230, 0.8);
             padding: 20px;
@@ -105,15 +108,15 @@
             transform: scale(1.03);
             box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
         }
-        
-        /* MODAL DE RESULTADOS SUPER MODERNO (NEUMORFISMO) */
+
+        /* MODAL DE RESULTADOS */
         #resultadoModal {
             display: none;
             position: fixed;
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
-            background: #e0f2ff; /* Color muy sutil */
+            background: #e0f2ff;
             border-radius: 25px; 
             padding: 40px 50px; 
             z-index: 1000;
@@ -124,16 +127,14 @@
             font-weight: bold;
             max-width: 450px;
             width: 90%;
-            /* Efecto Neumórfico: Sombra suave que le da profundidad */
-            box-shadow: 10px 10px 30px #a3c3e2, /* Sombra oscura para profundidad */
-                        -10px -10px 30px #ffffff; /* Sombra clara para relieve */
+            box-shadow: 10px 10px 30px #a3c3e2,
+                        -10px -10px 30px #ffffff;
         }
         #resultadoModal h2 {
             color: #0a2c58;
             font-size: 28px;
             margin-bottom: 25px;
             font-weight: 900;
-            /* Linea moderna sutil */
             border-bottom: 3px solid #4a90e2; 
             padding-bottom: 15px;
         }
@@ -144,11 +145,10 @@
             color: #333;
         }
         #resultadoModal p strong {
-            color: #1872e0; /* Color azul más brillante */
+            color: #1872e0;
         }
-        /* Estilo para destacar la NOTA */
         #resPuntaje {
-            background-color: #f0f8ff; /* Fondo blanco sutil */
+            background-color: #f0f8ff;
             color: #0a2c58;
             padding: 20px;
             border-radius: 15px;
@@ -156,13 +156,11 @@
             font-size: 22px;
             font-weight: bolder;
             line-height: 1.5;
-            /* Sombra interior para hacerlo parecer "presionado" */
             box-shadow: inset 5px 5px 10px #bfd7f0,
                         inset -5px -5px 10px #ffffff;
         }
 
         #resultadoModal button {
-            /* Botón de cierre que también usa estilo neumórfico */
             background: #dc3545;
             color: white;
             padding: 12px 30px;
@@ -182,23 +180,16 @@
                         -6px -6px 12px #ffffff;
         }
         #resultadoModal button:active {
-            /* Efecto de "presionado" */
             transform: translateY(1px);
             box-shadow: inset 2px 2px 5px #7a2a32,
                         inset -2px -2px 5px #ff5d6d;
         }
-        
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translate(-50%, -60%); }
-            to   { opacity: 1; transform: translate(-50%, -50%); }
+            to   { opacity: 1; transform: translate(-50%, -50%); }
         }
-        @keyframes shake {
-            0% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            50% { transform: translateX(5px); }
-            75% { transform: translateX(-5px); }
-            100% { transform: translateX(0); }
-        }
+
         #temporizador {
             position: fixed;
             top: 50px;
@@ -213,6 +204,7 @@
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
             font-size: 14px;
         }
+
         #modalTiempoFuera {
             display: none;
             position: fixed;
@@ -227,7 +219,6 @@
             font-family: 'Segoe UI', sans-serif;
             text-align: center;
             padding: 20px;
-            display: none;
         }
         #modalTiempoFuera > div {
             background: rgba(255,255,255,0.1);
@@ -237,6 +228,7 @@
             backdrop-filter: blur(6px);
             box-shadow: 0 0 20px rgba(0,0,0,0.4);
         }
+
         #btn-volver {
             position: fixed;
             bottom: 60px;
@@ -262,18 +254,107 @@
             transform: scale(0.96);
             box-shadow: 0 6px 10px rgba(0, 0, 0, 0.25);
         }
+
+        /* 🔒 Overlay de seguridad con contador */
+        #overlaySeguridad {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 99999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            backdrop-filter: blur(4px);
+        }
+
+        #overlaySeguridad h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: #ffcc00;
+        }
+
+        #overlaySeguridad .intentos {
+            background: #222;
+            color: #ff6b6b;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin: 10px 0;
+            font-size: 1.1rem;
+        }
+
+        #overlaySeguridad p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        #overlaySeguridad .btn-regresar {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        #overlaySeguridad .btn-regresar:hover {
+            background: #45a049;
+        }
+
+        /* 🔴 Bloqueo definitivo */
+        #bloqueoDefinitivo {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: #8B0000;
+            color: white;
+            z-index: 999999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 30px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        #bloqueoDefinitivo h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #ffe6e6;
+        }
+
+        #bloqueoDefinitivo p {
+            font-size: 1.4rem;
+            max-width: 700px;
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
+
+        #bloqueoDefinitivo .detalles {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 1.1rem;
+        }
+
         @media (max-width: 500px) {
-            .cuadro h2 {
-                font-size: 18px;
-            }
-            .boton {
-                font-size: 15px;
-                padding: 9px 15px;
-            }
-            #btn-volver {
-                font-size: 13px;
-                padding: 10px 22px;
-            }
+            #btn-volver { font-size: 13px; padding: 10px 22px; }
+            #overlaySeguridad h3 { font-size: 1.5rem; }
+            #bloqueoDefinitivo h2 { font-size: 2rem; }
         }
     </style>
 </head>
@@ -281,378 +362,530 @@
 
     <button id="btn-volver" onclick="location.href='menu.html'">⮜ Volver</button>
 
+    <div id="temporizador">Tiempo restante: 00:00</div>
 
-<div id="temporizador">Tiempo restante: 00:00</div>
+    <header>
+        <h1>Prueba de Sociales</h1>
+    </header>
 
-<header>
-    <h1>Prueba de Sociales</h1>
-</header>
+    <div class="contenedor">
+        <div class="flex">
+            <div>
+                <label><strong>Código de Identificación (3 dígitos):</strong></label>
+                <input type="number" id="codigoEstudiante" min="101" max="105" maxlength="3" required>
+            </div>
+            
+            <div>
+                <label><strong>Nombre del Estudiante:</strong></label>
+                <input type="text" id="nombreEstudiante" required>
+            </div>
 
-<div class="contenedor">
-    <div class="flex">
-        <div>
-            <label><strong>Código de Identificación (3 dígitos):</strong></label>
-            <input type="number" id="codigoEstudiante" min="101" max="105" maxlength="3" required>
-        </div>
-        
-        <div>
-            <label><strong>Nombre del Estudiante:</strong></label>
-            <input type="text" id="nombreEstudiante" required>
-        </div>
-
-        <div>
-            <label><strong>Grado:</strong></label>
-            <select id="gradoEstudiante" required>
-                <option value="">Seleccione</option>
-                <option value="6-1">6-1</option>
-                <option value="6-2">6-2</option>
-                <option value="7-1">7-1</option>
-                <option value="7-2">7-2</option>
-                <option value="8-1">8-1</option>
-                <option value="8-2">8-2</option>
-                <option value="9-1">9-1</option>
-                <option value="9-2">9-2</option>
-                <option value="10-1">10-1</option>
-                <option value="10-2">10-2</option>
-                <option value="11°">11°</option>
-            </select>
+            <div>
+                <label><strong>Grado:</strong></label>
+                <select id="gradoEstudiante" required>
+                    <option value="">Seleccione</option>
+                    <option value="6-1">6-1</option>
+                    <option value="6-2">6-2</option>
+                    <option value="7-1">7-1</option>
+                    <option value="7-2">7-2</option>
+                    <option value="8-1">8-1</option>
+                    <option value="8-2">8-2</option>
+                    <option value="9-1">9-1</option>
+                    <option value="9-2">9-2</option>
+                    <option value="10-1">10-1</option>
+                    <option value="10-2">10-2</option>
+                    <option value="11°">11°</option>
+                </select>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="contenedor pregunta" id="q-1">
-    <p><strong>1. ¿Qué hecho marcó el inicio formal de la Segunda Guerra Mundial?</strong></p>
-    <label><input type="radio" name="q1" value="a"> El ataque japonés a China</label>
-    <label><input type="radio" name="q1" value="b"> La ocupación alemana de Austria</label>
-    <label><input type="radio" name="q1" value="c"> La invasión alemana de Polonia</label>
-</div>
-
-<div class="contenedor pregunta" id="q-2">
-    <p><strong>2. ¿Cuál de las siguientes combinaciones representa a las Potencias del Eje?</strong></p>
-    <label><input type="radio" name="q2" value="a"> Alemania, Japón e Irán</label>
-    <label><input type="radio" name="q2" value="b"> Alemania, Italia y Japón</label>
-    <label><input type="radio" name="q2" value="c"> Alemania, Hungría y Finlandia</label>
-</div>
-
-<div class="contenedor pregunta" id="q-3">
-    <p><strong>3. ¿Cuál fue uno de los efectos inmediatos en Europa tras la guerra?</strong></p>
-    <label><input type="radio" name="q3" value="a"> Unión económica entre países europeos</label>
-    <label><input type="radio" name="q3" value="b"> Reconstrucción paulatina con el Plan Marshall</label>
-    <label><input type="radio" name="q3" value="c"> Migración masiva hacia América</label>
-</div>
-
-<div class="contenedor pregunta" id="q-4">
-    <p><strong>4. ¿Qué caracteriza al Holocausto dentro del conflicto mundial?</strong></p>
-    <label><input type="radio" name="q4" value="a"> Desplazamiento de miles de soldados en Europa</label>
-    <label><input type="radio" name="q4" value="b"> Muerte de millones de ciudadanos judíos en campos de exterminio</label>
-    <label><input type="radio" name="q4" value="c"> Uso de armas químicas en batallas urbanas</label>
-</div>
-
-<div class="contenedor pregunta" id="q-5">
-    <p><strong>5. ¿Qué ocurrió con Alemania al finalizar la guerra?</strong></p>
-    <label><input type="radio" name="q5" value="a"> Se convirtió en una república democrática unificada</label>
-    <label><input type="radio" name="q5" value="b"> Fue dividida entre las potencias vencedoras en dos estados distintos</label>
-    <label><input type="radio" name="q5" value="c"> Se anexó a la Unión Soviética</label>
-</div>
-
-<div class="contenedor pregunta" id="q-6">
-    <p><strong>6. ¿Entre qué años se desarrolló la Segunda Guerra Mundial?</strong></p>
-    <label><input type="radio" name="q6" value="a"> 1939 a 1945</label>
-    <label><input type="radio" name="q6" value="b"> 1932 a 1938</label>
-    <label><input type="radio" name="q6" value="c"> 1940 a 1948</label>
-</div>
-
-<div class="contenedor pregunta" id="q-7">
-    <p><strong>7. ¿Qué efecto geopolítico tuvo la guerra mundial?</strong></p>
-    <label><input type="radio" name="q7" value="a"> Disolución de la ONU</label>
-    <label><input type="radio" name="q7" value="b"> Creación de la Unión Europea</label>
-    <label><input type="radio" name="q7" value="c"> Inicio de un mundo bipolar entre EE.UU. y la URSS</label>
-</div>
-
-<div class="contenedor pregunta" id="q-8">
-    <p><strong>8. ¿Cuál de los siguientes tratados fue una causa profunda del conflicto?</strong></p>
-    <label><input type="radio" name="q8" value="a"> Tratado de Viena</label>
-    <label><input type="radio" name="q8" value="b"> Tratado de Versalles</label>
-    <label><input type="radio" name="q8" value="c"> Tratado de Ginebra</label>
-</div>
-
-<div class="contenedor pregunta" id="q-9">
-    <p><strong>9. ¿Qué definición se dio en la guía sobre “evaluar”?</strong></p>
-    <label><input type="radio" name="q9" value="a"> Comparar hechos históricos sin juicio de valor</label>
-    <label><input type="radio" name="q9" value="b"> Establecer el valor o significado según criterios definidos</label>
-    <label><input type="radio" name="q9" value="c"> Memorizar información para aplicar en exámenes</label>
-</div>
-
-<div class="contenedor pregunta" id="q-10">
-    <p><strong>10. ¿Cuál fue una repercusión tecnológica del conflicto?</strong></p>
-    <label><input type="radio" name="q10" value="a"> Creación del radar naval</label>
-    <label><input type="radio" name="q10" value="b"> Desarrollo de la energía atómica</label>
-    <label><input type="radio" name="q10" value="c"> Invención de la telefonía móvil</label>
-</div>
-
-<div class="contenedor puntuacion">
-    <div id="alerta" style="display:none; color: white; background-color: #d9534f; padding: 10px; margin: 15px auto; width: 80%; border-radius: 8px; text-align: center; font-weight: bold;">
+    <div class="contenedor pregunta" id="q-1">
+        <p><strong>1. ¿Qué hecho marcó el inicio formal de la Segunda Guerra Mundial?</strong></p>
+        <label><input type="radio" name="q1" value="a"> El ataque japonés a China</label>
+        <label><input type="radio" name="q1" value="b"> La ocupación alemana de Austria</label>
+        <label><input type="radio" name="q1" value="c"> La invasión alemana de Polonia</label>
     </div>
-    <button onclick="mostrarResultado()">Finalizar Prueba y Ver Nota</button>
-</div>
 
-<div id="resultadoModal">
-    <h2>Resultado del Examen</h2>
-    <p id="resNombre"></p>
-    <p id="resGrado"></p>
-    <p id="resCodigo"></p> 
-    <p id="resFecha"></p>
-    <p id="resHoraInicio"></p>
-    <p id="resHoraFin"></p>
-    <p id="resPuntaje"></p> 
-    
-   
-    <button onclick="cerrarModal()">Cerrar</button>
-</div>
-
-<div id="modalTiempoFuera">
-    <div>
-        <h2 style="font-size: 28px; margin-bottom: 10px;">⏰ ¡Se acabó el tiempo!</h2>
-        <p style="font-size: 18px;">La prueba se reiniciará en <span id="cuentaRegresiva">5</span> segundos...</p>
+    <div class="contenedor pregunta" id="q-2">
+        <p><strong>2. ¿Cuál de las siguientes combinaciones representa a las Potencias del Eje?</strong></p>
+        <label><input type="radio" name="q2" value="a"> Alemania, Japón e Irán</label>
+        <label><input type="radio" name="q2" value="b"> Alemania, Italia y Japón</label>
+        <label><input type="radio" name="q2" value="c"> Alemania, Hungría y Finlandia</label>
     </div>
-</div>
 
-<script>
-    const VALOR_POR_PREGUNTA = 0.5; // Cada pregunta vale 0.5 puntos
-    
-    // Lista de códigos válidos para que concuerde con resultados_docente.html
-    const CODIGOS_VALIDOS = ['101', '102', '103', '104', '105'];
+    <div class="contenedor pregunta" id="q-3">
+        <p><strong>3. ¿Cuál fue uno de los efectos inmediatos en Europa tras la guerra?</strong></p>
+        <label><input type="radio" name="q3" value="a"> Unión económica entre países europeos</label>
+        <label><input type="radio" name="q3" value="b"> Reconstrucción paulatina con el Plan Marshall</label>
+        <label><input type="radio" name="q3" value="c"> Migración masiva hacia América</label>
+    </div>
 
-    let tiempoPorPregunta = 50; // 50 segundos por pregunta
-    let totalTiempoPermitido = 0;
-    let tiempoUsado = 0;
-    let timer;
-    let horaInicio; // Variable global para la hora de inicio
+    <div class="contenedor pregunta" id="q-4">
+        <p><strong>4. ¿Qué caracteriza al Holocausto dentro del conflicto mundial?</strong></p>
+        <label><input type="radio" name="q4" value="a"> Desplazamiento de miles de soldados en Europa</label>
+        <label><input type="radio" name="q4" value="b"> Muerte de millones de ciudadanos judíos en campos de exterminio</label>
+        <label><input type="radio" name="q4" value="c"> Uso de armas químicas en batallas urbanas</label>
+    </div>
 
-    // Función genérica para barajar arrays (se mantiene)
-    function shuffleArray(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-    }
+    <div class="contenedor pregunta" id="q-5">
+        <p><strong>5. ¿Qué ocurrió con Alemania al finalizar la guerra?</strong></p>
+        <label><input type="radio" name="q5" value="a"> Se convirtió en una república democrática unificada</label>
+        <label><input type="radio" name="q5" value="b"> Fue dividida entre las potencias vencedoras en dos estados distintos</label>
+        <label><input type="radio" name="q5" value="c"> Se anexó a la Unión Soviética</label>
+    </div>
 
-    function inicializarPrueba() {
-        registrarInicio();
-        aleatorizarTodo();
-        calcularTiempoTotal();
-        iniciarTemporizador();
-        hacerTemporizadorMovible();
-    }
+    <div class="contenedor pregunta" id="q-6">
+        <p><strong>6. ¿Entre qué años se desarrolló la Segunda Guerra Mundial?</strong></p>
+        <label><input type="radio" name="q6" value="a"> 1939 a 1945</label>
+        <label><input type="radio" name="q6" value="b"> 1932 a 1938</label>
+        <label><input type="radio" name="q6" value="c"> 1940 a 1948</label>
+    </div>
 
-    function registrarInicio() {
-        const ahora = new Date();
-        horaInicio = ahora.toLocaleTimeString(); // Guarda la hora de inicio
-    }
+    <div class="contenedor pregunta" id="q-7">
+        <p><strong>7. ¿Qué efecto geopolítico tuvo la guerra mundial?</strong></p>
+        <label><input type="radio" name="q7" value="a"> Disolución de la ONU</label>
+        <label><input type="radio" name="q7" value="b"> Creación de la Unión Europea</label>
+        <label><input type="radio" name="q7" value="c"> Inicio de un mundo bipolar entre EE.UU. y la URSS</label>
+    </div>
 
-    function calcularTiempoTotal() {
-        const totalPreguntas = document.querySelectorAll('.contenedor.pregunta').length;
-        totalTiempoPermitido = totalPreguntas * tiempoPorPregunta;
-    }
+    <div class="contenedor pregunta" id="q-8">
+        <p><strong>8. ¿Cuál de los siguientes tratados fue una causa profunda del conflicto?</strong></p>
+        <label><input type="radio" name="q8" value="a"> Tratado de Viena</label>
+        <label><input type="radio" name="q8" value="b"> Tratado de Versalles</label>
+        <label><input type="radio" name="q8" value="c"> Tratado de Ginebra</label>
+    </div>
 
-    function iniciarTemporizador() {
-        clearInterval(timer);
-        tiempoUsado = 0;
-        const display = document.getElementById('temporizador');
+    <div class="contenedor pregunta" id="q-9">
+        <p><strong>9. ¿Qué definición se dio en la guía sobre “evaluar”?</strong></p>
+        <label><input type="radio" name="q9" value="a"> Comparar hechos históricos sin juicio de valor</label>
+        <label><input type="radio" name="q9" value="b"> Establecer el valor o significado según criterios definidos</label>
+        <label><input type="radio" name="q9" value="c"> Memorizar información para aplicar en exámenes</label>
+    </div>
 
-        timer = setInterval(() => {
-            tiempoUsado++;
+    <div class="contenedor pregunta" id="q-10">
+        <p><strong>10. ¿Cuál fue una repercusión tecnológica del conflicto?</strong></p>
+        <label><input type="radio" name="q10" value="a"> Creación del radar naval</label>
+        <label><input type="radio" name="q10" value="b"> Desarrollo de la energía atómica</label>
+        <label><input type="radio" name="q10" value="c"> Invención de la telefonía móvil</label>
+    </div>
 
-            const restante = totalTiempoPermitido - tiempoUsado;
-            const minutos = Math.floor(restante / 60);
-            const segundos = restante % 60;
-            const tiempoTexto = `${minutos.toString().padStart(2, '0')}:${segundos.toString().padStart(2, '0')}`;
-            display.textContent = `Tiempo restante: ${tiempoTexto}`;
+    <div class="contenedor puntuacion">
+        <div id="alerta" style="display:none; color: white; background-color: #d9534f; padding: 10px; margin: 15px auto; width: 80%; border-radius: 8px; text-align: center; font-weight: bold;">
+        </div>
+        <button onclick="mostrarResultado()">Finalizar Prueba y Ver Nota</button>
+    </div>
 
-            if (restante <= 0) {
-                clearInterval(timer);
-                mostrarModalTiempoAgotado();
+    <div id="resultadoModal">
+        <h2>Resultado del Examen</h2>
+        <p id="resNombre"></p>
+        <p id="resGrado"></p>
+        <p id="resCodigo"></p> 
+        <p id="resFecha"></p>
+        <p id="resHoraInicio"></p>
+        <p id="resHoraFin"></p>
+        <p id="resPuntaje"></p> 
+        <button onclick="cerrarModal()">Cerrar</button>
+    </div>
+
+    <div id="modalTiempoFuera">
+        <div>
+            <h2 style="font-size: 28px; margin-bottom: 10px;">⏰ ¡Se acabó el tiempo!</h2>
+            <p style="font-size: 18px;">La prueba se reiniciará en <span id="cuentaRegresiva">5</span> segundos...</p>
+        </div>
+    </div>
+
+    <!-- 🔒 Overlay de seguridad con contador -->
+    <div id="overlaySeguridad">
+        <h3>⚠️ Advertencia de Seguridad</h3>
+        <div class="intentos" id="contadorIntentos">Intentos: 1 de 3 permitidos</div>
+        <p>Has salido de la evaluación o intentado capturar pantalla.<br>
+        <strong>Solo tienes 3 intentos permitidos.</strong><br><br>
+        ⏳ El temporizador sigue activo.</p>
+        <button class="btn-regresar" onclick="cerrarOverlaySeguridad()">Regresar a la Prueba</button>
+    </div>
+
+    <!-- 🔴 Bloqueo definitivo -->
+    <div id="bloqueoDefinitivo">
+        <h2>❌ EVALUACIÓN ANULADA</h2>
+        <p>Se ha excedido el límite de intentos de seguridad.<br>
+        <strong>Esta evaluación ha sido cancelada automáticamente.</strong></p>
+        <div class="detalles">
+            <strong>Registro de incidentes:</strong><br>
+            <span id="registroDetalles">—</span>
+        </div>
+        <p>Por favor, contacte al docente para continuar.</p>
+    </div>
+
+    <script>
+        const VALOR_POR_PREGUNTA = 0.5;
+        const CODIGOS_VALIDOS = ['101', '102', '103', '104', '105'];
+        const MAX_INTENTOS = 3;
+
+        let tiempoPorPregunta = 50;
+        let totalTiempoPermitido = 0;
+        let tiempoUsado = 0;
+        let timer;
+        let horaInicio;
+        let estaEnPrueba = false;
+
+        // 🔐 Sistema de seguridad con conteo
+        let intentosSeguridad = 0;
+        let registroEventos = [];
+        let bloqueadoDefinitivamente = false;
+
+        // Registrar evento de seguridad
+        function registrarIntento(tipo) {
+            if (bloqueadoDefinitivamente) return;
+
+            const ahora = new Date().toLocaleTimeString();
+            const evento = `${tipo} - ${ahora}`;
+            registroEventos.push(evento);
+            intentosSeguridad++;
+
+            // Actualizar contador en overlay
+            document.getElementById('contadorIntentos').textContent = 
+                `Intentos: ${intentosSeguridad} de ${MAX_INTENTOS} permitidos`;
+
+            if (intentosSeguridad >= MAX_INTENTOS) {
+                activarBloqueoDefinitivo();
             }
-        }, 1000);
-    }
+        }
 
-    function mostrarModalTiempoAgotado() {
-        const modal = document.getElementById('modalTiempoFuera');
-        const cuenta = document.getElementById('cuentaRegresiva');
-        modal.style.display = 'flex';
+        function activarBloqueoDefinitivo() {
+            bloqueadoDefinitivamente = true;
 
-        document.querySelectorAll('input, select, button[onclick="mostrarResultado()"]').forEach(el => el.disabled = true);
+            // Mostrar detalles en bloqueo
+            const detalles = registroEventos.map((e, i) => `#${i+1} ${e}`).join('<br>');
+            document.getElementById('registroDetalles').innerHTML = detalles || 'Sin registros';
 
-        let segundos = 5;
-        cuenta.textContent = segundos;
+            // Bloquear TODO
+            document.getElementById('overlaySeguridad').style.display = 'none';
+            document.getElementById('bloqueoDefinitivo').style.display = 'flex';
 
-        const countdown = setInterval(() => {
-            segundos--;
+            // Deshabilitar todos los controles
+            document.querySelectorAll('input, select, button').forEach(el => {
+                el.disabled = true;
+            });
+
+            // Detener temporizador (por seguridad)
+            clearInterval(timer);
+
+            // Guardar en localStorage que fue anulada
+            if (document.getElementById('codigoEstudiante').value) {
+                const codigo = document.getElementById('codigoEstudiante').value.trim();
+                const key = `resultado_quizz_${codigo}`;
+                localStorage.setItem(key, JSON.stringify({
+                    status: 'ANULADA_POR_SEGURIDAD',
+                    intentos: intentosSeguridad,
+                    eventos: registroEventos,
+                    timestamp: new Date().toLocaleString()
+                }));
+            }
+        }
+
+        function crearOverlaySeguridad() {
+            // Ya está en HTML, solo aseguramos el contador inicial
+            document.getElementById('contadorIntentos').textContent = 
+                `Intentos: 0 de ${MAX_INTENTOS} permitidos`;
+        }
+
+        function cerrarOverlaySeguridad() {
+            if (!bloqueadoDefinitivamente) {
+                document.getElementById('overlaySeguridad').style.display = 'none';
+                window.focus();
+            }
+        }
+
+        // 🔒 Detección mejorada: salida + captura
+        document.addEventListener('keydown', function(e) {
+            if (bloqueadoDefinitivamente) return;
+
+            // Detectar PrintScreen y combinaciones de captura
+            const esCaptura = 
+                e.key === 'PrintScreen' ||
+                e.keyCode === 44 ||
+                (e.ctrlKey && e.key.toLowerCase() === 'p') ||
+                (navigator.userAgent.includes('Mac') && e.metaKey && e.shiftKey && ['3','4'].includes(e.key));
+
+            if (esCaptura) {
+                e.preventDefault();
+                registrarIntento('Intento de captura de pantalla');
+                alert("🔒 Acción bloqueada: captura de pantalla no permitida.\nIntento registrado.");
+                return false;
+            }
+        });
+
+        // Bloquear copiado/corte/pegado
+        ['copy', 'cut', 'paste'].forEach(event => {
+            document.addEventListener(event, (e) => {
+                if (estaEnPrueba && !bloqueadoDefinitivamente) {
+                    e.preventDefault();
+                    if (event === 'copy') {
+                        registrarIntento('Intento de copiar texto');
+                        alert("🔒 Copiar contenido está prohibido.\nIntento registrado.");
+                    }
+                }
+            });
+        });
+
+        // Salida de pestaña → +1 intento
+        function manejarSalida() {
+            if (estaEnPrueba && !bloqueadoDefinitivamente) {
+                registrarIntento('Cambio de pestaña/aplicación');
+                document.getElementById('overlaySeguridad').style.display = 'flex';
+            }
+        }
+
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                // Pequeño delay para evitar falsos positivos
+                setTimeout(manejarSalida, 200);
+            } else if (!bloqueadoDefinitivamente) {
+                cerrarOverlaySeguridad();
+            }
+        });
+
+        window.addEventListener('blur', function() {
+            setTimeout(() => {
+                if (document.visibilityState === 'hidden') {
+                    manejarSalida();
+                }
+            }, 200);
+        });
+
+        // === ✅ FUNCIONALIDAD ORIGINAL (sin cambios) ===
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function inicializarPrueba() {
+            crearOverlaySeguridad();
+            registrarInicio();
+            aleatorizarTodo();
+            calcularTiempoTotal();
+            iniciarTemporizador();
+            hacerTemporizadorMovible();
+            estaEnPrueba = true;
+        }
+
+        function registrarInicio() {
+            const ahora = new Date();
+            horaInicio = ahora.toLocaleTimeString();
+        }
+
+        function calcularTiempoTotal() {
+            const totalPreguntas = document.querySelectorAll('.contenedor.pregunta').length;
+            totalTiempoPermitido = totalPreguntas * tiempoPorPregunta;
+        }
+
+        function iniciarTemporizador() {
+            clearInterval(timer);
+            tiempoUsado = 0;
+            const display = document.getElementById('temporizador');
+
+            timer = setInterval(() => {
+                if (bloqueadoDefinitivamente) {
+                    clearInterval(timer);
+                    return;
+                }
+
+                tiempoUsado++;
+                const restante = totalTiempoPermitido - tiempoUsado;
+                const minutos = Math.floor(restante / 60);
+                const segundos = restante % 60;
+                const tiempoTexto = `${minutos.toString().padStart(2, '0')}:${segundos.toString().padStart(2, '0')}`;
+                display.textContent = `Tiempo restante: ${tiempoTexto}`;
+
+                if (restante <= 0) {
+                    clearInterval(timer);
+                    mostrarModalTiempoAgotado();
+                }
+            }, 1000);
+        }
+
+        function mostrarModalTiempoAgotado() {
+            if (bloqueadoDefinitivamente) return;
+
+            const modal = document.getElementById('modalTiempoFuera');
+            const cuenta = document.getElementById('cuentaRegresiva');
+            modal.style.display = 'flex';
+
+            document.querySelectorAll('input, select, button[onclick="mostrarResultado()"]').forEach(el => el.disabled = true);
+
+            let segundos = 5;
             cuenta.textContent = segundos;
-            if (segundos <= 0) {
-                clearInterval(countdown);
-                location.reload(); 
-            }
-        }, 1000);
-    }
 
-    function aleatorizarTodo() {
-        const preguntas = Array.from(document.querySelectorAll(".contenedor.pregunta"));
-        const quizArea = document.querySelector('body'); 
-        const referenceNode = document.querySelector('.contenedor.puntuacion');
-
-        if (!preguntas.length || !referenceNode) return;
-
-        // 1. Aleatorizar Opciones dentro de cada pregunta
-        preguntas.forEach(p => {
-            const opciones = Array.from(p.querySelectorAll("label"));
-            shuffleArray(opciones);
-            opciones.forEach(op => p.appendChild(op));
-        });
-
-        // 2. Aleatorizar el orden de las Preguntas
-        shuffleArray(preguntas);
-
-        // 3. Reinsertar las preguntas en el DOM y Renumerar
-        preguntas.forEach((p, index) => {
-            const pTexto = p.querySelector("p strong");
-            if (pTexto) {
-                let newText = pTexto.textContent.replace(/^\d+\.\s*/, `${index + 1}. `);
-                pTexto.textContent = newText;
-            }
-            quizArea.insertBefore(p, referenceNode);
-        });
-    }
-
-    function mostrarResultado() {
-        const nombre = document.getElementById("nombreEstudiante").value.trim();
-        const grado = document.getElementById("gradoEstudiante").value;
-        const codigo = document.getElementById("codigoEstudiante").value.trim();
-
-        // 1. VALIDACIONES (Asegura que no haya campos vacíos y que el código sea válido)
-        if (nombre === "") {
-            alert("Por favor, ingrese el nombre del estudiante.");
-            return;
+            const countdown = setInterval(() => {
+                segundos--;
+                cuenta.textContent = segundos;
+                if (segundos <= 0) {
+                    clearInterval(countdown);
+                    location.reload(); 
+                }
+            }, 1000);
         }
 
-        if (grado === "" || grado === "Seleccione") {
-            alert("Por favor, seleccione el grado.");
-            return;
-        }
-        
-        if (!CODIGOS_VALIDOS.includes(codigo)) {
-            alert(`El Código de Identificación "${codigo}" no es válido. Debe ser uno de los códigos pre-inscritos: ${CODIGOS_VALIDOS.join(', ')}.`);
-            return;
+        function aleatorizarTodo() {
+            if (bloqueadoDefinitivamente) return;
+
+            const preguntas = Array.from(document.querySelectorAll(".contenedor.pregunta"));
+            const quizArea = document.querySelector('body'); 
+            const referenceNode = document.querySelector('.contenedor.puntuacion');
+
+            if (!preguntas.length || !referenceNode) return;
+
+            preguntas.forEach(p => {
+                const opciones = Array.from(p.querySelectorAll("label"));
+                shuffleArray(opciones);
+                opciones.forEach(op => p.appendChild(op));
+            });
+
+            shuffleArray(preguntas);
+
+            preguntas.forEach((p, index) => {
+                const pTexto = p.querySelector("p strong");
+                if (pTexto) {
+                    let newText = pTexto.textContent.replace(/^\d+\.\s*/, `${index + 1}. `);
+                    pTexto.textContent = newText;
+                }
+                quizArea.insertBefore(p, referenceNode);
+            });
         }
 
-        const totalPreguntas = document.querySelectorAll(".contenedor.pregunta").length;
+        function mostrarResultado() {
+            if (bloqueadoDefinitivamente) return;
 
-        for (let i = 1; i <= totalPreguntas; i++) {
-            if (!document.querySelector(`input[name="q${i}"]:checked`)) {
-                alert(`Por favor, responda todas las preguntas.`);
+            const nombre = document.getElementById("nombreEstudiante").value.trim();
+            const grado = document.getElementById("gradoEstudiante").value;
+            const codigo = document.getElementById("codigoEstudiante").value.trim();
+
+            if (nombre === "") {
+                alert("Por favor, ingrese el nombre del estudiante.");
                 return;
             }
+
+            if (grado === "" || grado === "Seleccione") {
+                alert("Por favor, seleccione el grado.");
+                return;
+            }
+            
+            if (!CODIGOS_VALIDOS.includes(codigo)) {
+                alert(`El Código de Identificación "${codigo}" no es válido. Debe ser uno de los códigos pre-inscritos: ${CODIGOS_VALIDOS.join(', ')}.`);
+                return;
+            }
+
+            const totalPreguntas = document.querySelectorAll(".contenedor.pregunta").length;
+
+            for (let i = 1; i <= totalPreguntas; i++) {
+                if (!document.querySelector(`input[name="q${i}"]:checked`)) {
+                    alert(`Por favor, responda todas las preguntas.`);
+                    return;
+                }
+            }
+
+            const respuestas = {
+                q1: "c", q2: "b", q3: "b", q4: "b", q5: "b",
+                q6: "a", q7: "c", q8: "b", q9: "b", q10: "b"
+            };
+
+            let respuestasCorrectas = 0;
+            for (let i = 1; i <= totalPreguntas; i++) {
+                const seleccionada = document.querySelector(`input[name="q${i}"]:checked`);
+                if (seleccionada?.value === respuestas[`q${i}`]) {
+                    respuestasCorrectas++;
+                }
+            }
+            
+            const notaFinal = (respuestasCorrectas * VALOR_POR_PREGUNTA).toFixed(1);
+
+            const ahora = new Date();
+            const horaFin = ahora.toLocaleTimeString();
+            const fecha = ahora.toLocaleDateString();
+            const horaInicio_display = horaInicio || 'N/A';
+
+            document.getElementById("resNombre").innerHTML = `👤 <strong>Estudiante:</strong> ${nombre}`;
+            document.getElementById("resGrado").innerHTML = `📈 <strong>Grado:</strong> ${grado}`;
+            document.getElementById("resCodigo").innerHTML = `🆔 <strong>Cód. Identificación:</strong> ${codigo}`;
+            document.getElementById("resFecha").innerHTML = `📅 <strong>Fecha:</strong> ${fecha}`;
+            document.getElementById("resHoraInicio").innerHTML = `⏱️ <strong>Inició:</strong> ${horaInicio_display}`;
+            document.getElementById("resHoraFin").innerHTML = `✅ <strong>Finalizó:</strong> ${horaFin}`;
+            
+            document.getElementById("resPuntaje").innerHTML = 
+                `Puntuación: ${respuestasCorrectas} de ${totalPreguntas} correctas<br>` +
+                `NOTA FINAL: ${notaFinal} / 5.0`;
+
+            document.querySelector('button[onclick="mostrarResultado()"]').disabled = true;
+
+            clearInterval(timer);
+            document.getElementById("resultadoModal").style.display = "block";
+            
+            enviarResultadoAlDocente(codigo, nombre, grado, respuestasCorrectas, totalPreguntas, notaFinal, horaInicio_display, horaFin, fecha);
         }
 
-        // 2. CÁLCULO DE PUNTAJE Y NOTA
-        const respuestas = {
-            q1: "c", q2: "b", q3: "b", q4: "b", q5: "b",
-            q6: "a", q7: "c", q8: "b", q9: "b", q10: "b"
-        };
-
-        let respuestasCorrectas = 0;
-        for (let i = 1; i <= totalPreguntas; i++) {
-            const seleccionada = document.querySelector(`input[name="q${i}"]:checked`);
-            if (seleccionada?.value === respuestas[`q${i}`]) {
-                respuestasCorrectas++;
+        function cerrarModal() {
+            if (!bloqueadoDefinitivamente) {
+                document.getElementById("resultadoModal").style.display = "none";
             }
         }
-        
-        const notaFinal = (respuestasCorrectas * VALOR_POR_PREGUNTA).toFixed(1);
 
-        const ahora = new Date();
-        const horaFin = ahora.toLocaleTimeString();
-        const fecha = ahora.toLocaleDateString();
-        const horaInicio_display = horaInicio || 'N/A'; // Asegura que no sea undefined
+        function enviarResultadoAlDocente(codigoEstudiante, nombre, grado, puntuacion, total, nota, inicio, fin, fecha) {
+            if (bloqueadoDefinitivamente) return;
 
-        // 3. MOSTRAR RESULTADO EN MODAL (Muestra todos los campos que se guardarán)
-        document.getElementById("resNombre").innerHTML = `👤 <strong>Estudiante:</strong> ${nombre}`;
-        document.getElementById("resGrado").innerHTML = `📈 <strong>Grado:</strong> ${grado}`;
-        document.getElementById("resCodigo").innerHTML = `🆔 <strong>Cód. Identificación:</strong> ${codigo}`;
-        document.getElementById("resFecha").innerHTML = `📅 <strong>Fecha:</strong> ${fecha}`;
-        document.getElementById("resHoraInicio").innerHTML = `⏱️ <strong>Inició:</strong> ${horaInicio_display}`;
-        document.getElementById("resHoraFin").innerHTML = `✅ <strong>Finalizó:</strong> ${horaFin}`;
-        
-        document.getElementById("resPuntaje").innerHTML = 
-            `Puntuación: ${respuestasCorrectas} de ${totalPreguntas} correctas<br>` +
-            `NOTA FINAL: ${notaFinal} / 5.0`;
+            const storageKey = `resultado_quizz_${codigoEstudiante}`;
+            const resultadoData = JSON.stringify({
+                status: 'completado',
+                nombre: nombre,
+                grado: grado,
+                puntuacion: `${puntuacion}/${total} correctas`,
+                nota: `${nota} / 5.0`,
+                fecha: fecha,
+                horaInicio: inicio,
+                horaFin: fin,
+                timestamp: new Date().toLocaleString(),
+                intentosSeguridad: intentosSeguridad,
+                eventosSeguridad: registroEventos
+            });
 
-        document.querySelector('button[onclick="mostrarResultado()"]').disabled = true;
-
-        clearInterval(timer);
-        document.getElementById("resultadoModal").style.display = "block";
-        
-        // 4. ENVÍO DE RESULTADO PARA EL DOCENTE (Guarda todos los campos)
-        enviarResultadoAlDocente(codigo, nombre, grado, respuestasCorrectas, totalPreguntas, notaFinal, horaInicio_display, horaFin, fecha);
-    }
-
-    function cerrarModal() {
-        document.getElementById("resultadoModal").style.display = "none";
-    }
-
-    /**
-     * Guarda el resultado del Quizz en localStorage con todos los detalles.
-     */
-    function enviarResultadoAlDocente(codigoEstudiante, nombre, grado, puntuacion, total, nota, inicio, fin, fecha) {
-        const storageKey = `resultado_quizz_${codigoEstudiante}`;
-        
-        const resultadoData = JSON.stringify({
-            status: 'completado',
-            nombre: nombre,
-            grado: grado,
-            puntuacion: `${puntuacion}/${total} correctas`,
-            nota: `${nota} / 5.0`,
-            fecha: fecha,
-            horaInicio: inicio,
-            horaFin: fin,
-            timestamp: new Date().toLocaleString()
-        });
-
-        localStorage.setItem(storageKey, resultadoData);
-    }
-
-
-    // Hace que el temporizador sea arrastrable (se mantiene)
-    function hacerTemporizadorMovible() {
-        const el = document.getElementById("temporizador");
-        let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-
-        el.onmousedown = dragMouseDown;
-
-        function dragMouseDown(e) {
-            e.preventDefault();
-            pos3 = e.clientX;
-            pos4 = e.clientY;
-            document.onmouseup = closeDragElement;
-            document.onmousemove = elementDrag;
+            localStorage.setItem(storageKey, resultadoData);
         }
 
-        function elementDrag(e) {
-            e.preventDefault();
-            pos1 = pos3 - e.clientX;
-            pos2 = pos4 - e.clientY;
-            pos3 = e.clientX;
-            pos4 = e.clientY;
-            el.style.top = (el.offsetTop - pos2) + "px";
-            el.style.left = (el.offsetLeft - pos1) + "px";
-        }
+        function hacerTemporizadorMovible() {
+            const el = document.getElementById("temporizador");
+            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
 
-        function closeDragElement() {
-            document.onmouseup = null;
-            document.onmousemove = null;
+            el.onmousedown = dragMouseDown;
+
+            function dragMouseDown(e) {
+                if (bloqueadoDefinitivamente) return;
+                e.preventDefault();
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.onmouseup = closeDragElement;
+                document.onmousemove = elementDrag;
+            }
+
+            function elementDrag(e) {
+                if (bloqueadoDefinitivamente) return;
+                e.preventDefault();
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                el.style.top = (el.offsetTop - pos2) + "px";
+                el.style.left = (el.offsetLeft - pos1) + "px";
+            }
+
+            function closeDragElement() {
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
         }
-    }
-</script>
+    </script>
 
 </body>
 </html>
