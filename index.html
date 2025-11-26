@@ -1,461 +1,661 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Acceso</title>
-  <link rel="icon" href="icono.png">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css  ">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html, body {
-      height: 100%;
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-      overflow: hidden;
-      position: relative;
-    }
-
-    video#video-fondo {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      min-width: 100%;
-      min-height: 100%;
-      transform: translate(-50%, -50%);
-      object-fit: cover;
-      z-index: -1;
-      filter: brightness(0.7) contrast(1.1);
-    }
-
-    .overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.3) 100%);
-      z-index: -1;
-    }
-
-    .container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-      padding: 20px;
-      z-index: 1;
-    }
-
-    .logo {
-      margin-bottom: 2rem;
-      text-align: center;
-    }
-
-    .logo-icon {
-      font-size: 3.5rem;
-      color: white;
-      text-shadow: 0 2px 12px rgba(0,0,0,0.4);
-      margin-bottom: 1rem;
-      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .logo-text {
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: white;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.4);
-      letter-spacing: -0.5px;
-    }
-
-    .cuadro {
-      background: rgba(255, 255, 255, 0.12);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      width: 100%;
-      max-width: 420px;
-      padding: 38px 32px;
-      border-radius: 24px;
-      text-align: center;
-      box-shadow: 
-        0 12px 35px rgba(0, 0, 0, 0.25),
-        0 1px 3px rgba(255, 255, 255, 0.12);
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      z-index: 1;
-    }
-
-    .title {
-      color: white;
-      font-size: 1.9rem;
-      font-weight: 700;
-      margin-bottom: 2rem;
-      text-shadow: 0 2px 5px rgba(0,0,0,0.3);
-      letter-spacing: -0.5px;
-    }
-
-    .subtitle {
-      color: rgba(255, 255, 255, 0.85);
-      font-size: 1.1rem;
-      margin-bottom: 2.2rem;
-      font-weight: 400;
-      line-height: 1.5;
-    }
-
-    .btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      padding: 17px 22px;
-      margin: 16px 0;
-      border: none;
-      border-radius: 18px;
-      font-size: 1.15rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      box-shadow: 
-        0 6px 18px rgba(0, 0, 0, 0.22),
-        0 3px 6px rgba(0, 0, 0, 0.12);
-      position: relative;
-      overflow: hidden;
-      color: #000;
-      letter-spacing: -0.3px;
-    }
-
-    .btn::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(255, 255, 255, 0.25);
-      transform: translateX(-100%);
-      transition: transform 0.6s ease;
-      z-index: -1;
-    }
-
-    .btn:hover::before {
-      transform: translateX(0);
-    }
-
-    .btn-estudiante {
-      background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
-    }
-
-    .btn-docente {
-      background: linear-gradient(45deg, #fa709a 0%, #fee140 100%);
-    }
-
-    .btn i {
-      margin-right: 14px;
-      font-size: 1.35rem;
-      width: 26px;
-      text-align: center;
-    }
-
-    .btn:hover {
-      transform: translateY(-4px);
-      box-shadow: 
-        0 10px 30px rgba(0, 0, 0, 0.3),
-        0 5px 10px rgba(0, 0, 0, 0.18);
-    }
-
-    .btn:active {
-      transform: translateY(1px);
-      box-shadow: 
-        0 4px 18px rgba(0, 0, 0, 0.22),
-        0 2px 6px rgba(0, 0, 0, 0.12);
-    }
-
-    footer {
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      background: rgba(74, 144, 226, 0.85);
-      text-align: center;
-      padding: 17px 0;
-      color: #fff;
-      font-weight: 600;
-      z-index: 2;
-      box-shadow: 
-        0 -5px 25px rgba(0, 0, 0, 0.25),
-        0 -2px 5px rgba(0, 0, 0, 0.1);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-top: 1px solid rgba(255, 255, 255, 0.25);
-      font-size: 1.05rem;
-    }
-
-    .institution-name {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-    }
-
-    .institution-name i {
-      font-size: 1.2rem;
-    }
-
-    /* Modal de anuncio */
-    #anuncio-modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(5px);
-      z-index: 100;
-      justify-content: center;
-      align-items: center;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    #anuncio-modal.active {
-      display: flex;
-      opacity: 1;
-    }
-
-    .modal-content {
-      background: white;
-      border-radius: 20px;
-      width: 90%;
-      max-width: 500px;
-      padding: 32px;
-      position: relative;
-      box-shadow: 
-        0 20px 50px rgba(0, 0, 0, 0.3),
-        0 10px 20px rgba(0, 0, 0, 0.2);
-      transform: translateY(20px);
-      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-
-    #anuncio-modal.active .modal-content {
-      transform: translateY(0);
-    }
-
-    .close-btn {
-      position: absolute;
-      top: 16px;
-      right: 16px;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: #f1f3f9;
-      border: none;
-      font-size: 1.4rem;
-      color: #666;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.25s ease;
-    }
-
-    .close-btn:hover {
-      background: #e0e3eb;
-      color: #333;
-      transform: rotate(90deg);
-    }
-
-    .modal-title {
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: #2c3e50;
-      margin-bottom: 16px;
-      text-align: center;
-    }
-
-    .modal-icon {
-      font-size: 3.5rem;
-      color: #4a90e2;
-      margin: 0 auto 24px;
-      display: block;
-      text-align: center;
-    }
-
-    .modal-text {
-      font-size: 1.15rem;
-      line-height: 1.6;
-      color: #444;
-      text-align: center;
-      margin-bottom: 28px;
-    }
-
-    .modal-footer {
-      text-align: center;
-      font-size: 0.95rem;
-      color: #777;
-    }
-
-    @media (max-width: 480px) {
-      .cuadro {
-        padding: 30px 24px;
-        margin-bottom: 20px;
-      }
-      
-      .btn {
-        padding: 15px;
-        font-size: 1.05rem;
-      }
-      
-      .title {
-        font-size: 1.6rem;
-      }
-      
-      .subtitle {
-        font-size: 1rem;
-      }
-      
-      .logo-icon {
-        font-size: 2.8rem;
-      }
-      
-      .modal-content {
-        padding: 24px 20px;
-      }
-      
-      .modal-title {
-        font-size: 1.5rem;
-      }
-      
-      .modal-text {
-        font-size: 1.05rem;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pollos Semicriollos - Gestión Financiera</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Librerías para PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        .editable-cell { min-width: 120px; padding: 8px 12px; border-radius: 6px; }
+        .editable-cell:focus { outline: 2px solid #f59e0b; background-color: #fff9e6; }
+        .table-header { background-color: #fff8f0; color: #7c2d12; }
+        .profit-positive { color: #047857; font-weight: 600; }
+        .profit-negative { color: #b91c1c; font-weight: 600; }
+        .tab-btn.active { background-color: #fff8f0; color: #ea580c; font-weight: 600; border-left: 3px solid #ea580c; }
+        .scale-in { animation: scaleIn 0.3s ease forwards; }
+        @keyframes scaleIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    </style>
 </head>
-<body>
-  <!-- Video de fondo -->
-  <video id="video-fondo" autoplay muted loop>
-    <source src="video.mp4" type="video/mp4">
-    Tu navegador no soporta el video de fondo.
-  </video>
-  
-  <div class="overlay"></div>
+<body class="bg-gray-50">
 
-  <div class="container">
-    <div class="logo">
-      <div class="logo-icon">
-        <i class="fas fa-book-open"></i>
-      </div>
-      <div class="logo-text">Institución Educativa</div>
+<!-- Login Screen -->
+<div id="loginScreen" class="min-h-screen bg-gradient-to-br from-amber-50 to-orange-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md scale-in">
+        <div class="text-center mb-8">
+            <div class="bg-white rounded-full p-3 shadow-lg inline-block mb-4 border-4 border-amber-500">
+                <img 
+                    src="https://media-bog2-1.cdn.whatsapp.net/v/t61.24694-24/518969449_1751592388793487_2205738987564206197_n.jpg?ccb=11-4&oh=01_Q5Aa3AF0sjNpN47maYEyldHHZGzGhZGpb_B7P25AT0_vXGnAAw&oe=6933636D&_nc_sid=5e03e0&_nc_cat=106" 
+                    alt="Pollos Semicriollos" 
+                    class="w-28 h-28 rounded-full object-cover"
+                >
+            </div>
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">Pollos Semicriollos</h1>
+            <p class="text-gray-600">Control de Costos, Gastos y Ventas</p>
+        </div>
+
+        <form id="loginForm" class="space-y-5">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">🔒 Contraseña de Acceso</label>
+                <input
+                    type="password"
+                    id="passwordInput"
+                    placeholder="••••••••"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+                    required
+                >
+            </div>
+
+            <div class="bg-amber-50 border-l-4 border-amber-500 p-3 rounded">
+                <p class="text-sm text-amber-800 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                    Tus datos se guardan solo en este dispositivo
+                </p>
+            </div>
+
+            <button
+                type="submit"
+                class="w-full bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-semibold py-3 px-4 rounded-lg shadow-md transition-all duration-300 transform hover:scale-[1.02]"
+            >
+                Ingresar al Sistema
+            </button>
+        </form>
     </div>
+</div>
+
+<!-- Main App -->
+<div id="mainApp" class="hidden min-h-screen fade">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-amber-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-3">
+                    <img 
+                        src="https://media-bog2-1.cdn.whatsapp.net/v/t61.24694-24/518969449_1751592388793487_2205738987564206197_n.jpg?ccb=11-4&oh=01_Q5Aa3AF0sjNpN47maYEyldHHZGzGhZGpb_B7P25AT0_vXGnAAw&oe=6933636D&_nc_sid=5e03e0&_nc_cat=106" 
+                        alt="Logo" 
+                        class="h-10 w-10 rounded-full object-cover border-2 border-amber-500"
+                    >
+                    <h1 class="text-xl font-bold text-gray-900">Pollos Semicriollos</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="text-right hidden sm:block">
+                        <p class="text-sm font-medium text-gray-900">Ganancia Neta</p>
+                        <p id="netProfit" class="text-lg font-bold profit-positive">COP $0</p>
+                    </div>
+                    <button
+                        id="logoutBtn"
+                        class="flex items-center px-3 py-2 text-sm text-gray-600 hover:text-amber-700 hover:bg-amber-50 rounded-lg transition-colors"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
+                        Salir
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <!-- Tabs -->
+        <div class="flex flex-wrap gap-1 mb-6 bg-amber-50 p-1 rounded-xl w-fit">
+            <button data-tab="costs" class="tab-btn active px-5 py-2.5 rounded-lg text-sm font-medium">💰 Costos</button>
+            <button data-tab="expenses" class="tab-btn px-5 py-2.5 rounded-lg text-sm font-medium">💸 Gastos</button>
+            <button data-tab="sales" class="tab-btn px-5 py-2.5 rounded-lg text-sm font-medium">📈 Ventas</button>
+            <button data-tab="summary" class="tab-btn px-5 py-2.5 rounded-lg text-sm font-medium">📊 Resumen</button>
+        </div>
+
+        <!-- Add Form -->
+        <div id="addFormSection" class="bg-white rounded-xl shadow-sm border border-amber-100 p-5 mb-6 scale-in">
+            <h3 id="formTitle" class="text-lg font-semibold text-gray-800 mb-4">➕ Agregar Nuevo Costo</h3>
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                <input type="text" id="descInput" placeholder="Descripción" class="col-span-2 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500">
+                <input type="number" id="amountInput" placeholder="Monto" step="0.01" class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500">
+                <input type="date" id="dateInput" class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500">
+                <button id="addBtn" class="bg-amber-600 hover:bg-amber-700 text-white font-medium py-2 px-4 rounded-lg transition">Agregar</button>
+            </div>
+        </div>
+
+        <!-- Tab Contents -->
+        <!-- COSTOS -->
+        <div id="costsTab" class="tab-content block">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                <div class="px-6 py-4 bg-amber-50 border-b border-amber-200 flex justify-between items-center">
+                    <h2 class="text-lg font-bold text-amber-800">💰 Lista de Costos</h2>
+                    <span id="costsTotal" class="font-semibold text-gray-700">Total: COP $0</span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="table-header">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Fecha</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Descripción</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Monto (COP)</th>
+                                <th class="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="costsTableBody" class="bg-white divide-y divide-gray-100">
+                            <tr><td colspan="4" class="px-6 py-8 text-center text-gray-500">No hay costos registrados</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- GASTOS -->
+        <div id="expensesTab" class="tab-content hidden">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                <div class="px-6 py-4 bg-blue-50 border-b border-blue-200 flex justify-between items-center">
+                    <h2 class="text-lg font-bold text-blue-800">💸 Lista de Gastos</h2>
+                    <span id="expensesTotal" class="font-semibold text-gray-700">Total: COP $0</span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="table-header">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Fecha</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Descripción</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Monto (COP)</th>
+                                <th class="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="expensesTableBody" class="bg-white divide-y divide-gray-100">
+                            <tr><td colspan="4" class="px-6 py-8 text-center text-gray-500">No hay gastos registrados</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- VENTAS -->
+        <div id="salesTab" class="tab-content hidden">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                <div class="px-6 py-4 bg-green-50 border-b border-green-200 flex justify-between items-center">
+                    <h2 class="text-lg font-bold text-green-800">📈 Lista de Ventas</h2>
+                    <span id="salesTotal" class="font-semibold text-gray-700">Total: COP $0</span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="table-header">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Fecha</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Descripción</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Monto (COP)</th>
+                                <th class="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="salesTableBody" class="bg-white divide-y divide-gray-100">
+                            <tr><td colspan="4" class="px-6 py-8 text-center text-gray-500">No hay ventas registradas</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- RESUMEN -->
+        <div id="summaryTab" class="tab-content hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">📊 Resumen Financiero</h2>
+                <button
+                    id="downloadPdfBtn"
+                    class="flex items-center bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
+                    Descargar PDF
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <div class="bg-red-50 border-l-4 border-red-500 p-5 rounded-lg">
+                    <h3 class="text-sm font-medium text-red-800">💰 Costos Totales</h3>
+                    <p id="summaryCosts" class="text-2xl font-bold text-red-700">COP $0</p>
+                </div>
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-lg">
+                    <h3 class="text-sm font-medium text-blue-800">💸 Gastos Totales</h3>
+                    <p id="summaryExpenses" class="text-2xl font-bold text-blue-700">COP $0</p>
+                </div>
+                <div class="bg-green-50 border-l-4 border-green-500 p-5 rounded-lg">
+                    <h3 class="text-sm font-medium text-green-800">📈 Ventas Totales</h3>
+                    <p id="summarySales" class="text-2xl font-bold text-green-700">COP $0</p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">📊 Ganancia Neta</h3>
+                <div class="text-center py-8">
+                    <p class="text-sm text-gray-600 mb-2">Ventas - (Costos + Gastos)</p>
+                    <p id="summaryProfit" class="text-4xl font-bold profit-positive">COP $0</p>
+                    <p id="profitStatus" class="mt-2 text-sm font-medium text-gray-600">Sin actividad registrada</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Hidden content for PDF generation -->
+<div id="pdfContent" class="hidden">
+    <div style="width: 210mm; padding: 20mm; font-family: Arial, sans-serif; line-height: 1.6;">
+        <div style="text-align: center; margin-bottom: 25px;">
+            <img 
+                src="https://media-bog2-1.cdn.whatsapp.net/v/t61.24694-24/518969449_1751592388793487_2205738987564206197_n.jpg?ccb=11-4&oh=01_Q5Aa3AF0sjNpN47maYEyldHHZGzGhZGpb_B7P25AT0_vXGnAAw&oe=6933636D&_nc_sid=5e03e0&_nc_cat=106" 
+                alt="Pollos Semicriollos" 
+                style="width: 80px; height: 80px; border-radius: 50%; border: 3px solid #d97706; margin: 0 auto 15px;"
+            >
+            <h1 style="font-size: 24px; color: #7c2d12; font-weight: bold; margin: 0;">Pollos Semicriollos</h1>
+            <p style="font-size: 16px; color: #7c2d12; margin: 5px 0 0;">Informe Financiero</p>
+            <p id="pdfDate" style="font-size: 14px; color: #6b7280; margin-top: 10px;"></p>
+        </div>
+
+        <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 15px; margin: 20px 0; border-radius: 0 6px 6px 0;">
+            <h2 style="font-size: 18px; color: #7c2d12; font-weight: bold; margin: 0 0 10px;">Resumen Financiero</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-top: 10px;">
+                <div style="background: white; padding: 12px; border-radius: 6px; text-align: center;">
+                    <div style="font-size: 12px; color: #b91c1c; font-weight: bold;">COSTOS</div>
+                    <div id="pdfCosts" style="font-size: 18px; font-weight: bold; color: #b91c1c; margin-top: 5px;">COP $0</div>
+                </div>
+                <div style="background: white; padding: 12px; border-radius: 6px; text-align: center;">
+                    <div style="font-size: 12px; color: #1d4ed8; font-weight: bold;">GASTOS</div>
+                    <div id="pdfExpenses" style="font-size: 18px; font-weight: bold; color: #1d4ed8; margin-top: 5px;">COP $0</div>
+                </div>
+                <div style="background: white; padding: 12px; border-radius: 6px; text-align: center;">
+                    <div style="font-size: 12px; color: #059669; font-weight: bold;">VENTAS</div>
+                    <div id="pdfSales" style="font-size: 18px; font-weight: bold; color: #059669; margin-top: 5px;">COP $0</div>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; padding: 25px 0; background: white; border-radius: 8px; margin-top: 20px;">
+            <div style="font-size: 14px; color: #6b7280; margin-bottom: 10px;">GANANCIA NETA</div>
+            <div style="font-size: 28px; font-weight: bold;" id="pdfProfit">COP $0</div>
+            <div id="pdfStatus" style="font-size: 14px; margin-top: 10px; color: #6b7280;"></div>
+        </div>
+
+        <div style="margin-top: 30px; font-size: 12px; color: #9ca3af; text-align: center; border-top: 1px solid #e5e7eb; padding-top: 15px;">
+            <p>Informe generado automáticamente • Datos confidenciales</p>
+        </div>
+    </div>
+</div>
+
+<script>
+// Inicializar jsPDF
+const { jsPDF } = window.jspdf;
+
+// Datos iniciales
+let costs = JSON.parse(localStorage.getItem('pollosCosts')) || [];
+let expenses = JSON.parse(localStorage.getItem('pollosExpenses')) || [];
+let sales = JSON.parse(localStorage.getItem('pollosSales')) || [];
+let currentTab = 'costs';
+let editingId = null;
+
+// Elementos DOM
+const loginScreen = document.getElementById('loginScreen');
+const mainApp = document.getElementById('mainApp');
+const passwordInput = document.getElementById('passwordInput');
+const loginForm = document.getElementById('loginForm');
+const logoutBtn = document.getElementById('logoutBtn');
+const tabBtns = document.querySelectorAll('.tab-btn');
+const tabContents = document.querySelectorAll('.tab-content');
+const formTitle = document.getElementById('formTitle');
+const descInput = document.getElementById('descInput');
+const amountInput = document.getElementById('amountInput');
+const dateInput = document.getElementById('dateInput');
+const addBtn = document.getElementById('addBtn');
+const downloadPdfBtn = document.getElementById('downloadPdfBtn');
+
+// Formatear moneda COP
+function formatCOP(amount) {
+    return new Intl.NumberFormat('es-CO', {
+        style: 'currency',
+        currency: 'COP',
+        minimumFractionDigits: 0
+    }).format(amount);
+}
+
+// Calcular totales y ganancia
+function calculateTotals() {
+    const totalCosts = costs.reduce((sum, item) => sum + parseFloat(item.amount), 0);
+    const totalExpenses = expenses.reduce((sum, item) => sum + parseFloat(item.amount), 0);
+    const totalSales = sales.reduce((sum, item) => sum + parseFloat(item.amount), 0);
+    const profit = totalSales - totalCosts - totalExpenses;
+
+    // Actualizar interfaz
+    document.getElementById('costsTotal').textContent = `Total: ${formatCOP(totalCosts)}`;
+    document.getElementById('expensesTotal').textContent = `Total: ${formatCOP(totalExpenses)}`;
+    document.getElementById('salesTotal').textContent = `Total: ${formatCOP(totalSales)}`;
     
-    <div class="cuadro">
-      <h1 class="title">Acceso al Sistema</h1>
-     
-      
-      <button class="btn btn-docente" id="btn-docente">
-        <i class="fas fa-chalkboard-teacher"></i> Docente
-      </button>
-      
-      <button class="btn btn-estudiante" onclick="location.href='assets/estudiantes/index.html'">
-        <i class="fas fa-people-group"></i> Estudiante
-      </button>
-    </div>
-  </div>
+    document.getElementById('netProfit').textContent = formatCOP(profit);
+    document.getElementById('netProfit').className = 'text-lg font-bold ' + 
+        (profit >= 0 ? 'profit-positive' : 'profit-negative');
+    
+    // Resumen
+    document.getElementById('summaryCosts').textContent = formatCOP(totalCosts);
+    document.getElementById('summaryExpenses').textContent = formatCOP(totalExpenses);
+    document.getElementById('summarySales').textContent = formatCOP(totalSales);
+    document.getElementById('summaryProfit').textContent = formatCOP(profit);
+    document.getElementById('summaryProfit').className = 'text-4xl font-bold ' + 
+        (profit >= 0 ? 'profit-positive' : 'profit-negative');
+    
+    document.getElementById('profitStatus').textContent = 
+        profit > 0 ? '✅ ¡Estás generando ganancias!' :
+        profit < 0 ? '⚠️ Hay pérdidas. Revisa tus costos y gastos.' : 
+        '📊 Sin actividad registrada';
 
-  <!-- Footer -->
-  <footer>
-    <div class="institution-name">
-      <i class="fas fa-atom"></i>
-      <span>© 2025 Institución Educativa colucas - Derechos reservados</span>
-    </div>
-  </footer>
+    // Actualizar PDF content
+    document.getElementById('pdfCosts').textContent = formatCOP(totalCosts);
+    document.getElementById('pdfExpenses').textContent = formatCOP(totalExpenses);
+    document.getElementById('pdfSales').textContent = formatCOP(totalSales);
+    document.getElementById('pdfProfit').textContent = formatCOP(profit);
+    document.getElementById('pdfProfit').style.color = profit >= 0 ? '#059669' : '#b91c1c';
+    document.getElementById('pdfStatus').textContent = 
+        profit > 0 ? '✅ ¡Estás generando ganancias!' :
+        profit < 0 ? '⚠️ Hay pérdidas. Revisa tus costos y gastos.' : 
+        'Sin actividad registrada';
 
-  <!-- Modal de anuncio -->
-  <div id="anuncio-modal">
-    <div class="modal-content">
-      <button class="close-btn" id="close-modal">&times;</button>
-      <i class="fas fa-bullhorn modal-icon"></i>
-      <h2 class="modal-title">Aviso Importante para Docentes</h2>
-      <p class="modal-text">
-        Estimado docente, debido a actualizaciones en el sistema, 
-        el ingreso se encuentra <strong>inabilitado</strong> 
+    return { totalCosts, totalExpenses, totalSales, profit };
+}
+
+// Renderizar tablas
+function renderTables() {
+    // Costos
+    const costsBody = document.getElementById('costsTableBody');
+    if (costs.length === 0) {
+        costsBody.innerHTML = '<tr><td colspan="4" class="px-6 py-8 text-center text-gray-500">No hay costos registrados</td></tr>';
+    } else {
+        costsBody.innerHTML = costs.map(item => `
+            <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.date}</td>
+                <td class="px-6 py-4 text-sm font-medium text-gray-900">${item.description}</td>
+                <td class="px-6 py-4 text-sm font-medium text-red-600">${formatCOP(item.amount)}</td>
+                <td class="px-6 py-4 text-right text-sm font-medium">
+                    <button onclick="editItem(${item.id}, 'cost')" class="text-amber-600 hover:text-amber-800 mr-3">
+                        ✏️ Editar
+                    </button>
+                    <button onclick="deleteItem(${item.id}, 'cost')" class="text-red-600 hover:text-red-800">
+                        🗑️ Eliminar
+                    </button>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    // Gastos
+    const expensesBody = document.getElementById('expensesTableBody');
+    if (expenses.length === 0) {
+        expensesBody.innerHTML = '<tr><td colspan="4" class="px-6 py-8 text-center text-gray-500">No hay gastos registrados</td></tr>';
+    } else {
+        expensesBody.innerHTML = expenses.map(item => `
+            <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.date}</td>
+                <td class="px-6 py-4 text-sm font-medium text-gray-900">${item.description}</td>
+                <td class="px-6 py-4 text-sm font-medium text-blue-600">${formatCOP(item.amount)}</td>
+                <td class="px-6 py-4 text-right text-sm font-medium">
+                    <button onclick="editItem(${item.id}, 'expense')" class="text-amber-600 hover:text-amber-800 mr-3">
+                        ✏️ Editar
+                    </button>
+                    <button onclick="deleteItem(${item.id}, 'expense')" class="text-red-600 hover:text-red-800">
+                        🗑️ Eliminar
+                    </button>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    // Ventas
+    const salesBody = document.getElementById('salesTableBody');
+    if (sales.length === 0) {
+        salesBody.innerHTML = '<tr><td colspan="4" class="px-6 py-8 text-center text-gray-500">No hay ventas registradas</td></tr>';
+    } else {
+        salesBody.innerHTML = sales.map(item => `
+            <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.date}</td>
+                <td class="px-6 py-4 text-sm font-medium text-gray-900">${item.description}</td>
+                <td class="px-6 py-4 text-sm font-medium text-green-600">${formatCOP(item.amount)}</td>
+                <td class="px-6 py-4 text-right text-sm font-medium">
+                    <button onclick="editItem(${item.id}, 'sale')" class="text-amber-600 hover:text-amber-800 mr-3">
+                        ✏️ Editar
+                    </button>
+                    <button onclick="deleteItem(${item.id}, 'sale')" class="text-red-600 hover:text-red-800">
+                        🗑️ Eliminar
+                    </button>
+                </td>
+            </tr>
+        `).join('');
+    }
+}
+
+// Guardar datos
+function saveData() {
+    localStorage.setItem('pollosCosts', JSON.stringify(costs));
+    localStorage.setItem('pollosExpenses', JSON.stringify(expenses));
+    localStorage.setItem('pollosSales', JSON.stringify(sales));
+    localStorage.setItem('pollosAuth', 'true');
+    calculateTotals();
+    renderTables();
+}
+
+// Agregar nuevo ítem
+addBtn.addEventListener('click', function() {
+    const desc = descInput.value.trim();
+    const amount = parseFloat(amountInput.value);
+    const date = dateInput.value;
+
+    if (!desc || isNaN(amount) || !date) {
+        alert('Por favor completa todos los campos correctamente.');
+        return;
+    }
+
+    const newItem = {
+        id: Date.now(),
+        description: desc,
+        amount: amount,
+        date: date
+    };
+
+    if (editingId !== null) {
+        // Editar
+        if (currentTab === 'costs') {
+            costs = costs.map(item => item.id === editingId ? {...newItem, id: editingId} : item);
+        } else if (currentTab === 'expenses') {
+            expenses = expenses.map(item => item.id === editingId ? {...newItem, id: editingId} : item);
+        } else if (currentTab === 'sales') {
+            sales = sales.map(item => item.id === editingId ? {...newItem, id: editingId} : item);
+        }
+        editingId = null;
+        addBtn.textContent = 'Agregar';
+        formTitle.textContent = `➕ Agregar Nuevo ${currentTab === 'costs' ? 'Costo' : currentTab === 'expenses' ? 'Gasto' : 'Venta'}`;
+    } else {
+        // Agregar nuevo
+        if (currentTab === 'costs') {
+            costs.push(newItem);
+        } else if (currentTab === 'expenses') {
+            expenses.push(newItem);
+        } else if (currentTab === 'sales') {
+            sales.push(newItem);
+        }
+    }
+
+    // Limpiar formulario
+    descInput.value = '';
+    amountInput.value = '';
+    dateInput.value = new Date().toISOString().split('T')[0];
+    
+    saveData();
+});
+
+// Editar ítem (llamado desde botón)
+window.editItem = function(id, type) {
+    let item;
+    if (type === 'cost') {
+        item = costs.find(c => c.id === id);
+        currentTab = 'costs';
+    } else if (type === 'expense') {
+        item = expenses.find(e => e.id === id);
+        currentTab = 'expenses';
+    } else if (type === 'sale') {
+        item = sales.find(s => s.id === id);
+        currentTab = 'sales';
+    }
+
+    if (item) {
+        descInput.value = item.description;
+        amountInput.value = item.amount;
+        dateInput.value = item.date;
+        editingId = id;
+        addBtn.textContent = '✅ Actualizar';
+        formTitle.textContent = `✏️ Editar ${type === 'cost' ? 'Costo' : type === 'expense' ? 'Gasto' : 'Venta'}`;
         
-      </p>
-      <div class="modal-footer">
-        <p>Gracias</p>
-      </div>
-    </div>
-  </div>
+        // Cambiar a la pestaña correcta
+        switchTab(currentTab);
+    }
+};
 
-  <!-- Script para control de reproducción y modal -->
-  <script>
-    // Video handling
-    const video = document.getElementById('video-fondo');
-    let pausaActiva = false;
+// Eliminar ítem (llamado desde botón)
+window.deleteItem = function(id, type) {
+    if (confirm('¿Estás seguro de eliminar este registro?')) {
+        if (type === 'cost') {
+            costs = costs.filter(c => c.id !== id);
+        } else if (type === 'expense') {
+            expenses = expenses.filter(e => e.id !== id);
+        } else if (type === 'sale') {
+            sales = sales.filter(s => s.id !== id);
+        }
+        saveData();
+    }
+};
 
-    video.addEventListener('ended', () => {
-      pausaActiva = true;
-      setTimeout(() => {
-        video.currentTime = 0;
-        video.play();
-        pausaActiva = false;
-      }, 180000); // 3 minutos
-    });
-
-    setInterval(() => {
-      if (!pausaActiva && (video.paused || video.ended)) {
-        video.currentTime = 0;
-        video.play().catch(e => console.log("Playback error:", e));
-      }
-    }, 180000);
+// Cambiar pestaña
+function switchTab(tab) {
+    currentTab = tab;
     
-    // Modal handling
-    const modal = document.getElementById('anuncio-modal');
-    const btnDocente = document.getElementById('btn-docente');
-    const closeBtn = document.getElementById('close-modal');
-
-    // Abrir modal al hacer clic en Docente
-    btnDocente.addEventListener('click', function() {
-      modal.classList.add('active');
+    // Actualizar botones
+    tabBtns.forEach(btn => {
+        if (btn.dataset.tab === tab) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
     });
-
-    // Cerrar modal al hacer clic en ×
-    closeBtn.addEventListener('click', function() {
-      modal.classList.remove('active');
+    
+    // Mostrar contenido
+    tabContents.forEach(content => {
+        content.classList.add('hidden');
     });
+    document.getElementById(tab + 'Tab').classList.remove('hidden');
+    
+    // Actualizar título del formulario
+    const titles = {
+        'costs': '➕ Agregar Nuevo Costo',
+        'expenses': '➕ Agregar Nuevo Gasto',
+        'sales': '➕ Agregar Nueva Venta',
+        'summary': '📊 Resumen Financiero'
+    };
+    formTitle.textContent = titles[tab] || titles.costs;
+    
+    // Reiniciar formulario
+    if (tab !== 'summary') {
+        document.getElementById('addFormSection').classList.remove('hidden');
+        descInput.value = '';
+        amountInput.value = '';
+        dateInput.value = new Date().toISOString().split('T')[0];
+        addBtn.textContent = 'Agregar';
+        editingId = null;
+    } else {
+        document.getElementById('addFormSection').classList.add('hidden');
+    }
+}
 
-    // Cerrar modal al hacer clic fuera del contenido
-    modal.addEventListener('click', function(e) {
-      if (e.target === modal) {
-        modal.classList.remove('active');
-      }
-    });
+// Generar PDF
+downloadPdfBtn.addEventListener('click', function() {
+    // Actualizar fecha en el PDF
+    const now = new Date();
+    const options = { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    };
+    document.getElementById('pdfDate').textContent = 
+        `Generado el: ${now.toLocaleDateString('es-CO', options)}`;
 
-    // Permitir cerrar con tecla ESC
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape' && modal.classList.contains('active')) {
-        modal.classList.remove('active');
-      }
+    // Mostrar contenido temporalmente para captura
+    const pdfContent = document.getElementById('pdfContent');
+    pdfContent.classList.remove('hidden');
+    
+    // Generar PDF
+    html2canvas(pdfContent.querySelector('div'), {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: null
+    }).then(canvas => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        
+        // Calcular dimensiones
+        const imgWidth = 210; // A4 width in mm
+        const pageHeight = 297; // A4 height in mm
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        
+        pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+        pdf.save(`PollosSemicriollos_Informe_${now.toISOString().split('T')[0]}.pdf`);
+        
+        // Ocultar contenido
+        pdfContent.classList.add('hidden');
+    }).catch(error => {
+        console.error('Error generando PDF:', error);
+        alert('Error al generar el PDF. Por favor intenta nuevamente.');
+        pdfContent.classList.add('hidden');
     });
+});
 
-    // Mobile video autoplay fix
-    document.addEventListener('DOMContentLoaded', function() {
-      const playVideo = () => {
-        video.play().catch(e => console.log("Autoplay prevented:", e));
-        document.body.removeEventListener('touchstart', playVideo);
-        document.body.removeEventListener('click', playVideo);
-      };
-      
-      document.body.addEventListener('touchstart', playVideo, { once: true });
-      document.body.addEventListener('click', playVideo, { once: true });
-    });
-  </script>
+// Eventos
+tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+});
+
+loginForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    if (passwordInput.value === 'pollos2025') {
+        loginScreen.classList.add('hidden');
+        mainApp.classList.remove('hidden');
+        dateInput.value = new Date().toISOString().split('T')[0];
+        calculateTotals();
+        renderTables();
+    } else {
+        alert('❌ Contraseña incorrecta. Por favor intente nuevamente.');
+    }
+});
+
+logoutBtn.addEventListener('click', function() {
+    if (confirm('¿Deseas cerrar sesión?')) {
+        mainApp.classList.add('hidden');
+        loginScreen.classList.remove('hidden');
+        passwordInput.value = '';
+    }
+});
+
+// Inicializar fecha
+document.addEventListener('DOMContentLoaded', function() {
+    dateInput.value = new Date().toISOString().split('T')[0];
+    
+    // Verificar si ya hay sesión
+    if (localStorage.getItem('pollosAuth') === 'true') {
+        loginScreen.classList.add('hidden');
+        mainApp.classList.remove('hidden');
+        calculateTotals();
+        renderTables();
+    }
+});
+</script>
+
 </body>
 </html>
+
