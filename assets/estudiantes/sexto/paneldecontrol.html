@@ -1,0 +1,1074 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="icon" href="img/icono.png">
+    <title>Panel de Control • Sociales 6°</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg: #f8fafc;
+            --sidebar-bg: #1e293b;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 4px 12px rgba(0,0,0,0.05);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f9ff;
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        /* Layout */
+        .app {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Top Navigation */
+        .top-nav {
+            background: white;
+            box-shadow: var(--shadow);
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 4rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--text);
+        }
+
+        .logo-icon {
+            background: #008037;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 0.75rem;
+        }
+
+        .logo span { 
+            color: #008037; 
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 0.5rem;
+        }
+
+        .nav-link {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+            color: var(--text-light);
+        }
+
+        .nav-link.active,
+        .nav-link:hover:not(.disabled) {
+            background: #dcfce7;
+            color: #008037;
+        }
+
+        .nav-link.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .nav-link.disabled .lock-icon {
+            color: var(--danger);
+            margin-left: 0.25rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 1.5rem;
+            max-width: 1280px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Page Styles */
+        .page-title {
+            font-size: 1.875rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: #008037;
+        }
+
+        .page-subtitle {
+            font-size: 1rem;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.25rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+        }
+
+        .stat-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .stat-title {
+            font-size: 0.875rem;
+            color: var(--text-light);
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .stat-status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        .status-active { background: #dcfce7; color: #16a34a; }
+        .status-partial { background: #fef9c3; color: #ca8a04; }
+        .status-blocked { background: #fee2e2; color: #dc2626; }
+
+        /* Control Cards */
+        .control-section {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .section-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            background: #f0fdf4;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #008037;
+        }
+
+        .section-subtitle {
+            font-size: 0.875rem;
+            color: var(--text-light);
+            margin-top: 0.25rem;
+        }
+
+        .control-list {
+            list-style: none;
+        }
+
+        .control-item {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .control-item:last-child {
+            border-bottom: none;
+        }
+
+        .control-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .control-info {
+            flex: 1;
+        }
+
+        .control-name {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .control-desc {
+            font-size: 0.875rem;
+            color: var(--text-light);
+        }
+
+        .control-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Toggle Switch */
+        .toggle {
+            position: relative;
+            display: inline-block;
+            width: 52px;
+            height: 26px;
+        }
+
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #cbd5e1;
+            transition: var(--transition);
+            border-radius: 26px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: var(--transition);
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #008037;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        /* Level Select */
+        .level-select {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border);
+            font-size: 0.875rem;
+            font-weight: 500;
+            background: white;
+        }
+
+        .level-total { background: #dcfce7; color: #16a34a; border-color: #bbf7d0; }
+        .level-partial { background: #fef9c3; color: #ca8a04; border-color: #fde047; }
+        .level-blocked { background: #fee2e2; color: #dc2626; border-color: #fecaca; }
+
+        /* Password Control */
+        .password-control {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .password-input {
+            padding: 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            width: 140px;
+        }
+
+        /* Logs */
+        .logs-list {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .log-item {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .log-icon {
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+            border-radius: 0.5rem;
+            background: #dcfce7;
+            color: #16a34a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .log-content h4 {
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .log-content p {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            margin-top: 0.25rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-content {
+                flex-wrap: wrap;
+            }
+            
+            .nav-links {
+                width: 100%;
+                justify-content: center;
+                margin-top: 1rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .control-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .control-actions {
+                width: 100%;
+                justify-content: flex-start;
+                margin-top: 1rem;
+            }
+        }
+
+        /* Estilos para la vista de Sociales (simulada) */
+        .sociales-preview {
+            background: linear-gradient(135deg, #e6f7ee, #ffffff);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-top: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .sociales-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .grado-label {
+            font-size: 60px;
+            font-weight: 800;
+            color: #3685ee;
+            text-shadow: 0 0 10px rgba(14, 69, 187, 0.5);
+            margin: 10px 0;
+            line-height: 1;
+        }
+
+        .sociales-title {
+            font-size: 24px;
+            color: #021227;
+            margin: 8px 0;
+        }
+
+        .boton-sociales {
+            display: inline-block;
+            padding: 12px 24px;
+            margin: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #008037, #00c853);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .boton-sociales:hover {
+            transform: scale(1.03);
+        }
+
+        .boton-sociales.blocked {
+            background: linear-gradient(135deg, #dc2626, #ef4444);
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .blocked-overlay {
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            font-size: 14px;
+        }
+
+        .password-box {
+            margin-top: 1rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .password-box input {
+            padding: 8px;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            width: 120px;
+        }
+
+        .password-box button {
+            padding: 8px 16px;
+            background: #007a3d;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <!-- Top Navigation -->
+        <nav class="top-nav">
+            <div class="nav-container">
+                <div class="nav-content">
+                    <div class="logo">
+                        <div class="logo-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        Panel Sociales<span style="color:#008037">6°</span>
+                    </div>
+                    <ul class="nav-links" id="navLinks">
+                        <li><a href="#" class="nav-link active" data-view="panel"><i class="fas fa-sliders-h"></i> Panel de Control</a></li>
+                        <li><a href="#" class="nav-link" data-view="sociales"><i class="fas fa-globe-americas"></i> Vista Sociales</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Panel de Control -->
+            <div id="panelView" class="view active">
+                <h1 class="page-title">
+                    <i class="fas fa-shield-alt"></i>
+                    Panel de Control • Área de Sociales 6°
+                </h1>
+                <p class="page-subtitle">Gestión de accesos para la plataforma del Colegio Integrado Lucas Caballero</p>
+
+                <!-- Stats Overview -->
+                <div class="stats-grid" id="statsGrid">
+                    <!-- Stats will be populated by JS -->
+                </div>
+
+                <!-- Control Section -->
+                <section class="control-section">
+                    <div class="section-header">
+                        <div>
+                            <h2 class="section-title">
+                                <i class="fas fa-toggle-on"></i>
+                                Gestión de Funcionalidades
+                            </h2>
+                            <p class="section-subtitle">Controla el acceso a cada módulo de la plataforma</p>
+                        </div>
+                    </div>
+                    <ul class="control-list" id="controlList">
+                        <!-- Controls will be populated by JS -->
+                    </ul>
+                </section>
+
+                <!-- Logs Section -->
+                <section class="control-section">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <i class="fas fa-bell"></i>
+                            Registro de Actividades
+                        </h2>
+                    </div>
+                    <div class="logs-list" id="logsList">
+                        <!-- Logs will be populated by JS -->
+                    </div>
+                </section>
+            </div>
+
+            <!-- Vista Sociales (simulada) -->
+            <div id="socialesView" class="view">
+                <h1 class="page-title">
+                    <i class="fas fa-globe-americas"></i>
+                    Vista Previa: Sociales 6°
+                </h1>
+                <div class="sociales-preview">
+                    <div class="sociales-header">
+                        <img src="img/icono.png" alt="Escudo" style="width:80px; margin:0 auto 15px; display:block;">
+                        <div class="grado-label">6°</div>
+                        <h2 class="sociales-title">Colegio Integrado Lucas Caballero</h2>
+                        <p>Área de Sociales & Historia • Docente: Marta Emilia Ovalle</p>
+                    </div>
+
+                    <div id="socialesControls">
+                        <!-- Botones se generarán con JS -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // ================================
+        // CONFIGURACIÓN CENTRALIZADA
+        // ================================
+        // Esta es la "fuente única de verdad" para toda la plataforma
+        const PLATFORM_CONFIG_KEY = 'innovastudio2026_sociales_config';
+        
+        // Estado inicial (simula base de datos)
+        const initialConfig = {
+            guiaHistoria: { 
+                enabled: false, 
+                lastModified: null, 
+                modifiedBy: null,
+                reason: "En revisión por el departamento"
+            },
+            quizConocimiento: { 
+                enabled: true, 
+                password: "social2025",
+                lastModified: null, 
+                modifiedBy: null
+            },
+            bibliotecaDigital: { 
+                enabled: true,
+                adRequired: true, // true = obligatorio, false = saltable
+                lastModified: null, 
+                modifiedBy: null
+            },
+            guiaSociales: { enabled: true },
+            autoevaluacion: { enabled: true },
+            herramientas: { enabled: true }
+        };
+
+        // Logs iniciales
+        const initialLogs = [
+            { id: 1, action: "Bloqueó", module: "guiaHistoria", by: "Admin", time: "2025-11-27 09:15", detail: "En revisión" },
+            { id: 2, action: "Configuró", module: "bibliotecaDigital", by: "Admin", time: "2025-11-26 14:30", detail: "Anuncio obligatorio" },
+        ];
+
+        // Cargar configuración desde localStorage o usar inicial
+        let config = JSON.parse(localStorage.getItem(PLATFORM_CONFIG_KEY)) || initialConfig;
+        let logs = JSON.parse(localStorage.getItem('innovastudio2026_sociales_logs')) || initialLogs;
+
+        // Guardar estado
+        function saveState() {
+            localStorage.setItem(PLATFORM_CONFIG_KEY, JSON.stringify(config));
+            localStorage.setItem('innovastudio2026_sociales_logs', JSON.stringify(logs));
+        }
+
+        // Formatear fecha
+        function formatDate(date) {
+            return new Date(date).toLocaleString('es-ES', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // Agregar log
+        function addLog(action, module, detail = '', by = 'Admin') {
+            const newLog = {
+                id: Date.now(),
+                action,
+                module,
+                detail,
+                by,
+                time: formatDate(new Date())
+            };
+            logs.unshift(newLog);
+            logs = logs.slice(0, 10); // Mantener solo los últimos 10
+            saveState();
+            renderLogs();
+        }
+
+        // ================================
+        // RENDERIZADO
+        // ================================
+        function renderStats() {
+            const statsGrid = document.getElementById('statsGrid');
+            statsGrid.innerHTML = '';
+            
+            const modules = [
+                { key: 'guiaHistoria', name: 'Guía Historia', icon: 'fa-book', color: '#ef4444' },
+                { key: 'quizConocimiento', name: 'Qüizz Conocimiento', icon: 'fa-question-circle', color: '#8b5cf6' },
+                { key: 'bibliotecaDigital', name: 'Biblioteca Digital', icon: 'fa-book-open', color: '#06b6d4' },
+                { key: 'guiaSociales', name: 'Guía Sociales', icon: 'fa-book', color: '#10b981' },
+                { key: 'autoevaluacion', name: 'Autoevaluación', icon: 'fa-check-circle', color: '#f59e0b' },
+                { key: 'herramientas', name: 'Herramientas', icon: 'fa-tools', color: '#008037' },
+            ];
+            
+            modules.forEach(mod => {
+                const status = config[mod.key].enabled ? 'Activo' : 'Bloqueado';
+                const statusClass = config[mod.key].enabled ? 'status-active' : 'status-blocked';
+                
+                const statCard = document.createElement('div');
+                statCard.className = 'stat-card';
+                statCard.innerHTML = `
+                    <div class="stat-header">
+                        <div class="stat-icon" style="background:${mod.color}">
+                            <i class="fas ${mod.icon}"></i>
+                        </div>
+                        <div>
+                            <div class="stat-title">${mod.name}</div>
+                            <div class="stat-value">${status}</div>
+                            <span class="stat-status ${statusClass}">${status}</span>
+                        </div>
+                    </div>
+                `;
+                statsGrid.appendChild(statCard);
+            });
+        }
+
+        function renderControls() {
+            const controlList = document.getElementById('controlList');
+            controlList.innerHTML = '';
+            
+            // Guía Historia
+            const guiaHistoriaItem = document.createElement('li');
+            guiaHistoriaItem.className = 'control-item';
+            guiaHistoriaItem.innerHTML = `
+                <div class="control-header">
+                    <div class="control-info">
+                        <div class="control-name">
+                            <i class="fas fa-book" style="color:#ef4444"></i>
+                            Guía de Historia
+                        </div>
+                        <div class="control-desc">
+                            Última modificación: ${config.guiaHistoria.lastModified ? config.guiaHistoria.lastModified + ' por ' + config.guiaHistoria.modifiedBy : 'Sin modificaciones'}
+                        </div>
+                    </div>
+                    <div class="control-actions">
+                        <label class="toggle">
+                            <input type="checkbox" ${config.guiaHistoria.enabled ? 'checked' : ''} id="guiaHistoriaToggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                <div id="guiaHistoriaReason" style="margin-top:1rem;${!config.guiaHistoria.enabled ? '' : 'display:none'}">
+                    <label>Motivo del bloqueo:</label>
+                    <textarea id="reasonText" rows="2" style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:4px; margin-top:5px;">${config.guiaHistoria.reason}</textarea>
+                    <button onclick="saveReason()" style="margin-top:8px; padding:6px 12px; background:#008037; color:white; border:none; border-radius:4px;">Guardar motivo</button>
+                </div>
+            `;
+            controlList.appendChild(guiaHistoriaItem);
+
+            // Qüizz de Conocimiento
+            const quizItem = document.createElement('li');
+            quizItem.className = 'control-item';
+            quizItem.innerHTML = `
+                <div class="control-header">
+                    <div class="control-info">
+                        <div class="control-name">
+                            <i class="fas fa-question-circle" style="color:#8b5cf6"></i>
+                            Qüizz de Conocimiento
+                        </div>
+                        <div class="control-desc">
+                            Protegido con contraseña • Última modificación: ${config.quizConocimiento.lastModified ? config.quizConocimiento.lastModified : 'Nunca'}
+                        </div>
+                    </div>
+                    <div class="control-actions">
+                        <div class="password-control">
+                            <input type="password" id="quizPassword" class="password-input" value="${config.quizConocimiento.password}">
+                            <button onclick="saveQuizPassword()" style="padding:6px 12px; background:#8b5cf6; color:white; border:none; border-radius:4px;">Guardar</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            controlList.appendChild(quizItem);
+
+            // Biblioteca Digital
+            const bibliotecaItem = document.createElement('li');
+            bibliotecaItem.className = 'control-item';
+            bibliotecaItem.innerHTML = `
+                <div class="control-header">
+                    <div class="control-info">
+                        <div class="control-name">
+                            <i class="fas fa-book-open" style="color:#06b6d4"></i>
+                            Biblioteca Digital
+                        </div>
+                        <div class="control-desc">
+                            Anuncio: ${config.bibliotecaDigital.adRequired ? 'Obligatorio' : 'Saltable'}
+                        </div>
+                    </div>
+                    <div class="control-actions">
+                        <select id="adRequiredSelect" class="level-select">
+                            <option value="true" ${config.bibliotecaDigital.adRequired ? 'selected' : ''}>Obligatorio</option>
+                            <option value="false" ${!config.bibliotecaDigital.adRequired ? 'selected' : ''}>Saltable</option>
+                        </select>
+                    </div>
+                </div>
+            `;
+            controlList.appendChild(bibliotecaItem);
+
+            // Otros módulos (simple toggle)
+            ['guiaSociales', 'autoevaluacion', 'herramientas'].forEach(key => {
+                const name = key === 'guiaSociales' ? 'Guía Sociales' : 
+                            key === 'autoevaluacion' ? 'Autoevaluación' : 'Herramientas';
+                const icon = key === 'guiaSociales' ? 'fa-book' : 
+                            key === 'autoevaluacion' ? 'fa-check-circle' : 'fa-tools';
+                const color = key === 'guiaSociales' ? '#10b981' : 
+                             key === 'autoevaluacion' ? '#f59e0b' : '#008037';
+                
+                const item = document.createElement('li');
+                item.className = 'control-item';
+                item.innerHTML = `
+                    <div class="control-header">
+                        <div class="control-info">
+                            <div class="control-name">
+                                <i class="fas ${icon}" style="color:${color}"></i>
+                                ${name}
+                            </div>
+                            <div class="control-desc">
+                                Estado actual: ${config[key].enabled ? 'Activo' : 'Bloqueado'}
+                            </div>
+                        </div>
+                        <div class="control-actions">
+                            <label class="toggle">
+                                <input type="checkbox" ${config[key].enabled ? 'checked' : ''} data-module="${key}">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                `;
+                controlList.appendChild(item);
+            });
+
+            // Event listeners
+            document.getElementById('guiaHistoriaToggle').addEventListener('change', function() {
+                const newEnabled = this.checked;
+                config.guiaHistoria = {
+                    ...config.guiaHistoria,
+                    enabled: newEnabled,
+                    lastModified: formatDate(new Date()),
+                    modifiedBy: 'Admin'
+                };
+                document.getElementById('guiaHistoriaReason').style.display = newEnabled ? 'none' : 'block';
+                addLog(newEnabled ? "Activó" : "Bloqueó", "guiaHistoria", newEnabled ? "" : config.guiaHistoria.reason);
+                saveState();
+                renderAll();
+            });
+
+            document.getElementById('adRequiredSelect').addEventListener('change', function() {
+                const newRequired = this.value === 'true';
+                config.bibliotecaDigital.adRequired = newRequired;
+                config.bibliotecaDigital.lastModified = formatDate(new Date());
+                config.bibliotecaDigital.modifiedBy = 'Admin';
+                addLog("Configuró", "bibliotecaDigital", newRequired ? "Anuncio obligatorio" : "Anuncio saltable");
+                saveState();
+                renderAll();
+            });
+
+            document.querySelectorAll('input[data-module]').forEach(input => {
+                input.addEventListener('change', function() {
+                    const module = this.getAttribute('data-module');
+                    const newEnabled = this.checked;
+                    config[module].enabled = newEnabled;
+                    config[module].lastModified = formatDate(new Date());
+                    config[module].modifiedBy = 'Admin';
+                    addLog(newEnabled ? "Activó" : "Bloqueó", module);
+                    saveState();
+                    renderAll();
+                });
+            });
+        }
+
+        function saveReason() {
+            const reason = document.getElementById('reasonText').value;
+            config.guiaHistoria.reason = reason;
+            saveState();
+            addLog("Actualizó", "guiaHistoria", "Motivo: " + reason);
+        }
+
+        function saveQuizPassword() {
+            const password = document.getElementById('quizPassword').value;
+            if (password.trim() === '') {
+                alert('La contraseña no puede estar vacía');
+                return;
+            }
+            config.quizConocimiento.password = password;
+            config.quizConocimiento.lastModified = formatDate(new Date());
+            config.quizConocimiento.modifiedBy = 'Admin';
+            addLog("Actualizó", "quizConocimiento", "Contraseña cambiada");
+            saveState();
+            alert('Contraseña actualizada correctamente');
+        }
+
+        function renderLogs() {
+            const logsList = document.getElementById('logsList');
+            logsList.innerHTML = '';
+            
+            logs.slice(0, 5).forEach(log => {
+                const logItem = document.createElement('div');
+                logItem.className = 'log-item';
+                logItem.innerHTML = `
+                    <div class="log-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="log-content">
+                        <h4><span style="color:#008037">${log.by}</span> ${log.action} "${log.module}" ${log.detail ? `→ ${log.detail}` : ''}</h4>
+                        <p>${log.time}</p>
+                    </div>
+                `;
+                logsList.appendChild(logItem);
+            });
+        }
+
+        function renderSocialesPreview() {
+            const container = document.getElementById('socialesControls');
+            container.innerHTML = '';
+
+            // Función para crear botón con estado
+            function createButton(id, text, enabled, onClick, extra = '') {
+                const btn = document.createElement('button');
+                btn.className = `boton-sociales ${!enabled ? 'blocked' : ''}`;
+                btn.textContent = text;
+                if (enabled) {
+                    btn.onclick = onClick;
+                } else {
+                    btn.title = 'Bloqueado por administración';
+                }
+                if (extra) btn.innerHTML += extra;
+                return btn;
+            }
+
+            // Guía Sociales
+            container.appendChild(createButton(
+                'guiaSociales',
+                'Guía Sociales',
+                config.guiaSociales.enabled,
+                () => alert('Redirigiendo a Guía Sociales...')
+            ));
+
+            // Guía Historia
+            const guiaHistoriaBtn = createButton(
+                'guiaHistoria',
+                'Guía Historia',
+                config.guiaHistoria.enabled,
+                () => alert('Redirigiendo a Guía Historia...'),
+                config.guiaHistoria.enabled ? '' : `<div class="blocked-overlay">${config.guiaHistoria.reason}</div>`
+            );
+            container.appendChild(guiaHistoriaBtn);
+
+            // Autoevaluación
+            container.appendChild(createButton(
+                'autoevaluacion',
+                'Autoevaluación',
+                config.autoevaluacion.enabled,
+                () => alert('Redirigiendo a Autoevaluación...')
+            ));
+
+            // Qüizz de Conocimiento
+            const quizContainer = document.createElement('div');
+            quizContainer.style.textAlign = 'center';
+            quizContainer.innerHTML = `
+                <button class="boton-sociales ${!config.quizConocimiento.enabled ? 'blocked' : ''}" 
+                        ${config.quizConocimiento.enabled ? '' : 'title="Bloqueado por administración"'}
+                        onclick="${config.quizConocimiento.enabled ? 'toggleQuizPassword()' : ''}">
+                    Qüizz de Conocimiento
+                </button>
+                <div id="quizPasswordBox" style="display:none; margin-top:10px;">
+                    <input type="password" id="socialesPassword" placeholder="Contraseña" style="padding:8px; width:140px;">
+                    <button onclick="checkSocialesPassword()" style="padding:8px 16px; background:#007a3d; color:white; border:none; border-radius:4px; margin-left:5px;">Ingresar</button>
+                </div>
+            `;
+            container.appendChild(quizContainer);
+
+            // Biblioteca Digital
+            container.appendChild(createButton(
+                'bibliotecaDigital',
+                'Biblioteca digital📚',
+                config.bibliotecaDigital.enabled,
+                config.bibliotecaDigital.adRequired ? 
+                    () => alert('Mostrando anuncio obligatorio...') : 
+                    () => alert('Accediendo directamente a biblioteca...')
+            ));
+
+            // Herramientas
+            container.appendChild(createButton(
+                'herramientas',
+                'Herramientas',
+                config.herramientas.enabled,
+                () => alert('Redirigiendo a Herramientas...')
+            ));
+        }
+
+        // ================================
+        // FUNCIONES PARA VISTA SOCIALES
+        // ================================
+        function toggleQuizPassword() {
+            const box = document.getElementById('quizPasswordBox');
+            box.style.display = box.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function checkSocialesPassword() {
+            const input = document.getElementById('socialesPassword').value;
+            if (input === config.quizConocimiento.password) {
+                alert('¡Acceso concedido! Redirigiendo al Qüizz...');
+                // Aquí iría window.location.href = "ptt2025.html";
+            } else {
+                alert('❌ Contraseña incorrecta');
+            }
+        }
+
+        // ================================
+        // FUNCIONES GLOBALES
+        // ================================
+        function renderAll() {
+            renderStats();
+            renderControls();
+            renderLogs();
+            renderSocialesPreview();
+        }
+
+        function changeView(viewName) {
+            document.querySelectorAll('.view').forEach(view => {
+                view.classList.remove('active');
+            });
+            document.getElementById(viewName + 'View').classList.add('active');
+            
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            document.querySelector(`[data-view="${viewName}"]`).classList.add('active');
+        }
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    changeView(this.getAttribute('data-view'));
+                });
+            });
+            
+            renderAll();
+        });
+
+        // ================================
+        // 🔑 INTEGRACIÓN PLATAFORMA - CLAVE
+        // ================================
+        // Copia ESTE BLOQUE en todas tus páginas (guia-boseto.html, autoevaluacion.html, etc.)
+        // para que lean el estado centralizado
+        window.PLATFORM = {
+            // Verifica si un módulo está habilitado
+            isEnabled: function(module) {
+                const config = JSON.parse(localStorage.getItem('innovastudio2026_sociales_config')) || initialConfig;
+                return config[module] && config[module].enabled;
+            },
+            
+            // Obtiene la configuración del quiz
+            getQuizConfig: function() {
+                const config = JSON.parse(localStorage.getItem('innovastudio2026_sociales_config')) || initialConfig;
+                return config.quizConocimiento;
+            },
+            
+            // Obtiene la configuración de la biblioteca
+            getLibraryConfig: function() {
+                const config = JSON.parse(localStorage.getItem('innovastudio2026_sociales_config')) || initialConfig;
+                return config.bibliotecaDigital;
+            },
+            
+            // Obtiene el motivo de bloqueo de la Guía de Historia
+            getHistoryGuideReason: function() {
+                const config = JSON.parse(localStorage.getItem('innovastudio2026_sociales_config')) || initialConfig;
+                return config.guiaHistoria.reason || "Acceso restringido temporalmente";
+            }
+        };
+    </script>
+</body>
+</html>
+
+

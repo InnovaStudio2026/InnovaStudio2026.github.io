@@ -113,6 +113,14 @@
             box-shadow: 0 0 20px #1a77f0;
         }
 
+        .boton-menu.blocked {
+            background: linear-gradient(135deg, #dc2626, #ef4444);
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
         /* Tarjeta giratoria */
         .flip-card {
             background-color: transparent;
@@ -289,7 +297,7 @@
 
         /* Estilos para el Anuncio de Video */
         #videoAnuncio {
-            display: none; /* CLAVE: Asegura que el pop-up esté oculto al cargar */
+            display: none;
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
@@ -327,6 +335,24 @@
         #videoAnuncio button:hover {
             box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         }
+
+        /* Estado bloqueado visual */
+        .blocked-overlay {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 18px;
+            text-align: center;
+            padding: 20px;
+            border-radius: 12px;
+            z-index: 10;
+        }
     </style>
 </head>
 <body>
@@ -343,34 +369,11 @@
             </div>
         </header>
 
-        <section class="menu">
-            <button class="boton-menu" onclick="incrementarProgresoYRedirigir('guia/guia-boseto.html', 6)">Guía Sociales</button>
-            
-            <button class="boton-menu" onclick="mostrarAnuncioActualizacion()">Guía Historia</button>
-            
-            <button class="boton-menu" onclick="incrementarProgresoYRedirigir('autoevaluacion.html', 6)">Autoevaluación</button>
-
-
-            <div class="flip-card" onclick="toggleFlip(event)">
-                <div class="flip-card-inner" id="flipInner">
-                    <div class="flip-card-front">
-                        Qüizz de Conocimiento
-                    </div>
-                    <div class="flip-card-back">
-                        <input type="password" id="password" placeholder="Contraseña">
-                        <button onclick="checkPassword(event)">Ingresar</button>
-                    </div>
-                </div>
-            </div>
-            
-            <button class="boton-menu" onclick="abrirAnuncioVideo(2)">Biblioteca digital📚</button> 
-            
-            <button class="boton-menu" onclick="incrementarProgresoYRedirigir('herramientas/index.html', 4)">Herramientas</button>
+        <section class="menu" id="menuContainer">
+            <!-- Los botones se generarán dinámicamente con JS -->
         </section>
 
-
         <button id="btn-volver" onclick="location.href='menu.html'">⮜ Volver</button>
-
 
         <div id="videoAnuncio">
             <div style="max-width: 680px;">
@@ -389,12 +392,11 @@
         <div id="anuncioActualizacion">
             <div class="contenido">
                 <h2>⚠️ Guía de Historia Bloqueada ⚠️</h2>
-                <p>Este modulo está siendo ajustado y validado.</p>
-                <p>El acceso se encuentra Inabilitado temporalmente.</p>
+                <p id="motivoBloqueo">Este modulo está siendo ajustado y validado.</p>
+                <p>El acceso se encuentra inhabilitado temporalmente.</p>
                 <button onclick="cerrarAnuncioActualizacion()">Entendido, Cerrar</button>
             </div>
         </div>
-
 
         <footer>
             © 2025 Institución Educativa Colucas - Derechos Reservados
@@ -402,10 +404,34 @@
     </div>
 
     <script>
+        // ================================
+        // 🔑 INTEGRACIÓN CON PANEL DE CONTROL
+        // ================================
+        const PLATFORM_CONFIG_KEY = 'innovastudio2026_sociales_config';
+
+        // Cargar configuración centralizada
+        function loadPlatformConfig() {
+            const saved = localStorage.getItem(PLATFORM_CONFIG_KEY);
+            const defaultConfig = {
+                guiaHistoria: { enabled: false, reason: "Este módulo está siendo ajustado y validado." },
+                quizConocimiento: { enabled: true, password: "social2025" },
+                bibliotecaDigital: { enabled: true, adRequired: true },
+                guiaSociales: { enabled: true },
+                autoevaluacion: { enabled: true },
+                herramientas: { enabled: true }
+            };
+            
+            return saved ? JSON.parse(saved) : defaultConfig;
+        }
+
+        // Estado global
+        let config = loadPlatformConfig();
+
+        // ================================
+        // FUNCIONES DE PROGRESO (sin cambios)
+        // ================================
         const AREA_NAME = "Historia y Sociales";
         const PROGRESO_KEY = `progreso_${AREA_NAME.replace(/\s/g, '_')}`;
-
-        // --- FUNCIONES DE PROGRESO AUTOMÁTICO ---
 
         function obtenerProgreso() {
             return parseInt(localStorage.getItem(PROGRESO_KEY)) || 0;
@@ -417,26 +443,114 @@
 
         function incrementarProgreso(incremento) {
             let progresoActual = obtenerProgreso();
-            if (progresoActual >= 100) {
-                return;
-            }
-            progresoActual += incremento;
-            if (progresoActual > 100) {
-                progresoActual = 100;
-            }
+            if (progresoActual >= 100) return;
+            progresoActual = Math.min(100, progresoActual + incremento);
             guardarProgreso(progresoActual);
             console.log(`Progreso actualizado en ${AREA_NAME}: ${progresoActual}%`);
         }
         
         function incrementarProgresoYRedirigir(url, incremento) {
-             incrementarProgreso(incremento);
-             window.location.href = url;
+            incrementarProgreso(incremento);
+            window.location.href = url;
         }
 
+        // ================================
+        // RENDERIZADO DINÁMICO DE BOTONES
+        // ================================
+        function renderMenu() {
+            const container = document.getElementById('menuContainer');
+            container.innerHTML = '';
 
-        // --- LÓGICA DE BOTONES Y ANUNCIOS ---
+            // Guía Sociales
+            if (config.guiaSociales.enabled) {
+                const btn = document.createElement('button');
+                btn.className = 'boton-menu';
+                btn.textContent = 'Guía Sociales';
+                btn.onclick = () => incrementarProgresoYRedirigir('guia/guia-boseto.html', 6);
+                container.appendChild(btn);
+            }
 
+            // Guía Historia
+            const historiaBtn = document.createElement('button');
+            if (config.guiaHistoria.enabled) {
+                historiaBtn.className = 'boton-menu';
+                historiaBtn.textContent = 'Guía Historia';
+                historiaBtn.onclick = () => window.location.href = 'historia.html';
+            } else {
+                historiaBtn.className = 'boton-menu blocked';
+                historiaBtn.textContent = 'Guía Historia';
+                historiaBtn.title = 'Bloqueado por administración';
+                historiaBtn.onclick = mostrarAnuncioActualizacion;
+            }
+            container.appendChild(historiaBtn);
+
+            // Autoevaluación
+            if (config.autoevaluacion.enabled) {
+                const btn = document.createElement('button');
+                btn.className = 'boton-menu';
+                btn.textContent = 'Autoevaluación';
+                btn.onclick = () => incrementarProgresoYRedirigir('autoevaluacion.html', 6);
+                container.appendChild(btn);
+            }
+
+            // Qüizz de Conocimiento
+            const flipCard = document.createElement('div');
+            flipCard.className = 'flip-card';
+            if (config.quizConocimiento.enabled) {
+                flipCard.onclick = (e) => toggleFlip(e);
+            } else {
+                flipCard.style.opacity = '0.5';
+                flipCard.style.pointerEvents = 'none';
+                flipCard.title = 'Bloqueado por administración';
+                // Añadir overlay visual
+                const overlay = document.createElement('div');
+                overlay.className = 'blocked-overlay';
+                overlay.innerHTML = '<i class="fas fa-lock"></i><br>Bloqueado';
+                flipCard.appendChild(overlay);
+            }
+            
+            flipCard.innerHTML += `
+                <div class="flip-card-inner" id="flipInner">
+                    <div class="flip-card-front">
+                        Qüizz de Conocimiento
+                    </div>
+                    <div class="flip-card-back">
+                        <input type="password" id="password" placeholder="Contraseña">
+                        <button onclick="checkPassword(event)">Ingresar</button>
+                    </div>
+                </div>
+            `;
+            container.appendChild(flipCard);
+
+            // Biblioteca Digital
+            const bibliotecaBtn = document.createElement('button');
+            if (config.bibliotecaDigital.enabled) {
+                bibliotecaBtn.className = 'boton-menu';
+                bibliotecaBtn.textContent = 'Biblioteca digital📚';
+                bibliotecaBtn.onclick = () => abrirAnuncioVideo(2);
+            } else {
+                bibliotecaBtn.className = 'boton-menu blocked';
+                bibliotecaBtn.textContent = 'Biblioteca digital📚';
+                bibliotecaBtn.title = 'Bloqueado por administración';
+                bibliotecaBtn.onclick = () => alert('Este módulo está desactivado temporalmente.');
+            }
+            container.appendChild(bibliotecaBtn);
+
+            // Herramientas
+            if (config.herramientas.enabled) {
+                const btn = document.createElement('button');
+                btn.className = 'boton-menu';
+                btn.textContent = 'Herramientas';
+                btn.onclick = () => incrementarProgresoYRedirigir('herramientas/index.html', 4);
+                container.appendChild(btn);
+            }
+        }
+
+        // ================================
+        // LÓGICA ACTUALIZADA (con integración)
+        // ================================
         function toggleFlip(e) {
+            if (!config.quizConocimiento.enabled) return;
             const inner = e.currentTarget.querySelector('.flip-card-inner');
             if (inner.classList.contains('flipped')) return; 
             inner.classList.add('flipped');
@@ -445,14 +559,14 @@
             window.flipTimeout = setTimeout(() => {
                 inner.classList.remove('flipped');
                 document.getElementById("password").value = "";
-            }, 180000); // 3 minutos
+            }, 180000);
         }
 
         function checkPassword(e) {
+            if (!config.quizConocimiento.enabled) return;
             e.stopPropagation(); 
             const input = document.getElementById("password").value;
-            
-            if (input === "social2025") {
+            if (input === config.quizConocimiento.password) {
                 clearTimeout(window.flipTimeout);
                 incrementarProgreso(4); 
                 window.location.href = "ptt2025.html";
@@ -462,73 +576,93 @@
                 document.getElementById("password").value = "";
             }
         }
-        
-        // 🔒 FUNCIÓN DE APERTURA: SOLO MUESTRA EL CONTENEDOR
+
         function abrirAnuncioVideo(incremento) {
+            if (!config.bibliotecaDigital.enabled) return;
+            
             const anuncio = document.getElementById("videoAnuncio");
             const video = document.getElementById("anuncioVideo");
-            
-            // Pausa y reinicia el video (fundamental para asegurar que esté quieto)
             video.pause();
             video.currentTime = 0; 
             video.onended = null; 
-
-            // Muestra el pop-up
             anuncio.style.display = "flex";
             
-            // Asigna el evento 'onended' para que se active SOLO si el video llega al final.
+            // Si el anuncio NO es obligatorio, permitir saltar sin ver
+            if (!config.bibliotecaDigital.adRequired) {
+                video.onended = null;
+                return;
+            }
+            
             video.onended = function () {
                 incrementarProgreso(incremento); 
                 window.open("https://www.ellibrototal.com/ltotal/", "_blank");
                 anuncio.style.display = "none";
-                video.onended = null; 
             };
         }
 
-        // 🔑 FUNCIÓN DE REPRODUCCIÓN: SOLO INICIA EL VIDEO
         function iniciarReproduccionManual() {
-             const video = document.getElementById("anuncioVideo");
-             
-             // Ejecuta la reproducción (requiere interacción del usuario)
-             const playPromise = video.play();
-
-             if (playPromise !== undefined) {
-                 playPromise.catch(error => {
-                     // Esto puede manejar casos donde la reproducción falla, pero no debería con un clic explícito.
-                     console.error("Fallo al intentar reproducir el video:", error);
-                 });
-             }
+            if (!config.bibliotecaDigital.enabled) return;
+            const video = document.getElementById("anuncioVideo");
+            const playPromise = video.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(error => console.error("Error al reproducir:", error));
+            }
         }
 
         function cerrarAnuncio() {
             const anuncio = document.getElementById("videoAnuncio");
             const video = document.getElementById("anuncioVideo");
-            video.pause(); // Detiene el video
+            video.pause();
             anuncio.style.display = "none";
-            video.onended = null; 
         }
 
         function saltarAnuncio() {
+            if (!config.bibliotecaDigital.enabled) return;
             const anuncio = document.getElementById("videoAnuncio");
             const video = document.getElementById("anuncioVideo");
-            video.pause(); // Detiene el video
+            video.pause();
             anuncio.style.display = "none";
-            video.onended = null;
-            
-            // Se asume 2% de progreso por saltar.
             incrementarProgreso(2); 
-
             window.open("https://www.ellibrototal.com/ltotal/", "_blank");
         }
 
-        // Guía Historia (Bloqueo)
         function mostrarAnuncioActualizacion() {
+            if (config.guiaHistoria.enabled) {
+                window.location.href = 'historia.html';
+                return;
+            }
+            document.getElementById("motivoBloqueo").textContent = 
+                config.guiaHistoria.reason || "Este módulo está siendo ajustado y validado.";
             document.getElementById("anuncioActualizacion").style.display = "flex";
         }
 
         function cerrarAnuncioActualizacion() {
             document.getElementById("anuncioActualizacion").style.display = "none";
         }
+
+        // ================================
+        // INICIALIZACIÓN
+        // ================================
+        document.addEventListener('DOMContentLoaded', function() {
+            renderMenu();
+            
+            // Escuchar cambios en localStorage (para múltiples pestañas)
+            window.addEventListener('storage', function(e) {
+                if (e.key === PLATFORM_CONFIG_KEY) {
+                    config = loadPlatformConfig();
+                    renderMenu();
+                }
+            });
+        });
+
+        // Font Awesome para íconos (requerido por el overlay)
+        document.addEventListener('DOMContentLoaded', () => {
+            const script = document.createElement('script');
+            script.src = 'https://kit.fontawesome.com/a076d05399.js';
+            script.crossorigin = 'anonymous';
+            document.head.appendChild(script);
+        });
     </script>
 </body>
 </html>
+
