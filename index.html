@@ -1,1098 +1,461 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pollos Semicriollos - Gestión Financiera</title>
-  <!-- Tailwind CSS v3.4 (CDN) -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <!-- Librerías externas -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acceso</title>
+  <link rel="icon" href="icono.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css  ">
   <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background-color: #faf8f5;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
-    .editable-cell {
-      min-width: 120px;
-      padding: 8px 12px;
-      border-radius: 6px;
-      transition: all 0.2s ease;
+
+    html, body {
+      height: 100%;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      overflow: hidden;
+      position: relative;
     }
-    .editable-cell:focus {
-      outline: 2px solid #f59e0b;
-      background-color: #fff9e6;
-      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+
+    video#video-fondo {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      min-width: 100%;
+      min-height: 100%;
+      transform: translate(-50%, -50%);
+      object-fit: cover;
+      z-index: -1;
+      filter: brightness(0.7) contrast(1.1);
     }
-    .table-header {
-      background-color: #fff8f0;
-      color: #7c2d12;
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.3) 100%);
+      z-index: -1;
     }
-    .profit-positive {
-      color: #059669;
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding: 20px;
+      z-index: 1;
+    }
+
+    .logo {
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .logo-icon {
+      font-size: 3.5rem;
+      color: white;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.4);
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .logo-text {
+      font-size: 1.8rem;
       font-weight: 700;
+      color: white;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+      letter-spacing: -0.5px;
     }
-    .profit-negative {
-      color: #dc2626;
+
+    .cuadro {
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      width: 100%;
+      max-width: 420px;
+      padding: 38px 32px;
+      border-radius: 24px;
+      text-align: center;
+      box-shadow: 
+        0 12px 35px rgba(0, 0, 0, 0.25),
+        0 1px 3px rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      z-index: 1;
+    }
+
+    .title {
+      color: white;
+      font-size: 1.9rem;
       font-weight: 700;
+      margin-bottom: 2rem;
+      text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+      letter-spacing: -0.5px;
     }
-    .tab-btn {
-      transition: all 0.25s ease;
-      border-radius: 0.5rem;
+
+    .subtitle {
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 1.1rem;
+      margin-bottom: 2.2rem;
+      font-weight: 400;
+      line-height: 1.5;
     }
-    .tab-btn.active {
-      background-color: #fff8f0;
-      color: #ea580c;
+
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 17px 22px;
+      margin: 16px 0;
+      border: none;
+      border-radius: 18px;
+      font-size: 1.15rem;
       font-weight: 600;
-      border-left: 3px solid #ea580c;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      cursor: pointer;
+      transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 
+        0 6px 18px rgba(0, 0, 0, 0.22),
+        0 3px 6px rgba(0, 0, 0, 0.12);
+      position: relative;
+      overflow: hidden;
+      color: #000;
+      letter-spacing: -0.3px;
     }
-    .tab-btn:not(.active):hover {
-      background-color: #fef3c7;
-      color: #92400e;
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.25);
+      transform: translateX(-100%);
+      transition: transform 0.6s ease;
+      z-index: -1;
     }
-    .scale-in {
-      animation: scaleIn 0.3s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+
+    .btn:hover::before {
+      transform: translateX(0);
     }
-    @keyframes scaleIn {
-      from { transform: scale(0.92); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
+
+    .btn-estudiante {
+      background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
     }
-    .fade {
+
+    .btn-docente {
+      background: linear-gradient(45deg, #fa709a 0%, #fee140 100%);
+    }
+
+    .btn i {
+      margin-right: 14px;
+      font-size: 1.35rem;
+      width: 26px;
+      text-align: center;
+    }
+
+    .btn:hover {
+      transform: translateY(-4px);
+      box-shadow: 
+        0 10px 30px rgba(0, 0, 0, 0.3),
+        0 5px 10px rgba(0, 0, 0, 0.18);
+    }
+
+    .btn:active {
+      transform: translateY(1px);
+      box-shadow: 
+        0 4px 18px rgba(0, 0, 0, 0.22),
+        0 2px 6px rgba(0, 0, 0, 0.12);
+    }
+
+    footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: rgba(74, 144, 226, 0.85);
+      text-align: center;
+      padding: 17px 0;
+      color: #fff;
+      font-weight: 600;
+      z-index: 2;
+      box-shadow: 
+        0 -5px 25px rgba(0, 0, 0, 0.25),
+        0 -2px 5px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-top: 1px solid rgba(255, 255, 255, 0.25);
+      font-size: 1.05rem;
+    }
+
+    .institution-name {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .institution-name i {
+      font-size: 1.2rem;
+    }
+
+    /* Modal de anuncio */
+    #anuncio-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(5px);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
       opacity: 0;
-      animation: fadeIn 0.4s ease forwards;
+      transition: opacity 0.3s ease;
     }
-    @keyframes fadeIn {
-      to { opacity: 1; }
+
+    #anuncio-modal.active {
+      display: flex;
+      opacity: 1;
     }
-    .scrollable-table {
-      overflow-x: auto;
-      scrollbar-width: thin;
-      scrollbar-color: #fbbf24 #fff;
+
+    .modal-content {
+      background: white;
+      border-radius: 20px;
+      width: 90%;
+      max-width: 500px;
+      padding: 32px;
+      position: relative;
+      box-shadow: 
+        0 20px 50px rgba(0, 0, 0, 0.3),
+        0 10px 20px rgba(0, 0, 0, 0.2);
+      transform: translateY(20px);
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
-    .scrollable-table::-webkit-scrollbar {
-      height: 6px;
+
+    #anuncio-modal.active .modal-content {
+      transform: translateY(0);
     }
-    .scrollable-table::-webkit-scrollbar-track {
-      background: #fff;
-      border-radius: 4px;
+
+    .close-btn {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #f1f3f9;
+      border: none;
+      font-size: 1.4rem;
+      color: #666;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.25s ease;
     }
-    .scrollable-table::-webkit-scrollbar-thumb {
-      background: #fbbf24;
-      border-radius: 4px;
+
+    .close-btn:hover {
+      background: #e0e3eb;
+      color: #333;
+      transform: rotate(90deg);
+    }
+
+    .modal-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #2c3e50;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .modal-icon {
+      font-size: 3.5rem;
+      color: #4a90e2;
+      margin: 0 auto 24px;
+      display: block;
+      text-align: center;
+    }
+
+    .modal-text {
+      font-size: 1.15rem;
+      line-height: 1.6;
+      color: #444;
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .modal-footer {
+      text-align: center;
+      font-size: 0.95rem;
+      color: #777;
+    }
+
+    @media (max-width: 480px) {
+      .cuadro {
+        padding: 30px 24px;
+        margin-bottom: 20px;
+      }
+      
+      .btn {
+        padding: 15px;
+        font-size: 1.05rem;
+      }
+      
+      .title {
+        font-size: 1.6rem;
+      }
+      
+      .subtitle {
+        font-size: 1rem;
+      }
+      
+      .logo-icon {
+        font-size: 2.8rem;
+      }
+      
+      .modal-content {
+        padding: 24px 20px;
+      }
+      
+      .modal-title {
+        font-size: 1.5rem;
+      }
+      
+      .modal-text {
+        font-size: 1.05rem;
+      }
     }
   </style>
 </head>
-<body class="bg-amber-50">
-<!-- Login Screen -->
-<div id="loginScreen" class="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100 flex items-center justify-center p-4">
-  <div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md scale-in border border-amber-100">
-    <div class="text-center mb-8">
-      <img 
-        src="https://media-bog2-1.cdn.whatsapp.net/v/t61.24694-24/518969449_1751592388793487_2205738987564206197_n.jpg?ccb=11-4&oh=01_Q5Aa3AGbMlIpuygi7r2MlJ-yt0QrWAIGZidbVYIL1KTxkuc8Ww&oe=6936AF2D&_nc_sid=5e03e0&_nc_cat=106"
-        alt="Pollos Semicriollos" 
-        class="w-28 h-28 rounded-full object-cover shadow-lg border-4 border-amber-500 mx-auto"
-      >
-      <h1 class="text-3xl font-bold text-gray-800 mb-2">Pollos Semicriollos</h1>
-      <p class="text-gray-600">Control de Costos, Gastos y Ventas</p>
+<body>
+  <!-- Video de fondo -->
+  <video id="video-fondo" autoplay muted loop>
+    <source src="video.mp4" type="video/mp4">
+    Tu navegador no soporta el video de fondo.
+  </video>
+  
+  <div class="overlay"></div>
+
+  <div class="container">
+    <div class="logo">
+      <div class="logo-icon">
+        <i class="fas fa-book-open"></i>
+      </div>
+      <div class="logo-text">Institución Educativa</div>
     </div>
-    <form id="loginForm" class="space-y-5">
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-2">🔒 Contraseña de Acceso</label>
-        <input
-          type="password"
-          id="passwordInput"
-          placeholder="••••••••"
-          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition"
-          required
-        />
-      </div>
-      <div class="bg-amber-50 border-l-4 border-amber-500 p-3 rounded">
-        <p class="text-sm text-amber-800 flex items-center">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-          </svg>
-          Todos tus datos se guardan permanentemente en este dispositivo.
-        </p>
-      </div>
-      <button
-        type="submit"
-        class="w-full bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-semibold py-3 px-4 rounded-lg shadow-md transition-all duration-300 transform hover:scale-[1.02]"
-      >
-        Ingresar al Sistema
+    
+    <div class="cuadro">
+      <h1 class="title">Acceso al Sistema</h1>
+     
+      
+      <button class="btn btn-docente" id="btn-docente">
+        <i class="fas fa-chalkboard-teacher"></i> Docente
       </button>
-    </form>
-  </div>
-</div>
-<!-- Main App -->
-<div id="mainApp" class="hidden min-h-screen fade">
-  <!-- Header -->
-  <header class="bg-white shadow-sm border-b border-amber-100 sticky top-0 z-40">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between items-center h-16">
-        <div class="flex items-center space-x-3">
-          <img 
-            src="https://media-bog2-1.cdn.whatsapp.net/v/t61.24694-24/518969449_1751592388793487_2205738987564206197_n.jpg?ccb=11-4&oh=01_Q5Aa3AGbMlIpuygi7r2MlJ-yt0QrWAIGZidbVYIL1KTxkuc8Ww&oe=6936AF2D&_nc_sid=5e03e0&_nc_cat=106"
-            alt="Logo" 
-            class="h-10 w-10 rounded-full object-cover border-2 border-amber-500 shadow"
-          >
-          <h1 class="text-xl font-bold text-gray-900">Pollos Semicriollos</h1>
-        </div>
-        <div class="flex items-center space-x-4">
-          <div class="text-right hidden sm:block">
-            <p class="text-sm font-medium text-gray-900">Ganancia Neta</p>
-            <p id="netProfit" class="text-lg font-bold profit-positive">COP $0</p>
-          </div>
-          <!-- Menú desplegable -->
-          <div class="relative" id="menuContainer">
-            <button id="menuBtn" class="p-2 rounded-lg text-gray-600 hover:bg-amber-100 hover:text-amber-700 transition">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-            </button>
-            <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-60 bg-white rounded-lg shadow-lg py-1 border border-amber-100 z-50">
-              <button id="openNotesBtn" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-amber-50 flex items-center">
-                <svg class="h-4 w-4 mr-2 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                📝 Blog de Notas
-              </button>
-              <button id="importDataBtn" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-amber-50 flex items-center">
-                <svg class="h-4 w-4 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
-                </svg>
-                📥 Importar Datos
-              </button>
-            </div>
-          </div>
-          <button
-            id="logoutBtn"
-            class="flex items-center px-3 py-2 text-sm text-gray-600 hover:text-amber-700 hover:bg-amber-50 rounded-lg transition-colors"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-            </svg>
-            Salir
-          </button>
-        </div>
-      </div>
+      
+      <button class="btn btn-estudiante" onclick="location.href='assets/estudiantes/index.html'">
+        <i class="fas fa-people-group"></i> Estudiante
+      </button>
     </div>
-  </header>
+  </div>
 
-  <!-- Import Modal -->
-  <div id="importModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-    <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg p-6">
-      <h2 class="text-xl font-bold text-gray-800 mb-4">📥 Importar Datos</h2>
-      <p class="text-sm text-gray-600 mb-2">Sube un PDF descargado anteriormente:</p>
-      <input type="file" id="importFile" accept=".pdf" class="w-full px-3 py-2 border border-gray-300 rounded-lg mb-4" />
-      <div class="flex justify-end gap-2">
-        <button id="closeImportBtn" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded">Cancelar</button>
-        <button id="confirmImportBtn" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Importar</button>
+  <!-- Footer -->
+  <footer>
+    <div class="institution-name">
+      <i class="fas fa-atom"></i>
+      <span>© 2025 Institución Educativa colucas - Derechos reservados</span>
+    </div>
+  </footer>
+
+  <!-- Modal de anuncio -->
+  <div id="anuncio-modal">
+    <div class="modal-content">
+      <button class="close-btn" id="close-modal">&times;</button>
+      <i class="fas fa-bullhorn modal-icon"></i>
+      <h2 class="modal-title">Aviso Importante para Docentes</h2>
+      <p class="modal-text">
+        Estimado docente, debido a actualizaciones en el sistema, 
+        el ingreso se encuentra <strong>inabilitado</strong> 
+        
+      </p>
+      <div class="modal-footer">
+        <p>Gracias</p>
       </div>
     </div>
   </div>
 
-  <!-- Notes Modal -->
-  <div id="notesModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div class="bg-white rounded-xl shadow-2xl w-full max-w-4xl h-[90vh] flex flex-col">
-      <div class="flex justify-between items-center p-4 border-b border-gray-200">
-        <h2 class="text-xl font-bold text-gray-800">📝 Blog de Notas</h2>
-        <div class="flex gap-2">
-          <button id="downloadAllNotesBtn" class="text-sm bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded flex items-center">
-            📥 Todas
-          </button>
-          <button id="downloadMonthNotesBtn" class="text-sm bg-amber-600 hover:bg-amber-700 text-white px-3 py-1 rounded flex items-center">
-            📅 Por Mes
-          </button>
-          <button id="closeNotesBtn" class="text-gray-500 hover:text-gray-800">
-            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
-      </div>
-      <!-- Month selector for notes -->
-      <div id="notesMonthSelector" class="hidden p-3 border-b border-gray-200">
-        <label class="block text-sm font-medium text-gray-700 mb-1">Seleccionar mes:</label>
-        <input type="month" id="notesMonthInput" class="px-3 py-2 border border-gray-300 rounded-lg" />
-      </div>
-      <div class="flex flex-col md:flex-row flex-1 overflow-hidden">
-        <!-- Notes list -->
-        <div class="w-full md:w-1/3 border-r border-gray-200 flex flex-col">
-          <div class="p-3 bg-amber-50 border-b border-amber-200 flex justify-between items-center">
-            <h3 class="font-medium text-gray-700">Tus Notas</h3>
-            <button id="newNoteBtn" class="bg-amber-600 hover:bg-amber-700 text-white rounded px-2 py-1 text-sm">+ Nueva</button>
-          </div>
-          <div id="notesList" class="overflow-y-auto flex-1 p-2 space-y-2"></div>
-          <div class="p-2 border-t border-gray-200">
-            <button id="clearNotesBtn" class="text-red-600 hover:text-red-800 text-sm flex items-center">
-              <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-              </svg>
-              Eliminar todas
-            </button>
-          </div>
-        </div>
-        <!-- Note editor -->
-        <div class="w-full md:w-2/3 flex flex-col">
-          <div class="p-3 border-b border-gray-200">
-            <input
-              type="text"
-              id="noteTitleInput"
-              placeholder="Título de la nota"
-              class="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
-            />
-          </div>
-          <textarea
-            id="noteContentInput"
-            placeholder="Escribe tu nota aquí..."
-            class="flex-1 w-full p-3 resize-none focus:outline-none"
-          ></textarea>
-          <div class="p-3 border-t border-gray-200 flex justify-end gap-2">
-            <button id="cancelNoteBtn" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded">Cancelar</button>
-            <button id="saveNoteBtn" class="px-4 py-2 bg-amber-600 text-white rounded hover:bg-amber-700">Guardar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <!-- Script para control de reproducción y modal -->
+  <script>
+    // Video handling
+    const video = document.getElementById('video-fondo');
+    let pausaActiva = false;
 
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-    <!-- Tabs -->
-    <div class="flex flex-wrap gap-2 mb-6 bg-amber-100 p-1.5 rounded-xl w-fit">
-      <button data-tab="costs" class="tab-btn active px-5 py-2.5 rounded-lg text-sm font-medium transition">💰 Costos</button>
-      <button data-tab="expenses" class="tab-btn px-5 py-2.5 rounded-lg text-sm font-medium transition">💸 Gastos</button>
-      <button data-tab="sales" class="tab-btn px-5 py-2.5 rounded-lg text-sm font-medium transition">📈 Ventas</button>
-      <button data-tab="summary" class="tab-btn px-5 py-2.5 rounded-lg text-sm font-medium transition">📊 Resumen</button>
-    </div>
-    <!-- Add Form -->
-    <div id="addFormSection" class="bg-white rounded-xl shadow-sm border border-amber-100 p-5 mb-6 scale-in transition-all">
-      <h3 id="formTitle" class="text-lg font-semibold text-gray-800 mb-4">➕ Agregar Nuevo Costo</h3>
-      <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
-        <input type="text" id="descInput" placeholder="Descripción" class="col-span-2 px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 transition" />
-        <input type="number" id="amountInput" placeholder="Monto" step="0.01" class="px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 transition" />
-        <input type="date" id="dateInput" class="px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 transition" />
-        <button id="addBtn" class="bg-amber-600 hover:bg-amber-700 text-white font-medium py-2.5 px-4 rounded-lg transition shadow hover:shadow-md">
-          <span id="addBtnText">Agregar</span>
-        </button>
-      </div>
-    </div>
-    <!-- Tab Contents -->
-    <div id="costsTab" class="tab-content block mb-6">
-      <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div class="px-6 py-4 bg-amber-50 border-b border-amber-200 flex justify-between items-center">
-          <h2 class="text-lg font-bold text-amber-800">💰 Lista de Costos</h2>
-          <span id="costsTotal" class="font-semibold text-gray-700">Total: COP $0</span>
-        </div>
-        <div class="scrollable-table">
-          <table class="min-w-full divide-y divide-gray-200">
-            <thead class="table-header">
-              <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Fecha</th>
-                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Descripción</th>
-                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Monto (COP)</th>
-                <th class="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider">Acciones</th>
-              </tr>
-            </thead>
-            <tbody id="costsTableBody" class="bg-white divide-y divide-gray-100">
-              <tr><td colspan="4" class="px-6 py-8 text-center text-gray-500">No hay costos registrados</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-    <div id="expensesTab" class="tab-content hidden mb-6">
-      <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div class="px-6 py-4 bg-blue-50 border-b border-blue-200 flex justify-between items-center">
-          <h2 class="text-lg font-bold text-blue-800">💸 Lista de Gastos</h2>
-          <span id="expensesTotal" class="font-semibold text-gray-700">Total: COP $0</span>
-        </div>
-        <div class="scrollable-table">
-          <table class="min-w-full divide-y divide-gray-200">
-            <thead class="table-header">
-              <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Fecha</th>
-                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Descripción</th>
-                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Monto (COP)</th>
-                <th class="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider">Acciones</th>
-              </tr>
-            </thead>
-            <tbody id="expensesTableBody" class="bg-white divide-y divide-gray-100">
-              <tr><td colspan="4" class="px-6 py-8 text-center text-gray-500">No hay gastos registrados</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-    <div id="salesTab" class="tab-content hidden mb-6">
-      <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div class="px-6 py-4 bg-green-50 border-b border-green-200 flex justify-between items-center">
-          <h2 class="text-lg font-bold text-green-800">📈 Lista de Ventas</h2>
-          <span id="salesTotal" class="font-semibold text-gray-700">Total: COP $0</span>
-        </div>
-        <div class="scrollable-table">
-          <table class="min-w-full divide-y divide-gray-200">
-            <thead class="table-header">
-              <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Fecha</th>
-                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Descripción</th>
-                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Monto (COP)</th>
-                <th class="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider">Acciones</th>
-              </tr>
-            </thead>
-            <tbody id="salesTableBody" class="bg-white divide-y divide-gray-100">
-              <tr><td colspan="4" class="px-6 py-8 text-center text-gray-500">No hay ventas registradas</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-    <div id="summaryTab" class="tab-content hidden">
-      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-        <h2 class="text-2xl font-bold text-gray-800">📊 Resumen Financiero</h2>
-        <div class="flex flex-col sm:flex-row gap-3">
-          <button
-            id="downloadPdfBtn"
-            class="flex items-center bg-red-600 hover:bg-red-700 text-white font-medium py-2.5 px-4 rounded-lg transition shadow hover:shadow-md"
-          >
-            <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-            </svg>
-            Informe Completo
-          </button>
-          <button
-            id="exportByMonthBtn"
-            class="flex items-center bg-amber-600 hover:bg-amber-700 text-white font-medium py-2.5 px-4 rounded-lg transition shadow hover:shadow-md"
-          >
-            🗓️ Exportar por Mes
-          </button>
-        </div>
-      </div>
-      <!-- Month Modal -->
-      <div id="monthModal" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-        <div class="bg-white rounded-xl shadow-xl p-6 w-full max-w-md scale-in">
-          <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
-            🗓️ Seleccionar Período
-          </h3>
-          <div class="space-y-4">
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Desde</label>
-              <input type="month" id="monthFrom" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500" />
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Hasta</label>
-              <input type="month" id="monthTo" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500" />
-            </div>
-            <div class="flex justify-end gap-2 pt-2">
-              <button id="cancelMonthBtn" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition">Cancelar</button>
-              <button id="confirmMonthBtn" class="px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition">Exportar</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-        <div class="bg-red-50 border-l-4 border-red-500 p-5 rounded-lg shadow-sm">
-          <h3 class="text-sm font-medium text-red-800 flex items-center">💰 Costos Totales</h3>
-          <p id="summaryCosts" class="text-2xl font-bold text-red-700">COP $0</p>
-        </div>
-        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-lg shadow-sm">
-          <h3 class="text-sm font-medium text-blue-800 flex items-center">💸 Gastos Totales</h3>
-          <p id="summaryExpenses" class="text-2xl font-bold text-blue-700">COP $0</p>
-        </div>
-        <div class="bg-green-50 border-l-4 border-green-500 p-5 rounded-lg shadow-sm">
-          <h3 class="text-sm font-medium text-green-800 flex items-center">📈 Ventas Totales</h3>
-          <p id="summarySales" class="text-2xl font-bold text-green-700">COP $0</p>
-        </div>
-      </div>
-      <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-        <h3 class="text-lg font-bold text-gray-800 mb-4">📊 Ganancia Neta</h3>
-        <div class="text-center py-8">
-          <p class="text-sm text-gray-600 mb-2">Ventas - (Costos + Gastos)</p>
-          <p id="summaryProfit" class="text-4xl font-bold profit-positive">COP $0</p>
-          <p id="profitStatus" class="mt-2 text-sm font-medium text-gray-600">Sin actividad registrada</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Hidden PDF Templates -->
-<div id="pdfContent" class="hidden">
-  <div id="pdfReport" style="width:210mm;padding:20mm;font-family:'Poppins',Arial,sans-serif;line-height:1.6;color:#374151;font-size:12px;">
-    <div style="text-align:center;margin-bottom:25px;">
-      <img src="https://media-bog2-1.cdn.whatsapp.net/v/t61.24694-24/518969449_1751592388793487_2205738987564206197_n.jpg?ccb=11-4&oh=01_Q5Aa3AGbMlIpuygi7r2MlJ-yt0QrWAIGZidbVYIL1KTxkuc8Ww&oe=6936AF2D&_nc_sid=5e03e0&_nc_cat=106" style="width:60px;height:60px;border-radius:50%;border:2px solid #d97706;margin:0 auto 10px;">
-      <h1 style="font-size:20px;color:#7c2d12;font-weight:bold;">Pollos Semicriollos</h1>
-      <p style="font-size:14px;color:#ea580c;">Informe Financiero Completo</p>
-      <p id="pdfDate" style="font-size:12px;color:#6b7280;margin-top:8px;"></p>
-    </div>
-
-    <div style="display:flex;justify-content:space-between;margin-bottom:20px;">
-      <div style="flex:1;margin-right:10px;background:#fef2f2;padding:12px;border-radius:6px;border-left:3px solid #ef4444;">
-        <h3 style="font-size:12px;color:#b91c1c;margin:0;">💰 Costos Totales</h3>
-        <p id="pdfCosts" style="font-size:18px;font-weight:bold;color:#dc2626;margin:4px 0;">COP $0</p>
-      </div>
-      <div style="flex:1;margin:0 5px;background:#eff6ff;padding:12px;border-radius:6px;border-left:3px solid #3b82f6;">
-        <h3 style="font-size:12px;color:#2563eb;margin:0;">💸 Gastos Totales</h3>
-        <p id="pdfExpenses" style="font-size:18px;font-weight:bold;color:#2563eb;margin:4px 0;">COP $0</p>
-      </div>
-      <div style="flex:1;margin-left:10px;background:#f0fdf4;padding:12px;border-radius:6px;border-left:3px solid #16a34a;">
-        <h3 style="font-size:12px;color:#166534;margin:0;">📈 Ventas Totales</h3>
-        <p id="pdfSales" style="font-size:18px;font-weight:bold;color:#16a34a;margin:4px 0;">COP $0</p>
-      </div>
-    </div>
-
-    <div style="background:#f8fafc;padding:16px;border-radius:6px;border-left:3px solid #059669;margin-bottom:20px;text-align:center;">
-      <h3 style="font-size:14px;color:#065f46;margin:0;">📊 Ganancia Neta</h3>
-      <p id="pdfProfit" style="font-size:20px;font-weight:bold;color:#059669;margin:6px 0;">COP $0</p>
-      <p id="pdfStatus" style="font-size:11px;color:#4b5563;margin-top:4px;">Sin actividad registrada</p>
-    </div>
-
-    <div style="margin-top:30px;font-size:10px;color:#6b7280;border-top:1px solid #e5e7eb;padding-top:12px;text-align:center;">
-      Generado el <span id="pdfGeneratedAt"></span>
-    </div>
-  </div>
-</div>
-
-<script>
-  // ==============================
-  // ✅ PERSISTENCIA (localStorage)
-  // ==============================
-  const STORAGE_KEY = 'pollos_data_v2';
-  const DEFAULT_DATA = {
-    costs: [],
-    expenses: [],
-    sales: [],
-    notes: [],
-    lastTab: 'costs',
-    isLoggedIn: false,
-    updatedAt: new Date().toISOString()
-  };
-  function loadFromStorage() {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    return saved ? JSON.parse(saved) : { ...DEFAULT_DATA };
-  }
-  function saveToStorage(data) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({
-      ...data,
-      updatedAt: new Date().toISOString()
-    }));
-  }
-
-  // ==============================
-  // ✅ INICIALIZACIÓN
-  // ==============================
-  let appData = loadFromStorage();
-  let currentTab = appData.lastTab;
-  let editingId = null;
-  let editingNoteId = null;
-
-  // DOM Elements
-  const loginScreen = document.getElementById('loginScreen');
-  const mainApp = document.getElementById('mainApp');
-  const passwordInput = document.getElementById('passwordInput');
-  const loginForm = document.getElementById('loginForm');
-  const logoutBtn = document.getElementById('logoutBtn');
-  const menuBtn = document.getElementById('menuBtn');
-  const dropdownMenu = document.getElementById('dropdownMenu');
-  const openNotesBtn = document.getElementById('openNotesBtn');
-  const importDataBtn = document.getElementById('importDataBtn');
-  const notesModal = document.getElementById('notesModal');
-  const closeNotesBtn = document.getElementById('closeNotesBtn');
-  const notesMonthSelector = document.getElementById('notesMonthSelector');
-  const notesMonthInput = document.getElementById('notesMonthInput');
-  const downloadAllNotesBtn = document.getElementById('downloadAllNotesBtn');
-  const downloadMonthNotesBtn = document.getElementById('downloadMonthNotesBtn');
-
-  // Financial
-  const tabBtns = document.querySelectorAll('.tab-btn');
-  const tabContents = [...document.querySelectorAll('.tab-content')];
-  const formTitle = document.getElementById('formTitle');
-  const descInput = document.getElementById('descInput');
-  const amountInput = document.getElementById('amountInput');
-  const dateInput = document.getElementById('dateInput');
-  const addBtn = document.getElementById('addBtn');
-  const addBtnText = document.getElementById('addBtnText');
-  const downloadPdfBtn = document.getElementById('downloadPdfBtn');
-  const exportByMonthBtn = document.getElementById('exportByMonthBtn');
-  const monthModal = document.getElementById('monthModal');
-  const monthFrom = document.getElementById('monthFrom');
-  const monthTo = document.getElementById('monthTo');
-
-  // Notes
-  const notesList = document.getElementById('notesList');
-  const noteTitleInput = document.getElementById('noteTitleInput');
-  const noteContentInput = document.getElementById('noteContentInput');
-  const newNoteBtn = document.getElementById('newNoteBtn');
-  const saveNoteBtn = document.getElementById('saveNoteBtn');
-  const cancelNoteBtn = document.getElementById('cancelNoteBtn');
-  const clearNotesBtn = document.getElementById('clearNotesBtn');
-  const importModal = document.getElementById('importModal');
-  const importFile = document.getElementById('importFile');
-  const closeImportBtn = document.getElementById('closeImportBtn');
-  const confirmImportBtn = document.getElementById('confirmImportBtn');
-
-  // ==============================
-  // ✅ FUNCIONES AUXILIARES
-  // ==============================
-  function formatCOP(val) {
-    return new Intl.NumberFormat('es-CO', {
-      style: 'currency',
-      currency: 'COP',
-      minimumFractionDigits: 0
-    }).format(Number(val) || 0);
-  }
-  function formatDate(dateStr) {
-    return new Date(dateStr).toLocaleDateString('es-CO', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric'
+    video.addEventListener('ended', () => {
+      pausaActiva = true;
+      setTimeout(() => {
+        video.currentTime = 0;
+        video.play();
+        pausaActiva = false;
+      }, 180000); // 3 minutos
     });
-  }
-  function sortDescending(arr) {
-    return arr.sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt));
-  }
 
-  // ==============================
-  // ✅ NOTAS
-  // ==============================
-  function renderNotesList() {
-    const notes = appData.notes;
-    if (notes.length === 0) {
-      notesList.innerHTML = `<div class="px-3 py-2 text-gray-500 text-sm">No tienes notas aún.</div>`;
-      return;
-    }
-    notesList.innerHTML = notes.map(note => `
-      <div class="p-2 rounded hover:bg-amber-50 group flex justify-between items-start cursor-pointer transition" data-id="${note.id}">
-        <div class="flex-1 min-w-0">
-          <div class="font-medium text-gray-800 truncate">${note.title || 'Sin título'}</div>
-          <div class="text-xs text-gray-500">
-            ${formatDate(note.createdAt)}${note.updatedAt !== note.createdAt ? ` • Editada` : ''}
-          </div>
-        </div>
-        <button class="text-red-500 opacity-0 group-hover:opacity-100 hover:text-red-700 ml-2" onclick="deleteNote(${note.id}); event.stopPropagation();">
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-          </svg>
-        </button>
-      </div>
-    `).join('');
-  }
-
-  function openNoteEditor(note = null) {
-    editingNoteId = note ? note.id : null;
-    noteTitleInput.value = note ? note.title : '';
-    noteContentInput.value = note ? note.content : '';
-    notesModal.classList.remove('hidden');
-  }
-
-  window.deleteNote = function(id) {
-    if (confirm('¿Eliminar esta nota?')) {
-      appData.notes = appData.notes.filter(n => n.id !== id);
-      saveToStorage(appData);
-      renderNotesList();
-    }
-  };
-
-  // ==============================
-  // ✅ EVENTOS DE NOTAS
-  // ==============================
-  newNoteBtn.addEventListener('click', () => openNoteEditor());
-  saveNoteBtn.addEventListener('click', () => {
-    const title = noteTitleInput.value.trim();
-    const content = noteContentInput.value.trim();
-    if (!title && !content) {
-      alert('Ingresa al menos un título o contenido.');
-      return;
-    }
-    const now = new Date().toISOString();
-    if (editingNoteId !== null) {
-      const idx = appData.notes.findIndex(n => n.id === editingNoteId);
-      if (idx !== -1) {
-        appData.notes[idx] = {
-          ...appData.notes[idx],
-          title,
-          content,
-          updatedAt: now
-        };
+    setInterval(() => {
+      if (!pausaActiva && (video.paused || video.ended)) {
+        video.currentTime = 0;
+        video.play().catch(e => console.log("Playback error:", e));
       }
-    } else {
-      appData.notes.push({
-        id: Date.now(),
-        title,
-        content,
-        createdAt: now,
-        updatedAt: now
-      });
-    }
-    saveToStorage(appData);
-    renderNotesList();
-    notesModal.classList.add('hidden');
-  });
-  cancelNoteBtn.addEventListener('click', () => notesModal.classList.add('hidden'));
-  clearNotesBtn.addEventListener('click', () => {
-    if (appData.notes.length === 0) return;
-    if (confirm(`¿Eliminar las ${appData.notes.length} notas?`)) {
-      appData.notes = [];
-      saveToStorage(appData);
-      renderNotesList();
-    }
-  });
-  notesList.addEventListener('click', (e) => {
-    if (e.target.closest('[data-id]')) {
-      const id = parseInt(e.target.closest('[data-id]').dataset.id);
-      const note = appData.notes.find(n => n.id === id);
-      if (note) openNoteEditor(note);
-    }
-  });
-  downloadAllNotesBtn.addEventListener('click', () => generateNotesPdf('all'));
-  downloadMonthNotesBtn.addEventListener('click', () => {
-    notesMonthSelector.classList.remove('hidden');
-    notesMonthInput.value = new Date().toISOString().substring(0, 7);
-    notesMonthInput.focus();
-  });
-  notesMonthInput.addEventListener('change', () => {
-    generateNotesPdf('month', notesMonthInput.value);
-    notesMonthSelector.classList.add('hidden');
-  });
+    }, 180000);
+    
+    // Modal handling
+    const modal = document.getElementById('anuncio-modal');
+    const btnDocente = document.getElementById('btn-docente');
+    const closeBtn = document.getElementById('close-modal');
 
-  // ==============================
-  // ✅ GENERACIÓN DE PDF DE NOTAS
-  // ==============================
-  function generateNotesPdf(type, month = '') {
-    const now = new Date();
-    const notes = type === 'all' 
-      ? appData.notes 
-      : appData.notes.filter(n => n.createdAt.startsWith(month));
-    if (notes.length === 0) {
-      alert(`No hay notas ${type === 'month' ? `en ${month}` : ''}.`);
-      return;
-    }
-    const content = document.createElement('div');
-    content.innerHTML = `
-      <div style="width:210mm;padding:20mm;font-family:'Poppins';line-height:1.6;color:#374151;">
-        <div style="text-align:center;margin-bottom:25px;">
-          <img src="https://media-bog2-1.cdn.whatsapp.net/v/t61.24694-24/518969449_1751592388793487_2205738987564206197_n.jpg?ccb=11-4&oh=01_Q5Aa3AGbMlIpuygi7r2MlJ-yt0QrWAIGZidbVYIL1KTxkuc8Ww&oe=6936AF2D&_nc_sid=5e03e0&_nc_cat=106" style="width:60px;height:60px;border-radius:50%;border:2px solid #d97706;margin:0 auto 10px;">
-          <h1 style="font-size:20px;color:#7c2d12;font-weight:bold;">Pollos Semicriollos</h1>
-          <h2 style="font-size:18px;color:#ea580c;margin:8px 0;">${type === 'month' ? `Notas - ${new Date(month + '-01').toLocaleDateString('es-CO', { month: 'long', year: 'numeric' })}` : 'Todas las Notas'}</h2>
-          <p style="font-size:12px;color:#6b7280;">${now.toLocaleDateString('es-CO', { dateStyle: 'full' })} • ${notes.length} nota${notes.length !== 1 ? 's' : ''}</p>
-        </div>
-        ${notes.map((note, i) => `
-          <div style="margin-bottom:25px;border-left:3px solid #fbbf24;padding-left:15px;">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-              <h3 style="font-size:14px;font-weight:bold;color:#1f2937;">${note.title || 'Sin título'}</h3>
-              <span style="font-size:10px;color:#6b7280;background:#fef3c7;padding:2px 6px;border-radius:4px;">${formatDate(note.createdAt)}</span>
-            </div>
-            <div style="font-size:12px;line-height:1.5;white-space:pre-wrap;">${note.content.replace(/\n/g, '<br>')}</div>
-            ${note.updatedAt !== note.createdAt ? `<p style="font-size:10px;color:#9ca3af;margin-top:6px;">✏️ Editada: ${formatDate(note.updatedAt)}</p>` : ''}
-          </div>
-        `).join('')}
-        <div style="margin-top:30px;font-size:10px;color:#9ca3af;text-align:center;border-top:1px solid #e5e7eb;padding-top:10px;">
-          Descargado el ${now.toLocaleDateString('es-CO', { dateStyle: 'full', timeStyle: 'short' })}
-        </div>
-      </div>
-    `;
-    document.body.appendChild(content);
-    html2canvas(content.firstElementChild, { scale: 2 })
-      .then(canvas => {
-        const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF('p', 'mm', 'a4');
-        const imgData = canvas.toDataURL('image/png');
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-        pdf.save(`PollosSemicriollos_Notas_${type === 'month' ? month.replace('-', '_') : 'Todas'}.pdf`);
-        document.body.removeChild(content);
-      })
-      .catch(err => {
-        console.error(err);
-        alert('Error al generar PDF de notas.');
-        document.body.removeChild(content);
-      });
-  }
+    // Abrir modal al hacer clic en Docente
+    btnDocente.addEventListener('click', function() {
+      modal.classList.add('active');
+    });
 
-  // ==============================
-  // ✅ IMPORTACIÓN SIMULADA
-  // ==============================
-  importDataBtn.addEventListener('click', () => importModal.classList.remove('hidden'));
-  closeImportBtn.addEventListener('click', () => importModal.classList.add('hidden'));
-  confirmImportBtn.addEventListener('click', () => {
-    const baseDate = new Date('2025-08-01');
-    const simulatedData = Array.from({ length: 12 }, (_, i) => {
-      const date = new Date(baseDate);
-      date.setDate(date.getDate() + i);
-      const strDate = date.toISOString().split('T')[0];
-      return {
-        id: Date.now() + i,
-        date: strDate,
-        description: i % 3 === 0 ? 'Compra de insumos' : i % 3 === 1 ? 'Venta a cliente' : 'Gasto operativo',
-        amount: [1500000, 2500000, 80000][i % 3],
-        type: ['cost', 'sale', 'expense'][i % 3]
+    // Cerrar modal al hacer clic en ×
+    closeBtn.addEventListener('click', function() {
+      modal.classList.remove('active');
+    });
+
+    // Cerrar modal al hacer clic fuera del contenido
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) {
+        modal.classList.remove('active');
+      }
+    });
+
+    // Permitir cerrar con tecla ESC
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && modal.classList.contains('active')) {
+        modal.classList.remove('active');
+      }
+    });
+
+    // Mobile video autoplay fix
+    document.addEventListener('DOMContentLoaded', function() {
+      const playVideo = () => {
+        video.play().catch(e => console.log("Autoplay prevented:", e));
+        document.body.removeEventListener('touchstart', playVideo);
+        document.body.removeEventListener('click', playVideo);
       };
-    }).sort((a, b) => new Date(b.date) - new Date(a.date));
-    simulatedData.forEach(item => {
-      if (item.type === 'cost') appData.costs.push(item);
-      else if (item.type === 'expense') appData.expenses.push(item);
-      else if (item.type === 'sale') appData.sales.push(item);
+      
+      document.body.addEventListener('touchstart', playVideo, { once: true });
+      document.body.addEventListener('click', playVideo, { once: true });
     });
-    saveToStorage(appData);
-    calculateTotals();
-    renderTables();
-    importModal.classList.add('hidden');
-    alert(`✅ Importado: ${simulatedData.length} registros.`);
-  });
-
-  // ==============================
-  // ✅ CÁLCULOS Y RENDER
-  // ==============================
-  function calculateTotals() {
-    const tCosts = appData.costs.reduce((s, i) => s + (parseFloat(i.amount) || 0), 0);
-    const tExpenses = appData.expenses.reduce((s, i) => s + (parseFloat(i.amount) || 0), 0);
-    const tSales = appData.sales.reduce((s, i) => s + (parseFloat(i.amount) || 0), 0);
-    const profit = tSales - tCosts - tExpenses;
-
-    // Update UI
-    document.getElementById('costsTotal').textContent = `Total: ${formatCOP(tCosts)}`;
-    document.getElementById('expensesTotal').textContent = `Total: ${formatCOP(tExpenses)}`;
-    document.getElementById('salesTotal').textContent = `Total: ${formatCOP(tSales)}`;
-    document.getElementById('netProfit').textContent = formatCOP(profit);
-    document.getElementById('netProfit').className = 'text-lg font-bold ' + (profit >= 0 ? 'profit-positive' : 'profit-negative');
-    document.getElementById('summaryCosts').textContent = formatCOP(tCosts);
-    document.getElementById('summaryExpenses').textContent = formatCOP(tExpenses);
-    document.getElementById('summarySales').textContent = formatCOP(tSales);
-    document.getElementById('summaryProfit').textContent = formatCOP(profit);
-    document.getElementById('summaryProfit').className = 'text-4xl font-bold ' + (profit >= 0 ? 'profit-positive' : 'profit-negative');
-    document.getElementById('profitStatus').textContent = 
-      profit > 0 ? '✅ ¡Estás generando ganancias!' :
-      profit < 0 ? '⚠️ Hay pérdidas. Revisa tus costos y gastos.' : 
-      '📊 Sin actividad registrada';
-  }
-
-  function renderTables() {
-    const render = (list, tbodyId, emptyMsg) => {
-      const tbody = document.getElementById(tbodyId);
-      if (list.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="4" class="px-6 py-8 text-center text-gray-500">${emptyMsg}</td></tr>`;
-      } else {
-        tbody.innerHTML = list.map((item, idx) => {
-          const color = tbodyId.includes('costs') ? 'text-red-600'
-            : tbodyId.includes('expenses') ? 'text-blue-600'
-              : 'text-green-600';
-          return `
-            <tr class="hover:bg-gray-50 transition-colors">
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.date}</td>
-              <td class="px-6 py-4 text-sm font-medium text-gray-900">${item.description}</td>
-              <td class="px-6 py-4 text-sm font-medium ${color}">${formatCOP(item.amount)}</td>
-              <td class="px-6 py-4 text-right text-sm font-medium">
-                <button onclick="editItem(${item.id}, '${tbodyId.includes('costs') ? 'cost' : tbodyId.includes('expenses') ? 'expense' : 'sale'}')" class="text-amber-600 hover:text-amber-800 hover:bg-amber-100 rounded px-2 py-1 transition mr-2">✏️ Editar</button>
-                <button onclick="deleteItem(${item.id}, '${tbodyId.includes('costs') ? 'cost' : tbodyId.includes('expenses') ? 'expense' : 'sale'}')" class="text-red-600 hover:text-red-800 hover:bg-red-50 rounded px-2 py-1 transition">🗑️ Eliminar</button>
-              </td>
-            </tr>
-          `;
-        }).join('');
-      }
-    };
-
-    render(sortDescending([...appData.costs]), 'costsTableBody', 'No hay costos registrados');
-    render(sortDescending([...appData.expenses]), 'expensesTableBody', 'No hay gastos registrados');
-    render(sortDescending([...appData.sales]), 'salesTableBody', 'No hay ventas registradas');
-  }
-
-  // ==============================
-  // ✅ LOGIN / LOGOUT / MENÚ
-  // ==============================
-  loginForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    if (passwordInput.value === 'pollos2025') {
-      appData.isLoggedIn = true;
-      saveToStorage(appData);
-      loginScreen.classList.add('hidden');
-      mainApp.classList.remove('hidden');
-      calculateTotals();
-      renderTables();
-      renderNotesList();
-    } else {
-      alert('❌ Contraseña incorrecta.');
-    }
-  });
-
-  logoutBtn.addEventListener('click', () => {
-    if (confirm('¿Deseas cerrar sesión?')) {
-      appData.isLoggedIn = false;
-      saveToStorage(appData);
-      mainApp.classList.add('hidden');
-      loginScreen.classList.remove('hidden');
-      passwordInput.value = '';
-    }
-  });
-
-  menuBtn.addEventListener('click', () => dropdownMenu.classList.toggle('hidden'));
-  document.addEventListener('click', (e) => !e.target.closest('#menuContainer') && dropdownMenu.classList.add('hidden'));
-
-  openNotesBtn.addEventListener('click', () => {
-    dropdownMenu.classList.add('hidden');
-    renderNotesList();
-    notesModal.classList.remove('hidden');
-  });
-
-  closeNotesBtn.addEventListener('click', () => notesModal.classList.add('hidden'));
-
-  // ==============================
-  // ✅ TABS & EDITAR
-  // ==============================
-  function switchTab(tab) {
-    currentTab = tab;
-    appData.lastTab = tab;
-    saveToStorage(appData);
-    tabBtns.forEach(btn => btn.classList.toggle('active', btn.dataset.tab === tab));
-    tabContents.forEach(el => el.classList.toggle('hidden', el.id !== tab + 'Tab'));
-    formTitle.textContent = {
-      costs: '➕ Agregar Nuevo Costo',
-      expenses: '➕ Agregar Nuevo Gasto',
-      sales: '➕ Agregar Nueva Venta',
-      summary: '📊 Resumen Financiero'
-    }[tab];
-    document.getElementById('addFormSection').classList.toggle('hidden', tab === 'summary');
-    if (tab !== 'summary') {
-      descInput.value = '';
-      amountInput.value = '';
-      dateInput.value = new Date().toISOString().split('T')[0];
-      addBtnText.textContent = 'Agregar';
-      editingId = null;
-    }
-  }
-
-  tabBtns.forEach(btn => btn.addEventListener('click', () => switchTab(btn.dataset.tab)));
-
-  window.editItem = function (id, type) {
-    let item, tab;
-    if (type === 'cost') { item = appData.costs.find(i => i.id === id); tab = 'costs'; }
-    else if (type === 'expense') { item = appData.expenses.find(i => i.id === id); tab = 'expenses'; }
-    else if (type === 'sale') { item = appData.sales.find(i => i.id === id); tab = 'sales'; }
-    if (!item) return;
-    descInput.value = item.description;
-    amountInput.value = item.amount;
-    dateInput.value = item.date;
-    editingId = id;
-    addBtnText.textContent = '✅ Actualizar';
-    formTitle.textContent = `✏️ Editar ${type === 'cost' ? 'Costo' : type === 'expense' ? 'Gasto' : 'Venta'}`;
-    switchTab(tab);
-  };
-
-  window.deleteItem = function (id, type) {
-    if (confirm('⚠️ ¿Estás seguro?')) {
-      if (type === 'cost') appData.costs = appData.costs.filter(i => i.id !== id);
-      else if (type === 'expense') appData.expenses = appData.expenses.filter(i => i.id !== id);
-      else if (type === 'sale') appData.sales = appData.sales.filter(i => i.id !== id);
-      saveToStorage(appData);
-      calculateTotals();
-      renderTables();
-    }
-  };
-
-  addBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    const desc = descInput.value.trim();
-    const amount = parseFloat(amountInput.value);
-    const date = dateInput.value;
-    if (!desc || isNaN(amount) || !date) {
-      alert('❌ Completa todos los campos.');
-      return;
-    }
-    const newItem = { id: Date.now(), description: desc, amount, date };
-    if (editingId !== null) {
-      if (currentTab === 'costs') appData.costs = appData.costs.map(i => i.id === editingId ? { ...newItem, id: editingId } : i);
-      else if (currentTab === 'expenses') appData.expenses = appData.expenses.map(i => i.id === editingId ? { ...newItem, id: editingId } : i);
-      else if (currentTab === 'sales') appData.sales = appData.sales.map(i => i.id === editingId ? { ...newItem, id: editingId } : i);
-      editingId = null;
-      addBtnText.textContent = 'Agregar';
-    } else {
-      if (currentTab === 'costs') appData.costs.push(newItem);
-      else if (currentTab === 'expenses') appData.expenses.push(newItem);
-      else if (currentTab === 'sales') appData.sales.push(newItem);
-    }
-    saveToStorage(appData);
-    descInput.value = '';
-    amountInput.value = '';
-    dateInput.value = new Date().toISOString().split('T')[0];
-    calculateTotals();
-    renderTables();
-  });
-
-  // ==============================
-  // ✅ EXPORTAR PDF COMPLETO
-  // ==============================
-  downloadPdfBtn.addEventListener('click', () => {
-    const tCosts = appData.costs.reduce((s, i) => s + (parseFloat(i.amount) || 0), 0);
-    const tExpenses = appData.expenses.reduce((s, i) => s + (parseFloat(i.amount) || 0), 0);
-    const tSales = appData.sales.reduce((s, i) => s + (parseFloat(i.amount) || 0), 0);
-    const profit = tSales - tCosts - tExpenses;
-
-    const now = new Date();
-    document.getElementById('pdfDate').textContent = now.toLocaleDateString('es-CO', { dateStyle: 'full' });
-    document.getElementById('pdfCosts').textContent = formatCOP(tCosts);
-    document.getElementById('pdfExpenses').textContent = formatCOP(tExpenses);
-    document.getElementById('pdfSales').textContent = formatCOP(tSales);
-    document.getElementById('pdfProfit').textContent = formatCOP(profit);
-    document.getElementById('pdfProfit').style.color = profit >= 0 ? '#059669' : '#dc2626';
-    document.getElementById('pdfStatus').textContent = 
-      profit > 0 ? '✅ ¡Estás generando ganancias!' :
-      profit < 0 ? '⚠️ Hay pérdidas. Revisa tus costos y gastos.' : 
-      '📊 Sin actividad registrada';
-    document.getElementById('pdfGeneratedAt').textContent = now.toLocaleString('es-CO', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-
-    const content = document.getElementById('pdfReport').cloneNode(true);
-    const container = document.createElement('div');
-    container.appendChild(content);
-    document.body.appendChild(container);
-
-    html2canvas(content, { scale: 2 })
-      .then(canvas => {
-        const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF('p', 'mm', 'a4');
-        const imgData = canvas.toDataURL('image/png');
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, Math.min(pdfHeight, 290));
-        pdf.save(`PollosSemicriollos_Informe_${now.toISOString().split('T')[0]}.pdf`);
-        document.body.removeChild(container);
-      })
-      .catch(err => {
-        console.error('PDF Error:', err);
-        alert('Error al generar el PDF. Revisa la consola.');
-        document.body.removeChild(container);
-      });
-  });
-
-  // ==============================
-  // ✅ EXPORTAR POR MES (simulado rápido)
-  // ==============================
-  exportByMonthBtn.addEventListener('click', () => {
-    const now = new Date();
-    const m = String(now.getMonth() + 1).padStart(2, '0');
-    const y = now.getFullYear();
-    monthFrom.value = `${y}-${m}`;
-    monthTo.value = `${y}-${m}`;
-    monthModal.classList.remove('hidden');
-  });
-
-  document.getElementById('cancelMonthBtn').addEventListener('click', () => monthModal.classList.add('hidden'));
-  document.getElementById('confirmMonthBtn').addEventListener('click', () => {
-    const from = monthFrom.value;
-    const to = monthTo.value;
-    if (!from || !to) {
-      alert('Selecciona ambas fechas.');
-      return;
-    }
-    // Filtrar por mes (solo año-mes)
-    const fromMonth = from;
-    const toMonth = to;
-
-    const filteredCosts = appData.costs.filter(i => i.date >= fromMonth + '-01' && i.date <= toMonth + '-31');
-    const filteredExpenses = appData.expenses.filter(i => i.date >= fromMonth + '-01' && i.date <= toMonth + '-31');
-    const filteredSales = appData.sales.filter(i => i.date >= fromMonth + '-01' && i.date <= toMonth + '-31');
-
-    const tCosts = filteredCosts.reduce((s, i) => s + (parseFloat(i.amount) || 0), 0);
-    const tExpenses = filteredExpenses.reduce((s, i) => s + (parseFloat(i.amount) || 0), 0);
-    const tSales = filteredSales.reduce((s, i) => s + (parseFloat(i.amount) || 0), 0);
-    const profit = tSales - tCosts - tExpenses;
-
-    const now = new Date();
-    const title = `Informe ${from} a ${to}`;
-    const content = document.createElement('div');
-    content.innerHTML = `
-      <div style="width:210mm;padding:20mm;font-family:'Poppins',Arial,sans-serif;line-height:1.6;color:#374151;font-size:12px;">
-        <div style="text-align:center;margin-bottom:25px;">
-          <img src="https://media-bog2-1.cdn.whatsapp.net/v/t61.24694-24/518969449_1751592388793487_2205738987564206197_n.jpg?ccb=11-4&oh=01_Q5Aa3AGbMlIpuygi7r2MlJ-yt0QrWAIGZidbVYIL1KTxkuc8Ww&oe=6936AF2D&_nc_sid=5e03e0&_nc_cat=106" style="width:60px;height:60px;border-radius:50%;border:2px solid #d97706;margin:0 auto 10px;">
-          <h1 style="font-size:20px;color:#7c2d12;font-weight:bold;">Pollos Semicriollos</h1>
-          <p style="font-size:14px;color:#ea580c;">${title}</p>
-          <p style="font-size:12px;color:#6b7280;margin-top:8px;">${now.toLocaleDateString('es-CO', { dateStyle: 'full' })}</p>
-        </div>
-
-        <div style="display:flex;justify-content:space-between;margin-bottom:20px;">
-          <div style="flex:1;margin-right:10px;background:#fef2f2;padding:12px;border-radius:6px;border-left:3px solid #ef4444;">
-            <h3 style="font-size:12px;color:#b91c1c;margin:0;">💰 Costos</h3>
-            <p style="font-size:18px;font-weight:bold;color:#dc2626;margin:4px 0;">${formatCOP(tCosts)}</p>
-            <p style="font-size:10px;color:#7f1d1d;margin-top:2px;">${filteredCosts.length} registro(s)</p>
-          </div>
-          <div style="flex:1;margin:0 5px;background:#eff6ff;padding:12px;border-radius:6px;border-left:3px solid #3b82f6;">
-            <h3 style="font-size:12px;color:#2563eb;margin:0;">💸 Gastos</h3>
-            <p style="font-size:18px;font-weight:bold;color:#2563eb;margin:4px 0;">${formatCOP(tExpenses)}</p>
-            <p style="font-size:10px;color:#1d4ed8;margin-top:2px;">${filteredExpenses.length} registro(s)</p>
-          </div>
-          <div style="flex:1;margin-left:10px;background:#f0fdf4;padding:12px;border-radius:6px;border-left:3px solid #16a34a;">
-            <h3 style="font-size:12px;color:#166534;margin:0;">📈 Ventas</h3>
-            <p style="font-size:18px;font-weight:bold;color:#16a34a;margin:4px 0;">${formatCOP(tSales)}</p>
-            <p style="font-size:10px;color:#15803d;margin-top:2px;">${filteredSales.length} registro(s)</p>
-          </div>
-        </div>
-
-        <div style="background:#f8fafc;padding:16px;border-radius:6px;border-left:3px solid #059669;margin-bottom:20px;text-align:center;">
-          <h3 style="font-size:14px;color:#065f46;margin:0;">📊 Ganancia Neta</h3>
-          <p style="font-size:20px;font-weight:bold;color:${profit >= 0 ? '#059669' : '#dc2626'};margin:6px 0;">${formatCOP(profit)}</p>
-          <p style="font-size:11px;color:#4b5563;margin-top:4px;">
-            ${profit > 0 ? '✅ Ganancias' : profit < 0 ? '⚠️ Pérdidas' : '📊 Sin actividad'}
-          </p>
-        </div>
-
-        <div style="margin-top:30px;font-size:10px;color:#6b7280;border-top:1px solid #e5e7eb;padding-top:12px;text-align:center;">
-          Generado el ${now.toLocaleString('es-CO', {
-            day: '2-digit',
-            month: 'short',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-          })}
-        </div>
-      </div>
-    `;
-    document.body.appendChild(content);
-    html2canvas(content.firstElementChild, { scale: 2 })
-      .then(canvas => {
-        const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF('p', 'mm', 'a4');
-        const imgData = canvas.toDataURL('image/png');
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, Math.min(pdfHeight, 290));
-        pdf.save(`PollosSemicriollos_Mensual_${from}_${to}.pdf`);
-        document.body.removeChild(content);
-      })
-      .catch(err => {
-        console.error(err);
-        alert('Error al generar PDF mensual.');
-        document.body.removeChild(content);
-      });
-    monthModal.classList.add('hidden');
-  });
-
-  // ==============================
-  // ✅ INICIALIZAR
-  // ==============================
-  document.addEventListener('DOMContentLoaded', () => {
-    const data = loadFromStorage();
-    if (data.isLoggedIn) {
-      appData = data;
-      loginScreen.classList.add('hidden');
-      mainApp.classList.remove('hidden');
-      currentTab = appData.lastTab;
-      calculateTotals();
-      renderTables();
-      renderNotesList();
-    }
-    dateInput.value = new Date().toISOString().split('T')[0];
-  });
-</script>
+  </script>
 </body>
 </html>
-
