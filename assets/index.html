@@ -1,201 +1,805 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" href="img/icono.png" />
-    <title>Clave Acceso</title>
-    <style>
-        body {
-            background: url(img/4.jpg);
-            background-size: cover;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            font-family: Verdana, sans-serif;
-            color: #fff;
-        }
-        #titulo1 {
-            background-color: rgba(1, 58, 223, 0.3);
-            width: 60%;
-            padding: 20px;
-            text-align: center;
-            font-size: 32px;
-            color: cornsilk;
-            margin-left: auto;
-            margin-right: auto;
-            border-radius: 12px;
-            box-shadow: 0 0 15px rgba(1, 58, 223, 0.7);
-            backdrop-filter: blur(8px);
-        }
-        #titulo {
-            background-color: rgba(255, 0, 64, 0.5);
-            width: 60%;
-            padding: 30px 20px 40px;
-            text-align: center;
-            font-size: 24px;
-            color: aliceblue;
-            margin: 20px auto 0;
-            border-radius: 12px;
-            box-shadow: 0 0 15px rgba(255, 0, 64, 0.7);
-            backdrop-filter: blur(8px);
-        }
-        .form-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            margin-top: 20px;
-            flex-wrap: wrap;
-            position: relative;
-            max-width: 350px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        /* Input con padding para ícono */
-        .input-wrapper {
-            position: relative;
-            flex: 1 1 250px;
-            max-width: 250px;
-        }
-        /* Input estilo */
-        .input {
-            padding: 12px 12px 12px 40px; /* espacio para ícono */
-            width: 100%;
-            border: 1px solid #999;
-            border-radius: 8px;
-            text-align: center;
-            font-size: 16px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            outline: none;
-            transition: border 0.3s ease, box-shadow 0.3s ease;
-            color: #333;
-            font-weight: 600;
-        }
-        .input:focus {
-            border-color: #013adf;
-            box-shadow: 0 0 8px rgba(1, 58, 223, 0.6);
-        }
-        /* SVG candado */
-        .input-wrapper svg {
-            position: absolute;
-            top: 50%;
-            left: 12px;
-            width: 20px;
-            height: 20px;
-            fill: rgba(0, 0, 0, 0.35);
-            pointer-events: none;
-            transform: translateY(-50%);
-            transition: fill 0.3s ease;
-        }
-        .input:focus + svg {
-            fill: #013adf;
-        }
-        /* Botón */
-        .button {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 8px;
-            background: linear-gradient(45deg, #4CAF50, #2e7d32);
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-            transition: transform 0.2s, background 0.3s;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            flex-shrink: 0;
-        }
-        .button:hover {
-            background: linear-gradient(45deg, #45a049, #1b5e20);
-            transform: scale(1.05);
-        }
-        /* Loader spinner */
-        #loader {
-            display: none;
-            position: absolute;
-            bottom: -50px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 32px;
-            height: 32px;
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            border-top-color: #013adf;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            z-index: 10;
-        }
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-        /* Responsivo */
-        @media (max-width: 480px) {
-            #titulo1, #titulo {
-                width: 90%;
-                font-size: 20px;
-                padding: 15px;
-            }
-            .form-container {
-                flex-direction: column;
-                gap: 15px;
-                max-width: 300px;
-            }
-            .button {
-                width: 100%;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Renta Ciudadana - Consulta de Beneficiarios</title>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root {
+      --red-primary: #c91a22;
+      --red-dark: #a0151b;
+      --gold: #d4af37;
+      --white: #ffffff;
+      --gray-100: #f8f9fa;
+      --shadow-md: 0 8px 30px rgba(0,0,0,0.12);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f6f8fa 0%, #eef1f5 100%);
+      min-height: 100vh;
+      padding: 20px;
+      color: #333;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .bg-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .wave {
+      position: absolute;
+      border-radius: 45%;
+      filter: blur(60px);
+      opacity: 0.15;
+      animation: float 20s infinite ease-in-out;
+    }
+
+    .wave-1 { width: 700px; height: 700px; background: var(--red-primary); top: -150px; left: -100px; }
+    .wave-2 { width: 800px; height: 800px; background: var(--gold); bottom: -200px; right: -150px; opacity: 0.12; animation-delay: -7s; }
+    .wave-3 { width: 550px; height: 550px; background: var(--red-primary); top: 45%; right: 18%; animation-delay: -14s; opacity: 0.1; }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      25% { transform: translate(20px, 20px) scale(1.02); }
+      50% { transform: translate(0, 40px) scale(0.98); }
+      75% { transform: translate(-20px, 20px) scale(1.01); }
+    }
+
+    .container {
+      max-width: 920px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .banner {
+      background: linear-gradient(90deg, var(--red-primary), var(--red-dark));
+      color: white;
+      padding: 30px 24px;
+      border-radius: 20px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.18);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .banner h1 {
+      font-size: 2.6rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.25);
+    }
+
+    .banner p {
+      font-size: 1.2rem;
+      opacity: 0.95;
+      margin-top: 14px;
+      max-width: 720px;
+      margin-left: auto;
+      margin-right: auto;
+      font-weight: 500;
+    }
+
+    .card {
+      background: var(--white);
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      transition: all 0.45s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    .card-header {
+      background: linear-gradient(to right, #fffdf8, #fff9f0);
+      padding: 24px 32px;
+      border-bottom: 2px solid #ffe0b2;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .card-header h2 {
+      color: var(--red-primary);
+      font-size: 1.65rem;
+      font-weight: 800;
+    }
+
+    .card-body {
+      padding: 36px;
+    }
+
+    .form-group {
+      margin-bottom: 26px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    @media (min-width: 768px) {
+      .form-row { grid-template-columns: 1fr 1fr; }
+    }
+
+    label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      color: #222;
+      margin-bottom: 12px;
+      font-size: 1.08rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 18px 22px;
+      border: 2px solid #e0e0e0;
+      border-radius: 16px;
+      font-size: 1.08rem;
+      transition: all 0.35s ease;
+      background-color: #fafafa;
+      font-weight: 500;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--red-primary);
+      box-shadow: 0 0 0 4px rgba(201, 26, 34, 0.15);
+      background-color: white;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 20px;
+      background: linear-gradient(135deg, var(--red-primary), #b81a20);
+      color: white;
+      font-size: 1.25rem;
+      font-weight: 800;
+      border: none;
+      border-radius: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      transition: all 0.45s cubic-bezier(0.165, 0.84, 0.44, 1);
+      box-shadow: 0 8px 25px rgba(201, 26, 34, 0.35);
+      letter-spacing: 0.4px;
+    }
+
+    .btn:hover:not(:disabled) {
+      transform: translateY(-4px) scale(1.008);
+      box-shadow: 0 12px 35px rgba(201, 26, 34, 0.45);
+    }
+
+    .cycle-section {
+      background: var(--red-primary);
+      color: white;
+      padding: 24px;
+      border-radius: 16px;
+      margin: 20px 0;
+      text-align: center;
+      box-shadow: var(--shadow-md);
+    }
+
+    .cycle-title {
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .cycle-subtitle {
+      font-size: 1.3rem;
+      opacity: 0.9;
+    }
+
+    .deadline {
+      color: var(--red-primary);
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin: 16px 0;
+      text-align: center;
+    }
+
+    .payment-points {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: var(--shadow-md);
+      margin: 20px 0;
+    }
+
+    .points-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--red-primary);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .points-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .point-item {
+      padding: 12px 16px;
+      background: #f8f9fa;
+      border-radius: 10px;
+      margin-bottom: 8px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .point-icon {
+      color: var(--red-primary);
+      font-size: 1.2rem;
+      margin-top: 4px;
+    }
+
+    .point-location {
+      font-weight: 700;
+      color: #333;
+      min-width: 100px;
+    }
+
+    .point-name {
+      font-weight: 600;
+      color: var(--red-primary);
+    }
+
+    /* MODAL OVERLAY */
+    #modalOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.4s ease, visibility 0.4s;
+    }
+
+    #modalOverlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-content {
+      max-width: 90%;
+      width: 680px;
+      text-align: center;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.3);
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      font-size: 1.4rem;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+    }
+
+    .result-success {
+      background: white;
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: 0 15px 50px rgba(0,0,0,0.25);
+      position: relative;
+    }
+
+    .result-header {
+      background: linear-gradient(90deg, var(--red-primary), var(--gold));
+      padding: 28px 36px;
+      color: white;
+      font-size: 1.6rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .result-content {
+      padding: 36px;
+    }
+
+    .result-message {
+      font-size: 1.4rem;
+      line-height: 1.5;
+      margin-bottom: 28px;
+      color: #222;
+    }
+
+    .result-name {
+      font-family: 'Georgia', serif;
+      font-weight: 700;
+      color: var(--red-primary);
+      font-size: 1.55rem;
+    }
+
+    .result-id {
+      font-family: 'Consolas', monospace;
+      background: rgba(201, 26, 34, 0.08);
+      padding: 6px 16px;
+      border-radius: 6px;
+      font-weight: 600;
+      color: var(--red-dark);
+      font-size: 1.1rem;
+    }
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+      margin-top: 24px;
+    }
+
+    @media (min-width: 640px) {
+      .details-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    .detail-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 16px;
+      background: #fafafa;
+      border-radius: 14px;
+      text-align: left;
+    }
+
+    .detail-icon {
+      width: 42px;
+      height: 42px;
+      background: rgba(201, 26, 34, 0.08);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--red-primary);
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .detail-value {
+      font-weight: 700;
+      color: var(--red-primary);
+      font-size: 1.1rem;
+      line-height: 1.4;
+    }
+
+    .detail-label {
+      font-weight: 500;
+      font-size: 0.95rem;
+      color: #555;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .result-error {
+      background: white;
+      border-radius: 22px;
+      padding: 40px 30px;
+      box-shadow: 0 15px 50px rgba(0,0,0,0.25);
+      position: relative;
+    }
+
+    .error-icon {
+      font-size: 4rem;
+      color: var(--red-primary);
+      margin-bottom: 20px;
+    }
+
+    .error-title {
+      font-size: 1.65rem;
+      font-weight: 700;
+      color: var(--red-primary);
+      margin-bottom: 20px;
+    }
+
+    .error-message {
+      font-size: 1.25rem;
+      color: #555;
+      line-height: 1.6;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .validated-badge {
+      text-align: center;
+      margin-top: 32px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      background: linear-gradient(145deg, #28a745, #208b3a);
+      color: white;
+      padding: 18px 42px;
+      border-radius: 50px;
+      font-weight: 900;
+      font-size: 1.5rem;
+      box-shadow: 0 8px 25px rgba(40, 167, 69, 0.45);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.04); }
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 20px;
+      color: #666;
+      font-size: 1.05rem;
+      padding-bottom: 30px;
+    }
+
+    .note-box {
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: 16px;
+      padding: 24px;
+      margin-top: 24px;
+      max-width: 750px;
+      margin-left: auto;
+      margin-right: auto;
+      box-shadow: var(--shadow-md);
+    }
+
+    @media (max-width: 600px) {
+      .banner h1 { font-size: 2.1rem; }
+      .card-body { padding: 24px; }
+      .btn { padding: 18px; font-size: 1.15rem; }
+      .cycle-title { font-size: 1.8rem; }
+      .points-title { font-size: 1.2rem; }
+      .result-header { font-size: 1.4rem; padding: 22px; }
+      .result-message { font-size: 1.25rem; }
+      .badge { font-size: 1.3rem; padding: 14px 30px; }
+    }
+  </style>
 </head>
 <body>
+  <div class="bg-animation">
+    <div class="wave wave-1"></div>
+    <div class="wave wave-2"></div>
+    <div class="wave wave-3"></div>
+  </div>
 
-    <div id="titulo1">
-        <b id="negrita">Sociales & Historia <br />Segundaria</b>
+  <div class="container">
+    <div class="header">
+      <div class="banner">
+        <h1>
+          <i class="fas fa-hand-holding-usd"></i>
+          Renta Ciudadana / Devolución IVA
+        </h1>
+        <p>Consulta de beneficiarios — Programa de apoyo económico del Gobierno Nacional</p>
+      </div>
     </div>
-    <br />
-    <div id="titulo">
-        Estudiante digite la <b id="negrita">contraseña</b> para ingresar a la clase.
-        <form onsubmit="return acceso()" class="form-container" novalidate>
-            <div class="input-wrapper">
-                <input type="password" id="clave" class="input" placeholder="Ingrese su contraseña" required aria-label="Campo contraseña" autocomplete="current-password" />
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                    <path d="M12 2a5 5 0 00-5 5v3H6a2 2 0 00-2 2v9a2 2 0 002 2h12a2 2 0 002-2v-9a2 2 0 00-2-2h-1V7a5 5 0 00-5-5zm-3 5a3 3 0 116 0v3H9V7zm9 5v9H6v-9h12z"/>
-                </svg>
+
+    <div class="card">
+      <div class="card-header">
+        <i class="fas fa-search fa-lg" style="color: var(--red-primary);"></i>
+        <h2>Consultar beneficiario</h2>
+      </div>
+
+      <div class="card-body">
+        <form id="searchForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="nombre">
+                <i class="fas fa-user"></i> Nombre y apellidos
+              </label>
+              <input type="text" id="nombre" placeholder="Ej: Ana María Torres Rojas" autocomplete="off">
             </div>
-            <button type="submit" class="button" aria-label="Ingresar">Ingresar</button>
-            <div id="loader" role="alert" aria-live="assertive" aria-hidden="true"></div>
+            <div class="form-group">
+              <label for="id">
+                <i class="fas fa-id-card"></i> Número de identificación
+              </label>
+              <input type="text" id="id" placeholder="Ej: 1034567890" autocomplete="off">
+            </div>
+          </div>
+
+          <button type="submit" id="btnConsultar" class="btn">
+            <i class="fas fa-search"></i> Consultar beneficiario
+          </button>
         </form>
+      </div>
     </div>
 
-    <script>
-        function acceso() {
-            const input = document.getElementById('clave');
-            const loader = document.getElementById('loader');
-            const claveCorrecta = "12345";
-            const claveIngresada = input.value.trim();
+    <div class="cycle-section">
+      <div class="cycle-title">Ciclo 6 del 2025</div>
+      <div class="cycle-subtitle">Modalidad por Giro</div>
+    </div>
 
-            loader.style.display = 'block';
-            loader.setAttribute('aria-hidden', 'false');
+    <div class="deadline">
+      Hasta el 20 de diciembre de 2025
+    </div>
 
-            // Simula validación (1.5 seg)
-            setTimeout(() => {
-                loader.style.display = 'none';
-                loader.setAttribute('aria-hidden', 'true');
+    <div class="payment-points">
+      <h3 class="points-title">
+        <i class="fas fa-map-marker-alt"></i> Puntos de pago Autorizados:
+      </h3>
+      <ul class="points-list">
+        <li class="point-item">
+          <i class="fas fa-store point-icon"></i>
+          <span class="point-location">Olival:</span>
+          <span class="point-name">Jairo Ochoa</span>
+        </li>
+        <li class="point-item">
+          <i class="fas fa-store point-icon"></i>
+          <span class="point-location">Tolota:</span>
+          <span class="point-name">Doña Maria Eugenia “Efecty”</span>
+        </li>
+        <li class="point-item">
+          <i class="fas fa-store point-icon"></i>
+          <span class="point-location">Vado Real:</span>
+          <span class="point-name">Droguería de Rubiela</span>
+        </li>
+        <li class="point-item">
+          <i class="fas fa-store point-icon"></i>
+          <span class="point-location">San José de Suaita:</span>
+          <span class="point-name">Droguería y Papelería el Profe</span>
+        </li>
+        <li class="point-item">
+          <i class="fas fa-store point-icon"></i>
+          <span class="point-location">Suaita:</span>
+          <span class="point-name">Detalles y Algo Más “Efecty”</span>
+        </li>
+      </ul>
+    </div>
 
-                if (claveIngresada === claveCorrecta) {
-                    window.location.href = "class.html";
-                } else {
-                    alert("Contraseña incorrecta. Inténtelo nuevamente.");
-                    input.focus();
-                }
-            }, 1500);
+    <div class="note-box">
+      <p><strong>Nota:</strong> Presentar C.C. Original.</p>
+    </div>
 
-            return false; // evitar submit real
+    <div class="footer">
+      <p>
+        © <span id="currentYear"></span> Gobierno de Suaita — 2024-2026
+      </p>
+    </div>
+  </div>
+
+  <!-- Modal Overlay -->
+  <div id="modalOverlay">
+    <button class="close-btn" id="closeModal">&times;</button>
+    <div class="modal-content" id="modalContent"></div>
+  </div>
+
+  <script>
+    // 🔴 IMPORTANTE: Reemplaza esta URL con la tuya
+    // Debe ser PUBLICADO como CSV: Archivo > Publicar en la web > Formato: CSV
+    const GOOGLE_SHEETS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTCZXIW6QFh-7S8czd3HceniHxS07n17lm_FbjKBAwl-aLclnvw8fVPkv-jo3ScRQ/pub?output=csv';
+
+    const form = document.getElementById('searchForm');
+    const nombreInput = document.getElementById('nombre');
+    const idInput = document.getElementById('id');
+    const btnConsultar = document.getElementById('btnConsultar');
+    const modalOverlay = document.getElementById('modalOverlay');
+    const modalContent = document.getElementById('modalContent');
+    const closeModalBtn = document.getElementById('closeModal');
+    const currentYearEl = document.getElementById('currentYear');
+
+    currentYearEl.textContent = new Date().getFullYear();
+
+    // Normaliza encabezados para mapeo flexible
+    function normalizeHeader(str) {
+      return str
+        .trim()
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '') // Elimina tildes
+        .replace(/[^a-z0-9]/g, '');      // Solo letras/números
+    }
+
+    // Parsea CSV con columnas exactas de tu Excel
+    function parseCSV(csvText) {
+      const lines = csvText.split('\n').filter(line => line.trim() !== '');
+      if (lines.length < 2) return [];
+
+      const rawHeaders = lines[0].split(',').map(h => h.trim());
+      const headers = rawHeaders.map(normalizeHeader);
+      const data = [];
+
+      for (let i = 1; i < lines.length; i++) {
+        const values = lines[i].split(',').map(v => v.trim());
+        if (values.length === headers.length) {
+          const obj = {};
+          headers.forEach((h, idx) => {
+            obj[h] = values[idx];
+          });
+          // Limpiar ID
+          if (obj.numerodocumento) {
+            obj.idLimpio = obj.numerodocumento.replace(/\D/g, '');
+          }
+          data.push(obj);
         }
-    </script>
+      }
+      return data.filter(b => b.idLimpio);
+    }
 
+    // Cerrar modal
+    closeModalBtn.addEventListener('click', () => {
+      modalOverlay.classList.remove('active');
+      nombreInput.value = '';
+      idInput.value = '';
+      nombreInput.focus();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
+        closeModalBtn.click();
+      }
+    });
+
+    // Submit: Buscar en Google Sheets al hacer clic
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const nombre = nombreInput.value.trim();
+      const id = idInput.value.trim().replace(/\D/g, '');
+
+      if (!nombre && !id) {
+        alert('⚠️ Ingrese nombre o número de identificación.');
+        return;
+      }
+
+      // Mostrar modal de carga
+      modalContent.innerHTML = `
+        <div style="padding:40px; color:#333; font-size:1.3rem;">
+          <i class="fas fa-spinner fa-spin" style="font-size:2.4rem; margin-bottom:20px;"></i><br>
+          Buscando en la base de datos...
+        </div>
+      `;
+      modalOverlay.classList.add('active');
+
+      try {
+        const response = await fetch(GOOGLE_SHEETS_CSV_URL);
+        if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
+
+        const csvText = await response.text();
+        const BENEFICIARIOS = parseCSV(csvText);
+
+        // Buscar por ID o nombre
+        const found = BENEFICIARIOS.find(b =>
+          (id && b.idLimpio === id) ||
+          (nombre && (
+            (b.primerapellido && b.primerapellido.toLowerCase().includes(nombre.toLowerCase())) ||
+            (b.segundoapellido && b.segundoapellido.toLowerCase().includes(nombre.toLowerCase())) ||
+            (b.primeronombre && b.primeronombre.toLowerCase().includes(nombre.toLowerCase())) ||
+            (b.segundonombre && b.segundonombre.toLowerCase().includes(nombre.toLowerCase()))
+          ))
+        );
+
+        if (found) {
+          const fullName = `${found.primeronombre || ''} ${found.segundonombre || ''} ${found.primerapellido || ''} ${found.segundoapellido || ''}`.trim();
+          const safeGet = (key) => found[key] || found[key.toLowerCase()] || '—';
+
+          modalContent.innerHTML = `
+            <div class="result-success">
+              <div class="result-header">
+                <i class="fas fa-check-circle"></i>
+                ¡Beneficiario Encontrado!
+              </div>
+              <div class="result-content">
+                <div class="result-message">
+                  La persona <span class="result-name">${fullName}</span> (ID: <span class="result-id">${safeGet('numerodocumento')}</span>) está <strong>Habilitada</strong>.
+                </div>
+
+                <div class="details-grid">
+                  <div class="detail-item">
+                    <div class="detail-icon"><i class="fas fa-city"></i></div>
+                    <div>
+                      <span class="detail-label">Departamento</span>
+                      <span class="detail-value">${safeGet('departamento')}</span>
+                    </div>
+                  </div>
+                  <div class="detail-item">
+                    <div class="detail-icon"><i class="fas fa-map-marked-alt"></i></div>
+                    <div>
+                      <span class="detail-label">Municipio</span>
+                      <span class="detail-value">${safeGet('municipio')}</span>
+                    </div>
+                  </div>
+                  <div class="detail-item">
+                    <div class="detail-icon"><i class="fas fa-home"></i></div>
+                    <div>
+                      <span class="detail-label">Código Hogar</span>
+                      <span class="detail-value">${safeGet('codigohogar')}</span>
+                    </div>
+                  </div>
+                  <div class="detail-item">
+                    <div class="detail-icon"><i class="fas fa-id-badge"></i></div>
+                    <div>
+                      <span class="detail-label">ID Registro</span>
+                      <span class="detail-value">${safeGet('id') || 'N/A'}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="validated-badge">
+                  <div class="badge">
+                    <i class="fas fa-check-circle"></i> VALIDADO
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        } else {
+          modalContent.innerHTML = `
+            <div class="result-error">
+              <div class="error-icon">
+                <i class="fas fa-times-circle"></i>
+              </div>
+              <h3 class="error-title">❌ No se encontró el beneficiario</h3>
+              <p class="error-message">
+                Verifique los datos ingresados.<br>
+                <strong>Recomendación:</strong> Use solo el número de identificación para mayor precisión.
+              </p>
+            </div>
+          `;
+        }
+
+      } catch (error) {
+        modalContent.innerHTML = `
+          <div class="result-error">
+            <div class="error-icon">
+              <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <h3 class="error-title">❌ Error de conexión</h3>
+            <p class="error-message">
+              No se pudo conectar con la base de datos.<br>
+              Por favor, intente más tarde o verifique su conexión a internet.
+            </p>
+          </div>
+        `;
+      }
+    });
+  </script>
 </body>
 </html>
