@@ -3,802 +3,458 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Renta Ciudadana - Consulta de Beneficiarios</title>
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <title>Acceso</title>
+  <link rel="icon" href="icono.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css  ">
   <style>
-    :root {
-      --red-primary: #c91a22;
-      --red-dark: #a0151b;
-      --gold: #d4af37;
-      --white: #ffffff;
-      --gray-100: #f8f9fa;
-      --shadow-md: 0 8px 30px rgba(0,0,0,0.12);
-    }
-
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Segoe UI', system-ui, sans-serif;
     }
 
-    body {
-      background: linear-gradient(135deg, #f6f8fa 0%, #eef1f5 100%);
-      min-height: 100vh;
-      padding: 20px;
-      color: #333;
+    html, body {
+      height: 100%;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      overflow: hidden;
       position: relative;
-      overflow-x: hidden;
     }
 
-    .bg-animation {
+    video#video-fondo {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      min-width: 100%;
+      min-height: 100%;
+      transform: translate(-50%, -50%);
+      object-fit: cover;
+      z-index: -1;
+      filter: brightness(0.7) contrast(1.1);
+    }
+
+    .overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
+      background: linear-gradient(135deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.3) 100%);
       z-index: -1;
-      overflow: hidden;
-    }
-
-    .wave {
-      position: absolute;
-      border-radius: 45%;
-      filter: blur(60px);
-      opacity: 0.15;
-      animation: float 20s infinite ease-in-out;
-    }
-
-    .wave-1 { width: 700px; height: 700px; background: var(--red-primary); top: -150px; left: -100px; }
-    .wave-2 { width: 800px; height: 800px; background: var(--gold); bottom: -200px; right: -150px; opacity: 0.12; animation-delay: -7s; }
-    .wave-3 { width: 550px; height: 550px; background: var(--red-primary); top: 45%; right: 18%; animation-delay: -14s; opacity: 0.1; }
-
-    @keyframes float {
-      0%, 100% { transform: translate(0, 0) scale(1); }
-      25% { transform: translate(20px, 20px) scale(1.02); }
-      50% { transform: translate(0, 40px) scale(0.98); }
-      75% { transform: translate(-20px, 20px) scale(1.01); }
     }
 
     .container {
-      max-width: 920px;
-      margin: 0 auto;
-      position: relative;
-      z-index: 2;
-    }
-
-    .header {
-      text-align: center;
-      margin-bottom: 32px;
-    }
-
-    .banner {
-      background: linear-gradient(90deg, var(--red-primary), var(--red-dark));
-      color: white;
-      padding: 30px 24px;
-      border-radius: 20px;
-      box-shadow: 0 12px 40px rgba(0,0,0,0.18);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .banner h1 {
-      font-size: 2.6rem;
-      font-weight: 800;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 16px;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.25);
+      height: 100%;
+      padding: 20px;
+      z-index: 1;
     }
 
-    .banner p {
-      font-size: 1.2rem;
-      opacity: 0.95;
-      margin-top: 14px;
-      max-width: 720px;
-      margin-left: auto;
-      margin-right: auto;
-      font-weight: 500;
+    .logo {
+      margin-bottom: 2rem;
+      text-align: center;
     }
 
-    .card {
-      background: var(--white);
-      border-radius: 22px;
-      overflow: hidden;
-      box-shadow: var(--shadow-md);
-      transition: all 0.45s cubic-bezier(0.165, 0.84, 0.44, 1);
+    .logo-icon {
+      font-size: 3.5rem;
+      color: white;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.4);
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
-    .card-header {
-      background: linear-gradient(to right, #fffdf8, #fff9f0);
-      padding: 24px 32px;
-      border-bottom: 2px solid #ffe0b2;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .card-header h2 {
-      color: var(--red-primary);
-      font-size: 1.65rem;
-      font-weight: 800;
-    }
-
-    .card-body {
-      padding: 36px;
-    }
-
-    .form-group {
-      margin-bottom: 26px;
-    }
-
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 24px;
-    }
-
-    @media (min-width: 768px) {
-      .form-row { grid-template-columns: 1fr 1fr; }
-    }
-
-    label {
-      display: flex;
-      align-items: center;
-      gap: 12px;
+    .logo-text {
+      font-size: 1.8rem;
       font-weight: 700;
-      color: #222;
-      margin-bottom: 12px;
-      font-size: 1.08rem;
+      color: white;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+      letter-spacing: -0.5px;
     }
 
-    input {
+    .cuadro {
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       width: 100%;
-      padding: 18px 22px;
-      border: 2px solid #e0e0e0;
-      border-radius: 16px;
-      font-size: 1.08rem;
-      transition: all 0.35s ease;
-      background-color: #fafafa;
-      font-weight: 500;
+      max-width: 420px;
+      padding: 38px 32px;
+      border-radius: 24px;
+      text-align: center;
+      box-shadow: 
+        0 12px 35px rgba(0, 0, 0, 0.25),
+        0 1px 3px rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      z-index: 1;
     }
 
-    input:focus {
-      outline: none;
-      border-color: var(--red-primary);
-      box-shadow: 0 0 0 4px rgba(201, 26, 34, 0.15);
-      background-color: white;
+    .title {
+      color: white;
+      font-size: 1.9rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+      text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+      letter-spacing: -0.5px;
+    }
+
+    .subtitle {
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 1.1rem;
+      margin-bottom: 2.2rem;
+      font-weight: 400;
+      line-height: 1.5;
     }
 
     .btn {
-      width: 100%;
-      padding: 20px;
-      background: linear-gradient(135deg, var(--red-primary), #b81a20);
-      color: white;
-      font-size: 1.25rem;
-      font-weight: 800;
-      border: none;
-      border-radius: 16px;
-      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 14px;
-      transition: all 0.45s cubic-bezier(0.165, 0.84, 0.44, 1);
-      box-shadow: 0 8px 25px rgba(201, 26, 34, 0.35);
-      letter-spacing: 0.4px;
-    }
-
-    .btn:hover:not(:disabled) {
-      transform: translateY(-4px) scale(1.008);
-      box-shadow: 0 12px 35px rgba(201, 26, 34, 0.45);
-    }
-
-    .cycle-section {
-      background: var(--red-primary);
-      color: white;
-      padding: 24px;
-      border-radius: 16px;
-      margin: 20px 0;
-      text-align: center;
-      box-shadow: var(--shadow-md);
-    }
-
-    .cycle-title {
-      font-size: 2.2rem;
-      font-weight: 800;
-      margin-bottom: 8px;
-    }
-
-    .cycle-subtitle {
-      font-size: 1.3rem;
-      opacity: 0.9;
-    }
-
-    .deadline {
-      color: var(--red-primary);
-      font-size: 1.2rem;
-      font-weight: 700;
+      width: 100%;
+      padding: 17px 22px;
       margin: 16px 0;
+      border: none;
+      border-radius: 18px;
+      font-size: 1.15rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 
+        0 6px 18px rgba(0, 0, 0, 0.22),
+        0 3px 6px rgba(0, 0, 0, 0.12);
+      position: relative;
+      overflow: hidden;
+      color: #000;
+      letter-spacing: -0.3px;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.25);
+      transform: translateX(-100%);
+      transition: transform 0.6s ease;
+      z-index: -1;
+    }
+
+    .btn:hover::before {
+      transform: translateX(0);
+    }
+
+    .btn-estudiante {
+      background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
+    }
+
+    .btn-docente {
+      background: linear-gradient(45deg, #fa709a 0%, #fee140 100%);
+    }
+
+    .btn i {
+      margin-right: 14px;
+      font-size: 1.35rem;
+      width: 26px;
       text-align: center;
     }
 
-    .payment-points {
-      background: white;
-      border-radius: 16px;
-      padding: 24px;
-      box-shadow: var(--shadow-md);
-      margin: 20px 0;
+    .btn:hover {
+      transform: translateY(-4px);
+      box-shadow: 
+        0 10px 30px rgba(0, 0, 0, 0.3),
+        0 5px 10px rgba(0, 0, 0, 0.18);
     }
 
-    .points-title {
-      font-size: 1.4rem;
-      font-weight: 700;
-      color: var(--red-primary);
-      margin-bottom: 16px;
+    .btn:active {
+      transform: translateY(1px);
+      box-shadow: 
+        0 4px 18px rgba(0, 0, 0, 0.22),
+        0 2px 6px rgba(0, 0, 0, 0.12);
+    }
+
+    footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: rgba(74, 144, 226, 0.85);
+      text-align: center;
+      padding: 17px 0;
+      color: #fff;
+      font-weight: 600;
+      z-index: 2;
+      box-shadow: 
+        0 -5px 25px rgba(0, 0, 0, 0.25),
+        0 -2px 5px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-top: 1px solid rgba(255, 255, 255, 0.25);
+      font-size: 1.05rem;
+    }
+
+    .institution-name {
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 10px;
     }
 
-    .points-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    .point-item {
-      padding: 12px 16px;
-      background: #f8f9fa;
-      border-radius: 10px;
-      margin-bottom: 8px;
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
-    }
-
-    .point-icon {
-      color: var(--red-primary);
+    .institution-name i {
       font-size: 1.2rem;
-      margin-top: 4px;
     }
 
-    .point-location {
-      font-weight: 700;
-      color: #333;
-      min-width: 100px;
-    }
-
-    .point-name {
-      font-weight: 600;
-      color: var(--red-primary);
-    }
-
-    /* MODAL OVERLAY */
-    #modalOverlay {
+    /* Modal de anuncio */
+    #anuncio-modal {
+      display: none;
       position: fixed;
       top: 0;
       left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.45);
-      backdrop-filter: blur(8px);
-      display: flex;
-      align-items: center;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(5px);
+      z-index: 100;
       justify-content: center;
-      z-index: 1000;
+      align-items: center;
       opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.4s ease, visibility 0.4s;
+      transition: opacity 0.3s ease;
     }
 
-    #modalOverlay.active {
+    #anuncio-modal.active {
+      display: flex;
       opacity: 1;
-      visibility: visible;
     }
 
     .modal-content {
-      max-width: 90%;
-      width: 680px;
-      text-align: center;
+      background: white;
+      border-radius: 20px;
+      width: 90%;
+      max-width: 500px;
+      padding: 32px;
+      position: relative;
+      box-shadow: 
+        0 20px 50px rgba(0, 0, 0, 0.3),
+        0 10px 20px rgba(0, 0, 0, 0.2);
+      transform: translateY(20px);
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    #anuncio-modal.active .modal-content {
+      transform: translateY(0);
     }
 
     .close-btn {
       position: absolute;
-      top: 20px;
-      right: 20px;
-      background: rgba(255, 255, 255, 0.3);
-      border: none;
-      width: 40px;
-      height: 40px;
+      top: 16px;
+      right: 16px;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
+      background: #f1f3f9;
+      border: none;
       font-size: 1.4rem;
-      color: white;
+      color: #666;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      backdrop-filter: blur(4px);
+      transition: all 0.25s ease;
     }
 
-    .result-success {
-      background: white;
-      border-radius: 22px;
-      overflow: hidden;
-      box-shadow: 0 15px 50px rgba(0,0,0,0.25);
-      position: relative;
+    .close-btn:hover {
+      background: #e0e3eb;
+      color: #333;
+      transform: rotate(90deg);
     }
 
-    .result-header {
-      background: linear-gradient(90deg, var(--red-primary), var(--gold));
-      padding: 28px 36px;
-      color: white;
-      font-size: 1.6rem;
+    .modal-title {
+      font-size: 1.8rem;
       font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
+      color: #2c3e50;
+      margin-bottom: 16px;
+      text-align: center;
     }
 
-    .result-content {
-      padding: 36px;
-    }
-
-    .result-message {
-      font-size: 1.4rem;
-      line-height: 1.5;
-      margin-bottom: 28px;
-      color: #222;
-    }
-
-    .result-name {
-      font-family: 'Georgia', serif;
-      font-weight: 700;
-      color: var(--red-primary);
-      font-size: 1.55rem;
-    }
-
-    .result-id {
-      font-family: 'Consolas', monospace;
-      background: rgba(201, 26, 34, 0.08);
-      padding: 6px 16px;
-      border-radius: 6px;
-      font-weight: 600;
-      color: var(--red-dark);
-      font-size: 1.1rem;
-    }
-
-    .details-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 18px;
-      margin-top: 24px;
-    }
-
-    @media (min-width: 640px) {
-      .details-grid { grid-template-columns: 1fr 1fr; }
-    }
-
-    .detail-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 14px;
-      padding: 16px;
-      background: #fafafa;
-      border-radius: 14px;
-      text-align: left;
-    }
-
-    .detail-icon {
-      width: 42px;
-      height: 42px;
-      background: rgba(201, 26, 34, 0.08);
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--red-primary);
-      font-size: 1.2rem;
-      flex-shrink: 0;
-    }
-
-    .detail-value {
-      font-weight: 700;
-      color: var(--red-primary);
-      font-size: 1.1rem;
-      line-height: 1.4;
-    }
-
-    .detail-label {
-      font-weight: 500;
-      font-size: 0.95rem;
-      color: #555;
+    .modal-icon {
+      font-size: 3.5rem;
+      color: #4a90e2;
+      margin: 0 auto 24px;
       display: block;
-      margin-bottom: 4px;
+      text-align: center;
     }
 
-    .result-error {
-      background: white;
-      border-radius: 22px;
-      padding: 40px 30px;
-      box-shadow: 0 15px 50px rgba(0,0,0,0.25);
-      position: relative;
-    }
-
-    .error-icon {
-      font-size: 4rem;
-      color: var(--red-primary);
-      margin-bottom: 20px;
-    }
-
-    .error-title {
-      font-size: 1.65rem;
-      font-weight: 700;
-      color: var(--red-primary);
-      margin-bottom: 20px;
-    }
-
-    .error-message {
-      font-size: 1.25rem;
-      color: #555;
+    .modal-text {
+      font-size: 1.15rem;
       line-height: 1.6;
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    .validated-badge {
+      color: #444;
       text-align: center;
-      margin-top: 32px;
+      margin-bottom: 28px;
     }
 
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 14px;
-      background: linear-gradient(145deg, #28a745, #208b3a);
-      color: white;
-      padding: 18px 42px;
-      border-radius: 50px;
-      font-weight: 900;
-      font-size: 1.5rem;
-      box-shadow: 0 8px 25px rgba(40, 167, 69, 0.45);
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.04); }
-    }
-
-    .footer {
+    .modal-footer {
       text-align: center;
-      margin-top: 20px;
-      color: #666;
-      font-size: 1.05rem;
-      padding-bottom: 30px;
+      font-size: 0.95rem;
+      color: #777;
     }
 
-    .note-box {
-      background: rgba(255, 255, 255, 0.7);
-      border-radius: 16px;
-      padding: 24px;
-      margin-top: 24px;
-      max-width: 750px;
-      margin-left: auto;
-      margin-right: auto;
-      box-shadow: var(--shadow-md);
-    }
-
-    @media (max-width: 600px) {
-      .banner h1 { font-size: 2.1rem; }
-      .card-body { padding: 24px; }
-      .btn { padding: 18px; font-size: 1.15rem; }
-      .cycle-title { font-size: 1.8rem; }
-      .points-title { font-size: 1.2rem; }
-      .result-header { font-size: 1.4rem; padding: 22px; }
-      .result-message { font-size: 1.25rem; }
-      .badge { font-size: 1.3rem; padding: 14px 30px; }
+    @media (max-width: 480px) {
+      .cuadro {
+        padding: 30px 24px;
+        margin-bottom: 20px;
+      }
+      
+      .btn {
+        padding: 15px;
+        font-size: 1.05rem;
+      }
+      
+      .title {
+        font-size: 1.6rem;
+      }
+      
+      .subtitle {
+        font-size: 1rem;
+      }
+      
+      .logo-icon {
+        font-size: 2.8rem;
+      }
+      
+      .modal-content {
+        padding: 24px 20px;
+      }
+      
+      .modal-title {
+        font-size: 1.5rem;
+      }
+      
+      .modal-text {
+        font-size: 1.05rem;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="bg-animation">
-    <div class="wave wave-1"></div>
-    <div class="wave wave-2"></div>
-    <div class="wave wave-3"></div>
-  </div>
+  <!-- Video de fondo -->
+  <video id="video-fondo" autoplay muted loop>
+    <source src="video.mp4" type="video/mp4">
+    Tu navegador no soporta el video de fondo.
+  </video>
+  
+  <div class="overlay"></div>
 
   <div class="container">
-    <div class="header">
-      <div class="banner">
-        <h1>
-          <i class="fas fa-hand-holding-usd"></i>
-          Renta Ciudadana / Devolución IVA
-        </h1>
-        <p>Consulta de beneficiarios — Programa de apoyo económico del Gobierno Nacional</p>
+    <div class="logo">
+      <div class="logo-icon">
+        <i class="fas fa-book-open"></i>
       </div>
+      <div class="logo-text">Institución Educativa</div>
     </div>
-
-    <div class="card">
-      <div class="card-header">
-        <i class="fas fa-search fa-lg" style="color: var(--red-primary);"></i>
-        <h2>Consultar beneficiario</h2>
-      </div>
-
-      <div class="card-body">
-        <form id="searchForm">
-          <div class="form-row">
-            <div class="form-group">
-              <label for="nombre">
-                <i class="fas fa-user"></i> Nombre y apellidos
-              </label>
-              <input type="text" id="nombre" placeholder="Ej: Ana María Torres Rojas" autocomplete="off">
-            </div>
-            <div class="form-group">
-              <label for="id">
-                <i class="fas fa-id-card"></i> Número de identificación
-              </label>
-              <input type="text" id="id" placeholder="Ej: 1034567890" autocomplete="off">
-            </div>
-          </div>
-
-          <button type="submit" id="btnConsultar" class="btn">
-            <i class="fas fa-search"></i> Consultar beneficiario
-          </button>
-        </form>
-      </div>
+    
+    <div class="cuadro">
+      <h1 class="title">Acceso al Sistema</h1>
+     
+      
+      <button class="btn btn-docente" id="btn-docente">
+        <i class="fas fa-chalkboard-teacher"></i> Docente
+      </button>
+      
+      <button class="btn btn-estudiante" onclick="location.href='assets/estudiantes/index.html'">
+        <i class="fas fa-people-group"></i> Estudiante
+      </button>
     </div>
+  </div>
 
-    <div class="cycle-section">
-      <div class="cycle-title">Ciclo 6 del 2025</div>
-      <div class="cycle-subtitle">Modalidad por Giro</div>
+  <!-- Footer -->
+  <footer>
+    <div class="institution-name">
+      <i class="fas fa-atom"></i>
+      <span>© 2025 Institución Educativa colucas - Derechos reservados</span>
     </div>
+  </footer>
 
-    <div class="deadline">
-      Hasta el 20 de diciembre de 2025
-    </div>
-
-    <div class="payment-points">
-      <h3 class="points-title">
-        <i class="fas fa-map-marker-alt"></i> Puntos de pago Autorizados:
-      </h3>
-      <ul class="points-list">
-        <li class="point-item">
-          <i class="fas fa-store point-icon"></i>
-          <span class="point-location">Olival:</span>
-          <span class="point-name">Jairo Ochoa</span>
-        </li>
-        <li class="point-item">
-          <i class="fas fa-store point-icon"></i>
-          <span class="point-location">Tolota:</span>
-          <span class="point-name">Doña Maria Eugenia “Efecty”</span>
-        </li>
-        <li class="point-item">
-          <i class="fas fa-store point-icon"></i>
-          <span class="point-location">Vado Real:</span>
-          <span class="point-name">Droguería de Rubiela</span>
-        </li>
-        <li class="point-item">
-          <i class="fas fa-store point-icon"></i>
-          <span class="point-location">San José de Suaita:</span>
-          <span class="point-name">Droguería y Papelería el Profe</span>
-        </li>
-        <li class="point-item">
-          <i class="fas fa-store point-icon"></i>
-          <span class="point-location">Suaita:</span>
-          <span class="point-name">Detalles y Algo Más “Efecty”</span>
-        </li>
-      </ul>
-    </div>
-
-    <div class="note-box">
-      <p><strong>Nota:</strong> Presentar C.C. Original.</p>
-    </div>
-
-    <div class="footer">
-      <p>
-        © <span id="currentYear"></span> Gobierno de Suaita — 2024-2026.
+  <!-- Modal de anuncio -->
+  <div id="anuncio-modal">
+    <div class="modal-content">
+      <button class="close-btn" id="close-modal">&times;</button>
+      <i class="fas fa-bullhorn modal-icon"></i>
+      <h2 class="modal-title">Aviso Importante para Docentes</h2>
+      <p class="modal-text">
+        Estimado docente, debido a actualizaciones en el sistema, 
+        el ingreso se encuentra <strong>inabilitado</strong> 
+        
       </p>
+      <div class="modal-footer">
+        <p>Gracias</p>
+      </div>
     </div>
   </div>
 
-  <!-- Modal Overlay -->
-  <div id="modalOverlay">
-    <button class="close-btn" id="closeModal">&times;</button>
-    <div class="modal-content" id="modalContent"></div>
-  </div>
-
+  <!-- Script para control de reproducción y modal -->
   <script>
-    // 🔴 IMPORTANTE: Reemplaza esta URL con la tuya
-    // Debe ser PUBLICADO como CSV: Archivo > Publicar en la web > Formato: CSV
-    const GOOGLE_SHEETS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTCZXIW6QFh-7S8czd3HceniHxS07n17lm_FbjKBAwl-aLclnvw8fVPkv-jo3ScRQ/pub?output=csv';
+    // Video handling
+    const video = document.getElementById('video-fondo');
+    let pausaActiva = false;
 
-    const form = document.getElementById('searchForm');
-    const nombreInput = document.getElementById('nombre');
-    const idInput = document.getElementById('id');
-    const btnConsultar = document.getElementById('btnConsultar');
-    const modalOverlay = document.getElementById('modalOverlay');
-    const modalContent = document.getElementById('modalContent');
-    const closeModalBtn = document.getElementById('closeModal');
-    const currentYearEl = document.getElementById('currentYear');
-
-    currentYearEl.textContent = new Date().getFullYear();
-
-    // Normaliza encabezados para mapeo flexible
-    function normalizeHeader(str) {
-      return str
-        .trim()
-        .toLowerCase()
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '') // Elimina tildes
-        .replace(/[^a-z0-9]/g, '');      // Solo letras/números
-    }
-
-    // Parsea CSV con columnas exactas de tu Excel
-    function parseCSV(csvText) {
-      const lines = csvText.split('\n').filter(line => line.trim() !== '');
-      if (lines.length < 2) return [];
-
-      const rawHeaders = lines[0].split(',').map(h => h.trim());
-      const headers = rawHeaders.map(normalizeHeader);
-      const data = [];
-
-      for (let i = 1; i < lines.length; i++) {
-        const values = lines[i].split(',').map(v => v.trim());
-        if (values.length === headers.length) {
-          const obj = {};
-          headers.forEach((h, idx) => {
-            obj[h] = values[idx];
-          });
-          // Limpiar ID
-          if (obj.numerodocumento) {
-            obj.idLimpio = obj.numerodocumento.replace(/\D/g, '');
-          }
-          data.push(obj);
-        }
-      }
-      return data.filter(b => b.idLimpio);
-    }
-
-    // Cerrar modal
-    closeModalBtn.addEventListener('click', () => {
-      modalOverlay.classList.remove('active');
-      nombreInput.value = '';
-      idInput.value = '';
-      nombreInput.focus();
+    video.addEventListener('ended', () => {
+      pausaActiva = true;
+      setTimeout(() => {
+        video.currentTime = 0;
+        video.play();
+        pausaActiva = false;
+      }, 180000); // 3 minutos
     });
 
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
-        closeModalBtn.click();
+    setInterval(() => {
+      if (!pausaActiva && (video.paused || video.ended)) {
+        video.currentTime = 0;
+        video.play().catch(e => console.log("Playback error:", e));
+      }
+    }, 180000);
+    
+    // Modal handling
+    const modal = document.getElementById('anuncio-modal');
+    const btnDocente = document.getElementById('btn-docente');
+    const closeBtn = document.getElementById('close-modal');
+
+    // Abrir modal al hacer clic en Docente
+    btnDocente.addEventListener('click', function() {
+      modal.classList.add('active');
+    });
+
+    // Cerrar modal al hacer clic en ×
+    closeBtn.addEventListener('click', function() {
+      modal.classList.remove('active');
+    });
+
+    // Cerrar modal al hacer clic fuera del contenido
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) {
+        modal.classList.remove('active');
       }
     });
 
-    // Submit: Buscar en Google Sheets al hacer clic
-    form.addEventListener('submit', async function(e) {
-      e.preventDefault();
-
-      const nombre = nombreInput.value.trim();
-      const id = idInput.value.trim().replace(/\D/g, '');
-
-      if (!nombre && !id) {
-        alert('⚠️ Ingrese nombre o número de identificación.');
-        return;
+    // Permitir cerrar con tecla ESC
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && modal.classList.contains('active')) {
+        modal.classList.remove('active');
       }
+    });
 
-      // Mostrar modal de carga
-      modalContent.innerHTML = `
-        <div style="padding:40px; color:#333; font-size:1.3rem;">
-          <i class="fas fa-spinner fa-spin" style="font-size:2.4rem; margin-bottom:20px;"></i><br>
-          Buscando en la base de datos...
-        </div>
-      `;
-      modalOverlay.classList.add('active');
-
-      try {
-        const response = await fetch(GOOGLE_SHEETS_CSV_URL);
-        if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
-
-        const csvText = await response.text();
-        const BENEFICIARIOS = parseCSV(csvText);
-
-        // Buscar por ID o nombre
-        const found = BENEFICIARIOS.find(b =>
-          (id && b.idLimpio === id) ||
-          (nombre && (
-            (b.primerapellido && b.primerapellido.toLowerCase().includes(nombre.toLowerCase())) ||
-            (b.segundoapellido && b.segundoapellido.toLowerCase().includes(nombre.toLowerCase())) ||
-            (b.primeronombre && b.primeronombre.toLowerCase().includes(nombre.toLowerCase())) ||
-            (b.segundonombre && b.segundonombre.toLowerCase().includes(nombre.toLowerCase()))
-          ))
-        );
-
-        if (found) {
-          const fullName = `${found.primeronombre || ''} ${found.segundonombre || ''} ${found.primerapellido || ''} ${found.segundoapellido || ''}`.trim();
-          const safeGet = (key) => found[key] || found[key.toLowerCase()] || '—';
-
-          modalContent.innerHTML = `
-            <div class="result-success">
-              <div class="result-header">
-                <i class="fas fa-check-circle"></i>
-                ¡Beneficiario Encontrado!
-              </div>
-              <div class="result-content">
-                <div class="result-message">
-                  La persona <span class="result-name">${fullName}</span> (ID: <span class="result-id">${safeGet('numerodocumento')}</span>) está <strong>Habilitada</strong>.
-                </div>
-
-                <div class="details-grid">
-                  <div class="detail-item">
-                    <div class="detail-icon"><i class="fas fa-city"></i></div>
-                    <div>
-                      <span class="detail-label">Departamento</span>
-                      <span class="detail-value">${safeGet('departamento')}</span>
-                    </div>
-                  </div>
-                  <div class="detail-item">
-                    <div class="detail-icon"><i class="fas fa-map-marked-alt"></i></div>
-                    <div>
-                      <span class="detail-label">Municipio</span>
-                      <span class="detail-value">${safeGet('municipio')}</span>
-                    </div>
-                  </div>
-                  <div class="detail-item">
-                    <div class="detail-icon"><i class="fas fa-home"></i></div>
-                    <div>
-                      <span class="detail-label">Código Hogar</span>
-                      <span class="detail-value">${safeGet('codigohogar')}</span>
-                    </div>
-                  </div>
-                  <div class="detail-item">
-                    <div class="detail-icon"><i class="fas fa-id-badge"></i></div>
-                    <div>
-                      <span class="detail-label">ID Registro</span>
-                      <span class="detail-value">${safeGet('id') || 'N/A'}</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="validated-badge">
-                  <div class="badge">
-                    <i class="fas fa-check-circle"></i> VALIDADO
-                  </div>
-                </div>
-              </div>
-            </div>
-          `;
-        } else {
-          modalContent.innerHTML = `
-            <div class="result-error">
-              <div class="error-icon">
-                <i class="fas fa-times-circle"></i>
-              </div>
-              <h3 class="error-title">❌ No se encontró el beneficiario</h3>
-              <p class="error-message">
-                Verifique los datos ingresados.<br>
-                <strong>Recomendación:</strong> Use solo el número de identificación para mayor precisión.
-              </p>
-            </div>
-          `;
-        }
-
-      } catch (error) {
-        modalContent.innerHTML = `
-          <div class="result-error">
-            <div class="error-icon">
-              <i class="fas fa-exclamation-triangle"></i>
-            </div>
-            <h3 class="error-title">❌ Error de conexión</h3>
-            <p class="error-message">
-              No se pudo conectar con la base de datos.<br>
-              Por favor, intente más tarde o verifique su conexión a internet.
-            </p>
-          </div>
-        `;
-      }
+    // Mobile video autoplay fix
+    document.addEventListener('DOMContentLoaded', function() {
+      const playVideo = () => {
+        video.play().catch(e => console.log("Autoplay prevented:", e));
+        document.body.removeEventListener('touchstart', playVideo);
+        document.body.removeEventListener('click', playVideo);
+      };
+      
+      document.body.addEventListener('touchstart', playVideo, { once: true });
+      document.body.addEventListener('click', playVideo, { once: true });
     });
   </script>
 </body>
