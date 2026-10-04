@@ -2,15 +2,23 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Acceso</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Acceso Seguro | Colegio Lucas Caballero</title>
   <link rel="icon" href="icono.png">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css  ">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
+    :root {
+      --primary-yellow: #F4E841;
+      --primary-green: #006400;
+      --dark-green: #1a4d1a;
+      --light-green: #2d8a2d;
+    }
+
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
     }
 
     html, body {
@@ -20,6 +28,7 @@
       position: relative;
     }
 
+    /* ===== VIDEO DE FONDO (oculto al inicio) ===== */
     video#video-fondo {
       position: fixed;
       top: 50%;
@@ -28,8 +37,10 @@
       min-height: 100%;
       transform: translate(-50%, -50%);
       object-fit: cover;
-      z-index: -1;
+      z-index: -2;
       filter: brightness(0.7) contrast(1.1);
+      opacity: 0;
+      transition: opacity 1.2s ease;
     }
 
     .overlay {
@@ -40,8 +51,699 @@
       height: 100%;
       background: linear-gradient(135deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.3) 100%);
       z-index: -1;
+      opacity: 0;
+      transition: opacity 1.2s ease;
     }
 
+    /* ===== PANTALLA DE BIENVENIDA CON FONDO VERDE ===== */
+    .welcome-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #004d00 0%, #006400 30%, #1a7a1a 60%, #2d8a2d 100%);
+      z-index: 6000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1), 
+                  transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .welcome-screen.hidden {
+      opacity: 0;
+      transform: scale(1.1);
+      pointer-events: none;
+    }
+
+    /* ===== FORMAS EDUCATIVAS ANIMADAS (delineadas en blanco, sin relleno) ===== */
+    .edu-shapes {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .shape {
+      position: absolute;
+      opacity: 0;
+      animation: shapeAppear 1s ease-out forwards, shapeFloat 6s ease-in-out infinite;
+    }
+
+    @keyframes shapeAppear {
+      0% { opacity: 0; transform: scale(0) rotate(0deg); }
+      60% { opacity: 1; transform: scale(1.1) rotate(10deg); }
+      100% { opacity: 0.7; transform: scale(1) rotate(0deg); }
+    }
+
+    @keyframes shapeFloat {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      25% { transform: translateY(-15px) rotate(5deg); }
+      50% { transform: translateY(-8px) rotate(-3deg); }
+      75% { transform: translateY(-20px) rotate(8deg); }
+    }
+
+    /* Formas geométricas delineadas */
+    .shape-square {
+      width: 60px;
+      height: 60px;
+      border: 3px solid white;
+      background: transparent;
+      border-radius: 8px;
+    }
+
+    .shape-rectangle {
+      width: 100px;
+      height: 50px;
+      border: 3px solid white;
+      background: transparent;
+      border-radius: 6px;
+    }
+
+    .shape-circle {
+      width: 70px;
+      height: 70px;
+      border: 3px solid white;
+      background: transparent;
+      border-radius: 50%;
+    }
+
+    .shape-triangle {
+      width: 0;
+      height: 0;
+      border-left: 35px solid transparent;
+      border-right: 35px solid transparent;
+      border-bottom: 60px solid transparent;
+      position: relative;
+    }
+
+    .shape-triangle::before {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: -32px;
+      border-left: 32px solid transparent;
+      border-right: 32px solid transparent;
+      border-bottom: 55px solid transparent;
+    }
+
+    .shape-triangle::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -35px;
+      border-left: 35px solid transparent;
+      border-right: 35px solid transparent;
+      border-bottom: 60px solid white;
+      clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+      -webkit-mask: linear-gradient(white, white);
+      mask: linear-gradient(white, white);
+    }
+
+    .shape-book {
+      width: 50px;
+      height: 65px;
+      border: 3px solid white;
+      background: transparent;
+      border-radius: 3px 8px 8px 3px;
+      position: relative;
+    }
+
+    .shape-book::before {
+      content: '';
+      position: absolute;
+      left: 8px;
+      top: 10px;
+      width: 25px;
+      height: 3px;
+      background: white;
+      border-radius: 2px;
+    }
+
+    .shape-book::after {
+      content: '';
+      position: absolute;
+      left: 8px;
+      top: 20px;
+      width: 30px;
+      height: 3px;
+      background: white;
+      border-radius: 2px;
+    }
+
+    .shape-pencil {
+      width: 15px;
+      height: 80px;
+      border: 3px solid white;
+      background: transparent;
+      border-radius: 3px 3px 1px 1px;
+      position: relative;
+      transform: rotate(30deg);
+    }
+
+    .shape-pencil::before {
+      content: '';
+      position: absolute;
+      bottom: -12px;
+      left: -3px;
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-top: 15px solid white;
+    }
+
+    .shape-ruler {
+      width: 120px;
+      height: 25px;
+      border: 3px solid white;
+      background: transparent;
+      border-radius: 3px;
+      position: relative;
+    }
+
+    .shape-ruler::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 10px;
+      width: 2px;
+      height: 8px;
+      background: white;
+      box-shadow: 15px 0 0 white, 30px 0 0 white, 45px 0 0 white, 60px 0 0 white, 75px 0 0 white, 90px 0 0 white;
+    }
+
+    .shape-notebook {
+      width: 55px;
+      height: 70px;
+      border: 3px solid white;
+      background: transparent;
+      border-radius: 4px;
+      position: relative;
+    }
+
+    .shape-notebook::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 10px;
+      width: 2px;
+      height: 100%;
+      background: white;
+    }
+
+    .shape-notebook::after {
+      content: '';
+      position: absolute;
+      top: 15px;
+      left: 18px;
+      width: 25px;
+      height: 2px;
+      background: white;
+      box-shadow: 0 10px 0 white, 0 20px 0 white, 0 30px 0 white;
+    }
+
+    .shape-atom {
+      width: 80px;
+      height: 80px;
+      position: relative;
+    }
+
+    .shape-atom::before,
+    .shape-atom::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 70px;
+      height: 30px;
+      border: 2px solid white;
+      background: transparent;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .shape-atom::before {
+      transform: translate(-50%, -50%) rotate(60deg);
+    }
+
+    .shape-atom::after {
+      transform: translate(-50%, -50%) rotate(-60deg);
+    }
+
+    .shape-atom-center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 12px;
+      height: 12px;
+      border: 2px solid white;
+      background: transparent;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .shape-plus {
+      width: 50px;
+      height: 50px;
+      position: relative;
+    }
+
+    .shape-plus::before,
+    .shape-plus::after {
+      content: '';
+      position: absolute;
+      background: white;
+      border-radius: 2px;
+    }
+
+    .shape-plus::before {
+      top: 50%;
+      left: 0;
+      width: 100%;
+      height: 6px;
+      transform: translateY(-50%);
+    }
+
+    .shape-plus::after {
+      top: 0;
+      left: 50%;
+      width: 6px;
+      height: 100%;
+      transform: translateX(-50%);
+    }
+
+    .shape-diamond {
+      width: 50px;
+      height: 50px;
+      border: 3px solid white;
+      background: transparent;
+      transform: rotate(45deg);
+    }
+
+    .shape-hexagon {
+      width: 60px;
+      height: 35px;
+      border-left: 3px solid white;
+      border-right: 3px solid white;
+      background: transparent;
+      position: relative;
+    }
+
+    .shape-hexagon::before,
+    .shape-hexagon::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 0;
+      border-left: 30px solid transparent;
+      border-right: 30px solid transparent;
+    }
+
+    .shape-hexagon::before {
+      top: -18px;
+      border-bottom: 18px solid white;
+    }
+
+    .shape-hexagon::after {
+      bottom: -18px;
+      border-top: 18px solid white;
+    }
+
+    /* Posiciones y delays de las formas */
+    .shape:nth-child(1) { top: 10%; left: 8%; animation-delay: 0.2s, 0s; }
+    .shape:nth-child(2) { top: 15%; right: 10%; animation-delay: 0.4s, 0.5s; }
+    .shape:nth-child(3) { top: 25%; left: 5%; animation-delay: 0.6s, 1s; }
+    .shape:nth-child(4) { top: 30%; right: 5%; animation-delay: 0.8s, 1.5s; }
+    .shape:nth-child(5) { bottom: 25%; left: 10%; animation-delay: 1s, 2s; }
+    .shape:nth-child(6) { bottom: 20%; right: 8%; animation-delay: 1.2s, 2.5s; }
+    .shape:nth-child(7) { top: 50%; left: 3%; animation-delay: 1.4s, 3s; }
+    .shape:nth-child(8) { top: 45%; right: 3%; animation-delay: 1.6s, 3.5s; }
+    .shape:nth-child(9) { bottom: 10%; left: 20%; animation-delay: 1.8s, 4s; }
+    .shape:nth-child(10) { bottom: 15%; right: 20%; animation-delay: 2s, 4.5s; }
+    .shape:nth-child(11) { top: 5%; left: 40%; animation-delay: 0.3s, 1.2s; }
+    .shape:nth-child(12) { bottom: 5%; left: 50%; animation-delay: 0.7s, 2.2s; }
+
+    /* ===== LOGO CENTRAL ===== */
+    .welcome-logo {
+      width: 260px;
+      height: 260px;
+      animation: logoEntrance 2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.4));
+      z-index: 2;
+      position: relative;
+    }
+
+    @keyframes logoEntrance {
+      0% {
+        opacity: 0;
+        transform: scale(0) rotate(-180deg);
+      }
+      40% {
+        transform: scale(1.15) rotate(10deg);
+      }
+      70% {
+        transform: scale(0.95) rotate(-5deg);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+      }
+    }
+
+    .welcome-text {
+      margin-top: 30px;
+      text-align: center;
+      opacity: 0;
+      animation: textFadeIn 1s ease-out 1.5s forwards;
+      z-index: 2;
+      position: relative;
+    }
+
+    @keyframes textFadeIn {
+      to { opacity: 1; }
+    }
+
+    .welcome-title {
+      font-size: 2.3rem;
+      font-weight: 800;
+      color: white;
+      text-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      margin-bottom: 8px;
+      letter-spacing: 2px;
+    }
+
+    .welcome-subtitle {
+      font-size: 1.2rem;
+      color: rgba(255, 255, 255, 0.95);
+      font-weight: 500;
+      letter-spacing: 3px;
+    }
+
+    .welcome-institution {
+      font-size: 1rem;
+      color: var(--primary-yellow);
+      margin-top: 12px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+    }
+
+    .ai-indicator {
+      margin-top: 40px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      opacity: 0;
+      animation: fadeIn 1s ease-out 2s forwards;
+      z-index: 2;
+      position: relative;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    .ai-dot {
+      width: 12px;
+      height: 12px;
+      background: var(--primary-yellow);
+      border-radius: 50%;
+      animation: pulseAI 1.5s ease-in-out infinite;
+      box-shadow: 0 0 20px var(--primary-yellow);
+    }
+
+    @keyframes pulseAI {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.3); opacity: 0.6; }
+    }
+
+    .ai-text {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    .enter-btn {
+      margin-top: 35px;
+      padding: 18px 50px;
+      background: linear-gradient(135deg, var(--primary-yellow) 0%, #f9f871 100%);
+      border: none;
+      border-radius: 50px;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--dark-green);
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: slideUp 0.8s ease-out 2.5s forwards;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+      z-index: 2;
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    @keyframes slideUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .enter-btn:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    /* ===== LOADING OVERLAY ===== */
+    .loading-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #004d00 0%, #006400 100%);
+      backdrop-filter: blur(10px);
+      z-index: 3000;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .loading-overlay.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    .spinner {
+      width: 90px;
+      height: 90px;
+      border: 6px solid rgba(244, 232, 65, 0.3);
+      border-top: 6px solid var(--primary-yellow);
+      border-right: 6px solid white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 25px;
+      box-shadow: 0 0 30px rgba(244, 232, 65, 0.4);
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .loading-text {
+      color: var(--primary-yellow);
+      font-size: 1.5rem;
+      font-weight: 700;
+      text-align: center;
+      animation: pulse 1.5s ease-in-out infinite;
+      letter-spacing: 2px;
+    }
+
+    .loading-subtext {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 1rem;
+      margin-top: 12px;
+      font-weight: 500;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+
+    /* ===== SECURITY MODAL ===== */
+    .security-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 40, 0, 0.95);
+      backdrop-filter: blur(15px);
+      z-index: 4000;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .security-modal.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    .security-content {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+      border: 2px solid var(--primary-yellow);
+      border-radius: 24px;
+      padding: 40px 30px;
+      max-width: 450px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 
+                  0 0 40px rgba(244, 232, 65, 0.2);
+      transform: scale(0.9);
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+    }
+
+    .security-modal.active .security-content {
+      transform: scale(1);
+    }
+
+    .security-icon {
+      font-size: 3.5rem;
+      color: var(--primary-yellow);
+      margin-bottom: 20px;
+      animation: shieldPulse 2s infinite;
+    }
+
+    @keyframes shieldPulse {
+      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(244, 232, 65, 0.5)); }
+      50% { transform: scale(1.1); filter: drop-shadow(0 0 20px rgba(244, 232, 65, 0.8)); }
+    }
+
+    .security-title {
+      color: var(--primary-yellow);
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .security-subtitle {
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 1rem;
+      margin-bottom: 30px;
+      line-height: 1.5;
+    }
+
+    /* Slider de seguridad */
+    .slider-container {
+      position: relative;
+      width: 100%;
+      max-width: 340px;
+      height: 60px;
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 30px;
+      border: 2px solid rgba(244, 232, 65, 0.4);
+      margin: 0 auto;
+      overflow: hidden;
+    }
+
+    .slider-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 0.95rem;
+      font-weight: 600;
+      pointer-events: none;
+      white-space: nowrap;
+      transition: opacity 0.3s;
+      letter-spacing: 1px;
+    }
+
+    .slider-track {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--primary-green) 0%, var(--primary-yellow) 100%);
+      border-radius: 30px;
+      transition: width 0.1s linear;
+      opacity: 0.8;
+    }
+
+    .slider-ball {
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      width: 52px;
+      height: 52px;
+      background: linear-gradient(135deg, var(--primary-yellow) 0%, #fff 100%);
+      border-radius: 50%;
+      cursor: grab;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--dark-green);
+      font-size: 1.4rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      transition: transform 0.1s;
+      z-index: 2;
+      touch-action: none;
+      border: 2px solid var(--primary-green);
+    }
+
+    .slider-ball:active {
+      cursor: grabbing;
+      transform: scale(0.95);
+    }
+
+    .slider-ball.verified {
+      background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+      color: white;
+    }
+
+    .close-security {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 1.5rem;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .close-security:hover {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      transform: rotate(90deg);
+    }
+
+    /* ===== CONTAINER PRINCIPAL ===== */
     .container {
       display: flex;
       flex-direction: column;
@@ -50,6 +752,14 @@
       height: 100%;
       padding: 20px;
       z-index: 1;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .container.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     .logo {
@@ -73,7 +783,6 @@
       font-weight: 700;
       color: white;
       text-shadow: 0 2px 8px rgba(0,0,0,0.4);
-      letter-spacing: -0.5px;
     }
 
     .cuadro {
@@ -85,28 +794,21 @@
       padding: 38px 32px;
       border-radius: 24px;
       text-align: center;
-      box-shadow: 
-        0 12px 35px rgba(0, 0, 0, 0.25),
-        0 1px 3px rgba(255, 255, 255, 0.12);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
       border: 1px solid rgba(255, 255, 255, 0.18);
-      z-index: 1;
     }
 
     .title {
       color: white;
       font-size: 1.9rem;
       font-weight: 700;
-      margin-bottom: 2rem;
-      text-shadow: 0 2px 5px rgba(0,0,0,0.3);
-      letter-spacing: -0.5px;
+      margin-bottom: 0.5rem;
     }
 
     .subtitle {
       color: rgba(255, 255, 255, 0.85);
-      font-size: 1.1rem;
-      margin-bottom: 2.2rem;
-      font-weight: 400;
-      line-height: 1.5;
+      font-size: 1.05rem;
+      margin-bottom: 2rem;
     }
 
     .btn {
@@ -119,16 +821,13 @@
       border: none;
       border-radius: 18px;
       font-size: 1.15rem;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
       transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      box-shadow: 
-        0 6px 18px rgba(0, 0, 0, 0.22),
-        0 3px 6px rgba(0, 0, 0, 0.12);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
       position: relative;
       overflow: hidden;
-      color: #000;
-      letter-spacing: -0.3px;
+      letter-spacing: 0.5px;
     }
 
     .btn::before {
@@ -149,11 +848,13 @@
     }
 
     .btn-estudiante {
-      background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
+      background: linear-gradient(45deg, var(--primary-yellow) 0%, #f9f871 100%);
+      color: var(--dark-green);
     }
 
     .btn-docente {
-      background: linear-gradient(45deg, #fa709a 0%, #fee140 100%);
+      background: linear-gradient(45deg, var(--primary-green) 0%, #2d8a2d 100%);
+      color: white;
     }
 
     .btn i {
@@ -165,35 +866,27 @@
 
     .btn:hover {
       transform: translateY(-4px);
-      box-shadow: 
-        0 10px 30px rgba(0, 0, 0, 0.3),
-        0 5px 10px rgba(0, 0, 0, 0.18);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     }
 
     .btn:active {
       transform: translateY(1px);
-      box-shadow: 
-        0 4px 18px rgba(0, 0, 0, 0.22),
-        0 2px 6px rgba(0, 0, 0, 0.12);
     }
 
+    /* ===== FOOTER (blanco y verde) ===== */
     footer {
       position: fixed;
       bottom: 0;
       width: 100%;
-      background: rgba(74, 144, 226, 0.85);
+      background: linear-gradient(90deg, white 0%, #f0f0f0 50%, var(--primary-green) 100%);
       text-align: center;
       padding: 17px 0;
-      color: #fff;
-      font-weight: 600;
+      color: var(--dark-green);
+      font-weight: 700;
       z-index: 2;
-      box-shadow: 
-        0 -5px 25px rgba(0, 0, 0, 0.25),
-        0 -2px 5px rgba(0, 0, 0, 0.1);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-top: 1px solid rgba(255, 255, 255, 0.25);
-      font-size: 1.05rem;
+      box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.25);
+      border-top: 3px solid var(--primary-yellow);
+      font-size: 1rem;
     }
 
     .institution-name {
@@ -204,10 +897,11 @@
     }
 
     .institution-name i {
+      color: var(--primary-green);
       font-size: 1.2rem;
     }
 
-    /* Modal de anuncio */
+    /* ===== MODAL DE ANUNCIO ===== */
     #anuncio-modal {
       display: none;
       position: fixed;
@@ -217,7 +911,7 @@
       height: 100%;
       background: rgba(0, 0, 0, 0.6);
       backdrop-filter: blur(5px);
-      z-index: 100;
+      z-index: 5000;
       justify-content: center;
       align-items: center;
       opacity: 0;
@@ -236,11 +930,10 @@
       max-width: 500px;
       padding: 32px;
       position: relative;
-      box-shadow: 
-        0 20px 50px rgba(0, 0, 0, 0.3),
-        0 10px 20px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
       transform: translateY(20px);
       transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border: 3px solid var(--primary-green);
     }
 
     #anuncio-modal.active .modal-content {
@@ -254,10 +947,10 @@
       width: 36px;
       height: 36px;
       border-radius: 50%;
-      background: #f1f3f9;
+      background: var(--primary-green);
       border: none;
       font-size: 1.4rem;
-      color: #666;
+      color: white;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -266,22 +959,22 @@
     }
 
     .close-btn:hover {
-      background: #e0e3eb;
-      color: #333;
+      background: var(--dark-green);
+      color: white;
       transform: rotate(90deg);
     }
 
     .modal-title {
       font-size: 1.8rem;
       font-weight: 700;
-      color: #2c3e50;
+      color: var(--dark-green);
       margin-bottom: 16px;
       text-align: center;
     }
 
     .modal-icon {
       font-size: 3.5rem;
-      color: #4a90e2;
+      color: var(--primary-green);
       margin: 0 auto 24px;
       display: block;
       text-align: center;
@@ -298,56 +991,112 @@
     .modal-footer {
       text-align: center;
       font-size: 0.95rem;
-      color: #777;
+      color: var(--dark-green);
+      font-weight: 600;
+      padding-top: 20px;
+      border-top: 2px solid rgba(0, 100, 0, 0.2);
     }
 
+    /* ===== RESPONSIVE ===== */
     @media (max-width: 480px) {
-      .cuadro {
-        padding: 30px 24px;
-        margin-bottom: 20px;
-      }
-      
-      .btn {
-        padding: 15px;
-        font-size: 1.05rem;
-      }
-      
-      .title {
-        font-size: 1.6rem;
-      }
-      
-      .subtitle {
-        font-size: 1rem;
-      }
-      
-      .logo-icon {
-        font-size: 2.8rem;
-      }
-      
-      .modal-content {
-        padding: 24px 20px;
-      }
-      
-      .modal-title {
-        font-size: 1.5rem;
-      }
-      
-      .modal-text {
-        font-size: 1.05rem;
-      }
+      .welcome-logo { width: 200px; height: 200px; }
+      .welcome-title { font-size: 1.8rem; }
+      .welcome-subtitle { font-size: 1rem; }
+      .shape { transform: scale(0.7); }
+      .cuadro { padding: 30px 24px; }
+      .btn { padding: 15px; font-size: 1.05rem; }
+      .title { font-size: 1.6rem; }
+      .logo-icon { font-size: 2.8rem; }
+      .security-content { padding: 30px 20px; }
+      .slider-container { max-width: 300px; height: 55px; }
+      .slider-ball { width: 46px; height: 46px; }
+    }
+
+    .no-select {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
     }
   </style>
 </head>
-<body>
-  <!-- Video de fondo -->
-  <video id="video-fondo" autoplay muted loop>
-    <source src="video.mp4" type="video/mp4">
-    Tu navegador no soporta el video de fondo.
-  </video>
-  
-  <div class="overlay"></div>
+<body class="no-select">
 
-  <div class="container">
+  <!-- Video de fondo (oculto inicialmente) -->
+  <video id="video-fondo" autoplay muted loop playsinline>
+    <source src="video.mp4" type="video/mp4">
+  </video>
+  <div class="overlay" id="mainOverlay"></div>
+
+  <!-- ===== PANTALLA DE BIENVENIDA CON FONDO VERDE Y FORMAS EDUCATIVAS ===== -->
+  <div class="welcome-screen" id="welcomeScreen">
+    
+    <!-- Formas educativas animadas (delineadas en blanco, sin relleno) -->
+    <div class="edu-shapes">
+      <div class="shape shape-square"></div>
+      <div class="shape shape-rectangle"></div>
+      <div class="shape shape-circle"></div>
+      <div class="shape shape-book"></div>
+      <div class="shape shape-pencil"></div>
+      <div class="shape shape-ruler"></div>
+      <div class="shape shape-notebook"></div>
+      <div class="shape shape-atom">
+        <div class="shape-atom-center"></div>
+      </div>
+      <div class="shape shape-plus"></div>
+      <div class="shape shape-diamond"></div>
+      <div class="shape shape-hexagon"></div>
+      <div class="shape shape-circle" style="width: 50px; height: 50px;"></div>
+    </div>
+
+    <img src="icono.png" alt="Logo Colegio Lucas Caballero" class="welcome-logo">
+    
+    <div class="welcome-text">
+      <h1 class="welcome-title">COLEGIO INTEGRADO</h1>
+      <p class="welcome-subtitle">LUCAS CABALLERO</p>
+      <p class="welcome-institution">SUAITA</p>
+    </div>
+
+    <div class="ai-indicator">
+      <div class="ai-dot"></div>
+      <span class="ai-text">Asistente de IA </span>
+    </div>
+
+    <button class="enter-btn" id="enterBtn">
+      <i class="fas fa-arrow-right"></i> Ingresar a la Plataforma
+    </button>
+  </div>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+    <div class="loading-text">CARGANDO...</div>
+    <div class="loading-subtext">Preparando su acceso seguro</div>
+  </div>
+
+  <!-- Security Modal -->
+  <div class="security-modal" id="securityModal">
+    <div class="security-content">
+      <button class="close-security" id="closeSecurity">&times;</button>
+      <i class="fas fa-shield-halved security-icon"></i>
+      <h2 class="security-title">Verificación de Seguridad</h2>
+      <p class="security-subtitle">
+        Sistema de protección avanzado<br>
+        Desliza la bola hasta el otro lado para verificar
+      </p>
+      
+      <div class="slider-container" id="sliderContainer">
+        <div class="slider-track" id="sliderTrack"></div>
+        <div class="slider-text" id="sliderText">Desliza para verificar →</div>
+        <div class="slider-ball" id="sliderBall">
+          <i class="fas fa-fingerprint"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Container principal -->
+  <div class="container" id="mainContainer">
     <div class="logo">
       <div class="logo-icon">
         <i class="fas fa-book-open"></i>
@@ -357,23 +1106,23 @@
     
     <div class="cuadro">
       <h1 class="title">Acceso al Sistema</h1>
-     
+      <p class="subtitle">Plataforma segura de gestión académica</p>
       
       <button class="btn btn-docente" id="btn-docente">
         <i class="fas fa-chalkboard-teacher"></i> Docente
       </button>
       
-      <button class="btn btn-estudiante" onclick="location.href='assets/estudiantes/index.html'">
+      <button class="btn btn-estudiante" id="btn-estudiante">
         <i class="fas fa-people-group"></i> Estudiante
       </button>
     </div>
   </div>
 
-  <!-- Footer -->
+  <!-- Footer (blanco y verde) -->
   <footer>
     <div class="institution-name">
-      <i class="fas fa-atom"></i>
-      <span>© 2025 Institución Educativa colucas - Derechos reservados</span>
+      <i class="fas fa-graduation-cap"></i>
+      <span>© 2026 Colegio Lucas Caballero - Suaita | Sistema Seguro</span>
     </div>
   </footer>
 
@@ -385,77 +1134,266 @@
       <h2 class="modal-title">Aviso Importante para Docentes</h2>
       <p class="modal-text">
         Estimado docente, debido a actualizaciones en el sistema, 
-        el ingreso se encuentra <strong>inabilitado</strong> 
-        
+        el ingreso se encuentra <strong>inhabilitado</strong> temporalmente.
       </p>
       <div class="modal-footer">
-        <p>Gracias</p>
+        <p>Gracias por su comprensión</p>
       </div>
     </div>
   </div>
 
-  <!-- Script para control de reproducción y modal -->
   <script>
-    // Video handling
-    const video = document.getElementById('video-fondo');
+    // ==========================================
+    // SEGURIDAD AVANZADA
+    // ==========================================
+    document.addEventListener('contextmenu', event => event.preventDefault());
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'F12' || 
+          (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) || 
+          (e.ctrlKey && (e.key === 'U' || e.key === 'S'))) {
+        e.preventDefault();
+        return false;
+      }
+    });
+
+    // ==========================================
+    // SISTEMA DE VOZ (ALEXA-LIKE)
+    // ==========================================
+    function speakWelcome() {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        
+        const text = "Bienvenidos al Colegio Integrado Lucas Caballero. Plataforma de gestion academica. Seleccione su tipo de usuario para continuar.";
+        const utterance = new SpeechSynthesisUtterance(text);
+        
+        utterance.lang = 'es-ES';
+        utterance.rate = 0.9;
+        utterance.pitch = 1.1;
+        utterance.volume = 1.0;
+
+        const voices = window.speechSynthesis.getVoices();
+        const preferredVoice = voices.find(v => 
+          v.lang.includes('es') && 
+          (v.name.includes('Google') || v.name.includes('Female') || v.name.includes('Monica'))
+        );
+        
+        if (preferredVoice) {
+          utterance.voice = preferredVoice;
+        }
+
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+      speechSynthesis.onvoiceschanged = () => {};
+    }
+
+    // ==========================================
+    // FLUJO DE NAVEGACIÓN
+    // ==========================================
+    const welcomeScreen = document.getElementById('welcomeScreen');
+    const mainContainer = document.getElementById('mainContainer');
+    const videoFondo = document.getElementById('video-fondo');
+    const mainOverlay = document.getElementById('mainOverlay');
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    const securityModal = document.getElementById('securityModal');
+    const enterBtn = document.getElementById('enterBtn');
+    const btnDocente = document.getElementById('btn-docente');
+    const btnEstudiante = document.getElementById('btn-estudiante');
+    const anuncioModal = document.getElementById('anuncio-modal');
+    const closeModal = document.getElementById('close-modal');
+    const closeSecurity = document.getElementById('closeSecurity');
+
+    let userType = '';
+
+    // Al hacer clic en "Ingresar a la Plataforma"
+    enterBtn.addEventListener('click', () => {
+      welcomeScreen.classList.add('hidden');
+      
+      setTimeout(() => {
+        videoFondo.style.opacity = '1';
+        mainOverlay.style.opacity = '1';
+        mainContainer.classList.add('visible');
+        
+        speakWelcome();
+      }, 800);
+    });
+
+    // Función para manejar el acceso (igual para docente y estudiante)
+    function handleAccess(type) {
+      userType = type;
+      
+      // Mostrar loading
+      loadingOverlay.classList.add('active');
+      
+      setTimeout(() => {
+        loadingOverlay.classList.remove('active');
+        securityModal.classList.add('active');
+      }, 2000);
+    }
+
+    btnDocente.addEventListener('click', () => handleAccess('docente'));
+    btnEstudiante.addEventListener('click', () => handleAccess('estudiante'));
+
+    // Cerrar modal de seguridad
+    closeSecurity.addEventListener('click', () => {
+      securityModal.classList.remove('active');
+      resetSlider();
+    });
+
+    // Cerrar modal de anuncio
+    closeModal.addEventListener('click', () => {
+      anuncioModal.classList.remove('active');
+    });
+
+    anuncioModal.addEventListener('click', (e) => {
+      if (e.target === anuncioModal) {
+        anuncioModal.classList.remove('active');
+      }
+    });
+
+    // ==========================================
+    // SLIDER DE SEGURIDAD
+    // ==========================================
+    const sliderContainer = document.getElementById('sliderContainer');
+    const sliderBall = document.getElementById('sliderBall');
+    const sliderTrack = document.getElementById('sliderTrack');
+    const sliderText = document.getElementById('sliderText');
+
+    let isDragging = false;
+    let startX = 0;
+    let currentX = 0;
+    let containerWidth = 0;
+    let ballWidth = 0;
+    let maxDrag = 0;
+    let isVerified = false;
+
+    function initSlider() {
+      containerWidth = sliderContainer.offsetWidth;
+      ballWidth = sliderBall.offsetWidth;
+      maxDrag = containerWidth - ballWidth - 8;
+    }
+
+    function resetSlider() {
+      isVerified = false;
+      currentX = 0;
+      sliderBall.classList.remove('verified');
+      sliderBall.innerHTML = '<i class="fas fa-fingerprint"></i>';
+      sliderBall.style.transform = 'translateX(0px)';
+      sliderBall.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+      sliderTrack.style.width = '0px';
+      sliderTrack.style.transition = 'width 0.3s ease';
+      sliderText.textContent = 'Desliza para verificar →';
+      sliderText.style.opacity = '1';
+    }
+
+    function startDrag(e) {
+      if (isVerified) return;
+      isDragging = true;
+      startX = (e.type.includes('mouse')) ? e.clientX : e.touches[0].clientX;
+      sliderBall.style.transition = 'none';
+      sliderTrack.style.transition = 'none';
+    }
+
+    function drag(e) {
+      if (!isDragging || isVerified) return;
+      e.preventDefault();
+      
+      const x = (e.type.includes('mouse')) ? e.clientX : e.touches[0].clientX;
+      let diff = x - startX;
+      
+      if (diff < 0) diff = 0;
+      if (diff > maxDrag) diff = maxDrag;
+      
+      currentX = diff;
+      sliderBall.style.transform = `translateX(${currentX}px)`;
+      sliderTrack.style.width = `${currentX + ballWidth/2}px`;
+      
+      const opacity = 1 - (currentX / maxDrag);
+      sliderText.style.opacity = opacity;
+    }
+
+    function endDrag() {
+      if (!isDragging || isVerified) return;
+      isDragging = false;
+      
+      if (currentX >= maxDrag * 0.9) {
+        verifySuccess();
+      } else {
+        resetSlider();
+      }
+    }
+
+    function verifySuccess() {
+      isVerified = true;
+      sliderBall.classList.add('verified');
+      sliderBall.innerHTML = '<i class="fas fa-check"></i>';
+      sliderText.textContent = '¡Verificado!';
+      sliderText.style.opacity = '1';
+      sliderText.style.color = '#10b981';
+      sliderText.style.fontWeight = 'bold';
+      
+      setTimeout(() => {
+        securityModal.classList.remove('active');
+        
+        // Mostrar loading nuevamente
+        loadingOverlay.classList.add('active');
+        
+        setTimeout(() => {
+          loadingOverlay.classList.remove('active');
+          
+          if (userType === 'docente') {
+            anuncioModal.classList.add('active');
+          } else {
+            window.location.href = 'assets/estudiantes/index.html';
+          }
+          
+          resetSlider();
+        }, 1500);
+      }, 600);
+    }
+
+    // Event Listeners Slider
+    sliderBall.addEventListener('mousedown', startDrag);
+    document.addEventListener('mousemove', drag);
+    document.addEventListener('mouseup', endDrag);
+
+    sliderBall.addEventListener('touchstart', startDrag, { passive: false });
+    document.addEventListener('touchmove', drag, { passive: false });
+    document.addEventListener('touchend', endDrag);
+
+    window.addEventListener('load', initSlider);
+    window.addEventListener('resize', initSlider);
+
+    // ==========================================
+    // VIDEO DE FONDO
+    // ==========================================
     let pausaActiva = false;
 
-    video.addEventListener('ended', () => {
+    videoFondo.addEventListener('ended', () => {
       pausaActiva = true;
       setTimeout(() => {
-        video.currentTime = 0;
-        video.play();
+        videoFondo.currentTime = 0;
+        videoFondo.play();
         pausaActiva = false;
-      }, 180000); // 3 minutos
+      }, 180000);
     });
 
     setInterval(() => {
-      if (!pausaActiva && (video.paused || video.ended)) {
-        video.currentTime = 0;
-        video.play().catch(e => console.log("Playback error:", e));
+      if (!pausaActiva && (videoFondo.paused || videoFondo.ended)) {
+        videoFondo.currentTime = 0;
+        videoFondo.play().catch(e => console.log("Playback error:", e));
       }
     }, 180000);
-    
-    // Modal handling
-    const modal = document.getElementById('anuncio-modal');
-    const btnDocente = document.getElementById('btn-docente');
-    const closeBtn = document.getElementById('close-modal');
 
-    // Abrir modal al hacer clic en Docente
-    btnDocente.addEventListener('click', function() {
-      modal.classList.add('active');
-    });
-
-    // Cerrar modal al hacer clic en ×
-    closeBtn.addEventListener('click', function() {
-      modal.classList.remove('active');
-    });
-
-    // Cerrar modal al hacer clic fuera del contenido
-    modal.addEventListener('click', function(e) {
-      if (e.target === modal) {
-        modal.classList.remove('active');
+    // Cargar voces
+    setTimeout(() => {
+      if (speechSynthesis.getVoices().length === 0 && speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = () => {};
       }
-    });
-
-    // Permitir cerrar con tecla ESC
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape' && modal.classList.contains('active')) {
-        modal.classList.remove('active');
-      }
-    });
-
-    // Mobile video autoplay fix
-    document.addEventListener('DOMContentLoaded', function() {
-      const playVideo = () => {
-        video.play().catch(e => console.log("Autoplay prevented:", e));
-        document.body.removeEventListener('touchstart', playVideo);
-        document.body.removeEventListener('click', playVideo);
-      };
-      
-      document.body.addEventListener('touchstart', playVideo, { once: true });
-      document.body.addEventListener('click', playVideo, { once: true });
-    });
+    }, 1000);
   </script>
 </body>
 </html>
